@@ -32,36 +32,62 @@ public class MainProfile extends Profile{
     private int money;
     private boolean hasTongkat, hasTali, hasKitchenKit;
     private boolean hasAcc1, hasAcc2, hasAcc3;
-
-    
-    
-    private int score = 0;
     
 
     public MainProfile(){
+        reset();
     }
 
     public void reset() {
-        score = 0;
+        sound = true;
+        lastLevel = 1;
+        
+        bestCombo = new int[5];
+        savedAnimals = new int[5];
+        highscore = new int[5];
+        
+        money = 0;
+        hasKitchenKit = false;
+        hasAcc1 = hasAcc2 = hasAcc3 = hasTongkat = hasTali = false;
     }
 
     public void writeVariables(DataOutputStream stream) throws Exception {
         stream.writeBoolean(sound);
-        stream.writeInt(score);
+        stream.writeInt(lastLevel);
+        for(int i = 0; i < 5; i++){
+            stream.writeInt(bestCombo[i]);
+            stream.writeInt(savedAnimals[i]);
+            stream.writeInt(highscore[i]);
+        }
+        stream.writeInt(money);
+        stream.writeBoolean(hasTongkat);
+        stream.writeBoolean(hasTali);
+        stream.writeBoolean(hasKitchenKit);
+        stream.writeBoolean(hasAcc1);
+        stream.writeBoolean(hasAcc2);
+        stream.writeBoolean(hasAcc3);
+        
     }
 
     public void readVariables(DataInputStream stream) throws Exception {
         sound = stream.readBoolean();
-        score = stream.readInt();
+        lastLevel = stream.readInt();
+        
+        for(int i = 0; i < 5; i++){
+            bestCombo[i] = stream.readInt();
+            savedAnimals[i] = stream.readInt();
+            highscore[i] = stream.readInt();
+        }
+        
+        money = stream.readInt();
+        hasTongkat = stream.readBoolean();
+        hasTali = stream.readBoolean();
+        hasKitchenKit = stream.readBoolean();
+        hasAcc1 = stream.readBoolean();
+        hasAcc2 = stream.readBoolean();
+        hasAcc3 = stream.readBoolean();
     }
     
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
 
     public boolean isSound() {
         return sound;
