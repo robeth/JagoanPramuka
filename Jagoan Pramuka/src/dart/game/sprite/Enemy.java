@@ -105,11 +105,11 @@ public class Enemy extends AnimatedSprite {
     
     public int getCoin(){
         if (coinChance.nextInt(100) < this.goldChance){
-            return Enemy.bronzeAmount;
+            return Enemy.goldAmount;
         } else if (coinChance.nextInt(100) < this.silverChance){
             return Enemy.silverAmount;
         } else if (coinChance.nextInt(100) < this.bronzeChance){
-            return Enemy.goldAmount;
+            return Enemy.bronzeAmount;
         } else {
             return 0;
         }
