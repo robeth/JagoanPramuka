@@ -6,6 +6,7 @@
 package dart.game.main;
 
 import com.chocoarts.network.Profile;
+import dart.game.data.ItemDatabase;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
@@ -30,8 +31,6 @@ public class MainProfile extends Profile{
      * Shop Variables
      */
     private int money;
-    private boolean hasTongkat, hasTali, hasKitchenKit;
-    private boolean hasAcc1, hasAcc2, hasAcc3;
     
 
     public MainProfile(){
@@ -47,8 +46,7 @@ public class MainProfile extends Profile{
         highscore = new int[5];
         
         money = 0;
-        hasKitchenKit = false;
-        hasAcc1 = hasAcc2 = hasAcc3 = hasTongkat = hasTali = false;
+        ItemDatabase.reset();
     }
 
     public void writeVariables(DataOutputStream stream) throws Exception {
@@ -60,12 +58,20 @@ public class MainProfile extends Profile{
             stream.writeInt(highscore[i]);
         }
         stream.writeInt(money);
-        stream.writeBoolean(hasTongkat);
-        stream.writeBoolean(hasTali);
-        stream.writeBoolean(hasKitchenKit);
-        stream.writeBoolean(hasAcc1);
-        stream.writeBoolean(hasAcc2);
-        stream.writeBoolean(hasAcc3);
+        
+        stream.writeBoolean(ItemDatabase.ALAT_MASAK.isBought());
+        stream.writeBoolean(ItemDatabase.TONGKAT.isBought());
+        stream.writeBoolean(ItemDatabase.TALI.isBought());
+        stream.writeBoolean(ItemDatabase.HASDUK.isBought());
+        stream.writeBoolean(ItemDatabase.RING.isBought());
+        stream.writeBoolean(ItemDatabase.BADGE.isBought());
+        
+        stream.writeBoolean(ItemDatabase.ALAT_MASAK.isEquipped());
+        stream.writeBoolean(ItemDatabase.TONGKAT.isEquipped());
+        stream.writeBoolean(ItemDatabase.TALI.isEquipped());
+        stream.writeBoolean(ItemDatabase.HASDUK.isEquipped());
+        stream.writeBoolean(ItemDatabase.RING.isEquipped());
+        stream.writeBoolean(ItemDatabase.BADGE.isEquipped());
         
     }
 
@@ -80,12 +86,19 @@ public class MainProfile extends Profile{
         }
         
         money = stream.readInt();
-        hasTongkat = stream.readBoolean();
-        hasTali = stream.readBoolean();
-        hasKitchenKit = stream.readBoolean();
-        hasAcc1 = stream.readBoolean();
-        hasAcc2 = stream.readBoolean();
-        hasAcc3 = stream.readBoolean();
+        ItemDatabase.ALAT_MASAK.setBought(stream.readBoolean());
+        ItemDatabase.TONGKAT.setBought(stream.readBoolean());
+        ItemDatabase.TALI.setBought(stream.readBoolean());
+        ItemDatabase.HASDUK.setBought(stream.readBoolean());
+        ItemDatabase.RING.setBought(stream.readBoolean());
+        ItemDatabase.BADGE.setBought(stream.readBoolean());
+        
+        ItemDatabase.ALAT_MASAK.setEquipped(stream.readBoolean());
+        ItemDatabase.TONGKAT.setEquipped(stream.readBoolean());
+        ItemDatabase.TALI.setEquipped(stream.readBoolean());
+        ItemDatabase.HASDUK.setEquipped(stream.readBoolean());
+        ItemDatabase.RING.setEquipped(stream.readBoolean());
+        ItemDatabase.BADGE.setEquipped(stream.readBoolean());
     }
     
 
@@ -100,53 +113,6 @@ public class MainProfile extends Profile{
         return sound;
     }
 
-    public boolean isHasAcc1() {
-        return hasAcc1;
-    }
-
-    public void setHasAcc1(boolean hasAcc1) {
-        this.hasAcc1 = hasAcc1;
-    }
-
-    public boolean isHasAcc2() {
-        return hasAcc2;
-    }
-
-    public void setHasAcc2(boolean hasAcc2) {
-        this.hasAcc2 = hasAcc2;
-    }
-
-    public boolean isHasAcc3() {
-        return hasAcc3;
-    }
-
-    public void setHasAcc3(boolean hasAcc3) {
-        this.hasAcc3 = hasAcc3;
-    }
-
-    public boolean isHasKitchenKit() {
-        return hasKitchenKit;
-    }
-
-    public void setHasKitchenKit(boolean hasKitchenKit) {
-        this.hasKitchenKit = hasKitchenKit;
-    }
-
-    public boolean isHasTali() {
-        return hasTali;
-    }
-
-    public void setHasTali(boolean hasTali) {
-        this.hasTali = hasTali;
-    }
-
-    public boolean isHasTongkat() {
-        return hasTongkat;
-    }
-
-    public void setHasTongkat(boolean hasTongkat) {
-        this.hasTongkat = hasTongkat;
-    }
 
     public int getLastLevel() {
         return lastLevel;
@@ -198,5 +164,15 @@ public class MainProfile extends Profile{
     
     public void setSavedAnimals(int level, int animalsRecord){
         savedAnimals[level] = animalsRecord;
+    }
+
+    void printStatus() {
+        System.out.println("Money: "+money);
+        for(int i = 1; i < 6; i++){
+            System.out.println("--Level "+i+"--");
+            System.out.println("Highscore:"+highscore[i-1]);
+            System.out.println("Best Combo:"+bestCombo[i-1]);
+            System.out.println("Saved Animals:"+savedAnimals[i-1]);
+        }
     }
 }

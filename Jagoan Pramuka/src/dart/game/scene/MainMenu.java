@@ -56,7 +56,7 @@ public class MainMenu extends Scene {
         shopunselect = Image.createImage("/shop_unselect.png");
         exitselect = Image.createImage("/exit_select.png");
         exitunselect = Image.createImage("/exit_unselect.png");
-        logo = Image.createImage("logo.png");
+        logo = Image.createImage("/logo.png");
 
         bgsprite = new ChocoSprite(bgmenu);
         buttons[0] = new MenuButton(playselect,150,35);
