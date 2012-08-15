@@ -11,6 +11,7 @@ import com.chocoarts.drawing.ChocoSprite;
 import com.chocoarts.scene.Scene;
 import com.chocoarts.text.CustomFont;
 import dart.game.logic.World;
+import dart.game.main.MainProfile;
 import dart.game.sprite.HUD;
 import dart.game.sprite.Hero;
 import java.io.IOException;
@@ -41,6 +42,7 @@ public class MainPlay extends Scene {
     private boolean[] keyDownStates;
     private int gameState;
     private CustomFont berlin, gothic;
+    private MainProfile profile;
 
     MainPlay(Engine engine) {
         super(engine);
@@ -64,12 +66,14 @@ public class MainPlay extends Scene {
 
             background.setPosition(0, 0);
             keyDownStates = new boolean[4];
-
+            
+            //profile
+            profile = (MainProfile)engine.getProfile();
 
             //hud
             berlin = new CustomFont("/font/berlinSansFB12White");
             gothic = new CustomFont("/font/gothic10White");
-            hud = new HUD(berlin, gothic);
+            hud = new HUD(berlin, gothic, profile.getMoney());
 
             world = new World(this, heroes, hud);
             gameState = PLAY_STATE;
@@ -136,6 +140,7 @@ public class MainPlay extends Scene {
                 changeScene(mainMenu);
             }
         } else if (keyCode == GameCanvas.FIRE && gameState != PLAY_STATE) {
+            profile.setMoney(world.getHUDMoney());
             MainMenu mainMenu = new MainMenu(engine);
             changeScene(mainMenu);
         }

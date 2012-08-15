@@ -22,6 +22,7 @@ public class HUD {
     private int combo;
     private int bar;
     private int life;
+    private int money;
     private Image animal1, animal2, animal3, comboBar;
     
     
@@ -43,9 +44,10 @@ public class HUD {
        
     }
     
-    public HUD(CustomFont scoreFont, CustomFont comboFont) {
+    public HUD(CustomFont scoreFont, CustomFont comboFont, int money) {
         this.scoreFont = scoreFont;
         this.comboFont = comboFont;
+        this.money = money;
         this.life = 3;
          try {
             animal1 = Image.createImage("/1_ayam.png");
@@ -84,6 +86,7 @@ public class HUD {
     
     public void paint(Graphics g) throws IOException{
         scoreFont.paintString(g, "Score: "+score, 220, 0, Graphics.LEFT|Graphics.TOP);
+        scoreFont.paintString(g, "Coin: "+money, 220, 50, Graphics.LEFT|Graphics.TOP);
         
         int barLength = (int) Math.ceil(bar * (0.8));
         g.setColor(255,0,0);
@@ -114,5 +117,13 @@ public class HUD {
         } else {
             return false;
         }
+    }
+    
+    public int getMoney(){
+        return money;
+    }
+    
+    public void incMoney(int money){
+        this.money += money;
     }
 }

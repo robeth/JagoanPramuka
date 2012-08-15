@@ -5,6 +5,7 @@
 package dart.game.logic;
 
 import com.chocoarts.debug.Debug;
+import dart.game.main.MainProfile;
 import dart.game.scene.MainPlay;
 import java.util.Random;
 import java.util.Vector;
@@ -29,10 +30,15 @@ public class World {
     private HUD hud;
     private MainPlay context;
     private boolean isWaveEnd;
+    private MainProfile profile;
+    
 
     public World(MainPlay context, Hero[] heroes,HUD hud){
         this.context = context;
+        profile = (MainProfile)context.engine.getProfile();
+        
         this.hud = hud;
+        
         
         //Lanes component
         lanes = new Lanes(LANE_NUMBER, 40, 2, 80);
@@ -140,6 +146,7 @@ public class World {
                 if (applyDamage(attack,e,laneIndex,i)){
                     i--;
                     hud.incScore(e.getScore());
+                    hud.incMoney(e.getCoin());
                 }
                 Debug.println("kombo ++");
                 comboObj.hit(1);
@@ -202,6 +209,10 @@ public class World {
     private boolean isLevelEnd() {
         return isWaveEnd && enemiesLanes[0].isEmpty() && enemiesLanes[1].isEmpty()
                 && enemiesLanes[2].isEmpty();
+    }
+    
+    public int getHUDMoney(){
+        return hud.getMoney();
     }
     
 }

@@ -76,12 +76,13 @@ public class EnemyGenerator {
     
     public Enemy getEnemy(int enemyPoolIndex){
         Image enemyImage = null;
+        // tambah untuk gambar yang berbeda
         try {
-            enemyImage = Image.createImage("/penjahat_sprite.png");
+            enemyImage = Image.createImage("/penjahats.png");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return new Enemy(enemyImage, 33, 42, 400, enemiesPool[enemyPoolIndex]);
+        return new Enemy(enemyImage, 34, 43, 400, enemiesPool[enemyPoolIndex]);
      
     }
     
