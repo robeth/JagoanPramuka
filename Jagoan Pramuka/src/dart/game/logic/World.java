@@ -170,7 +170,7 @@ public class World {
         
         try {
             if (coinAmount == 100){
-                coinImage = Image.createImage("/Coin.png");
+                coinImage = Image.createImage("/Gold.png");
             } else if (coinAmount == 50){
                 coinImage = Image.createImage("/Silver.png");
             } else if (coinAmount == 10){
