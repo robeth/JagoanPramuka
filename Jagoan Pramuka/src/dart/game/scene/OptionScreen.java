@@ -10,6 +10,7 @@ import com.chocoarts.text.CustomFont;
 import dart.game.main.MainProfile;
 import dart.game.sprite.DummyButton;
 import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.game.GameCanvas;
 
 /**
@@ -18,6 +19,7 @@ import javax.microedition.lcdui.game.GameCanvas;
  */
 public class OptionScreen extends Scene{
     CustomFont berlin;
+    Image background;
     
     
     private MainProfile profile;
@@ -32,7 +34,6 @@ public class OptionScreen extends Scene{
     private boolean isConfirmReset;
     
     private DummyButton 
-            TITLE = new DummyButton(110,0 ,100,40),
             SOUND = new DummyButton(20 ,50, 80,40),
             SOUND_ON = new DummyButton (120, 50, 50, 40),
             SOUND_OFF = new DummyButton(200, 50, 50, 40),
@@ -65,6 +66,7 @@ public class OptionScreen extends Scene{
         currentRow = SOUND_ROW;
         isReset = false;
         isConfirmReset = false;
+        background = Image.createImage("/Pengaturan.png");
     }
 
     public void pause() {
@@ -88,7 +90,7 @@ public class OptionScreen extends Scene{
     }
 
     public void paint(Graphics g) {
-        TITLE.drawString(g, berlin,"Option Screen");
+        g.drawImage(background, 0, 0, 0);
         
         //Draw Row Header
         g.setColor(255,0,0);
