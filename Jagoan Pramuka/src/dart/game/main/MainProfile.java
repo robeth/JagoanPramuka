@@ -39,7 +39,7 @@ public class MainProfile extends Profile{
 
     public void reset() {
         sound = true;
-        lastLevel = 1;
+        lastLevel = 0;
         
         bestCombo = new int[5];
         savedAnimals = new int[5];
