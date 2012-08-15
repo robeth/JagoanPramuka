@@ -165,4 +165,14 @@ public class MainProfile extends Profile{
     public void setSavedAnimals(int level, int animalsRecord){
         savedAnimals[level] = animalsRecord;
     }
+
+    void printStatus() {
+        System.out.println("Money: "+money);
+        for(int i = 1; i < 6; i++){
+            System.out.println("--Level "+i+"--");
+            System.out.println("Highscore:"+highscore[i-1]);
+            System.out.println("Best Combo:"+bestCombo[i-1]);
+            System.out.println("Saved Animals:"+savedAnimals[i-1]);
+        }
+    }
 }

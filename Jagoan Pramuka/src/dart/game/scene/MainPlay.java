@@ -43,8 +43,9 @@ public class MainPlay extends Scene {
     private int gameState;
     private CustomFont berlin, gothic;
     private MainProfile profile;
+    private int level;
 
-    MainPlay(Engine engine) {
+    MainPlay(Engine engine, int level) {
         super(engine);
     }
 
@@ -140,7 +141,14 @@ public class MainPlay extends Scene {
                 changeScene(mainMenu);
             }
         } else if (keyCode == GameCanvas.FIRE && gameState != PLAY_STATE) {
-            profile.setMoney(world.getHUDMoney());
+            profile.setMoney(world.getHUDMoney() + profile.getMoney());
+            profile.setBestCombo(level, Math.max(profile.getBestCombo(level),world.getComboObj().getHighestCombo()));
+            profile.setHighscore(level, Math.max(profile.getHighscore(level),hud.getScore()));
+            profile.setSavedAnimals(level, Math.max(profile.getSavedAnimals(level), hud.getLife()));
+         
+            if(gameState == WIN_STATE)
+                profile.setLastLevel(Math.max(profile.getLastLevel(), level));
+            
             MainMenu mainMenu = new MainMenu(engine);
             changeScene(mainMenu);
         }

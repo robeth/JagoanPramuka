@@ -103,7 +103,7 @@ public class StageSelection extends Scene{
                 MainMenu mainMenu = new MainMenu(engine);
                 changeScene(mainMenu);
             } else {
-                MainPlay mainPlay = new MainPlay(engine);
+                MainPlay mainPlay = new MainPlay(engine, level + 1);
                 changeScene(mainPlay);
             }
         } else if(keyCode == GameCanvas.LEFT){
