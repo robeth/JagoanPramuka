@@ -81,7 +81,7 @@ public class EnemyGenerator {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return new Enemy(enemyImage, 34, 42, 400, enemiesPool[enemyPoolIndex]);
+        return new Enemy(enemyImage, 33, 42, 400, enemiesPool[enemyPoolIndex]);
      
     }
     

@@ -9,6 +9,7 @@ import com.chocoarts.debug.Debug;
 import com.chocoarts.scene.Scene;
 import com.chocoarts.text.CustomFont;
 import dart.game.data.ItemDatabase;
+import dart.game.data.Weapon;
 import dart.game.main.MainProfile;
 import dart.game.sprite.Color;
 import dart.game.sprite.DummyButton2;
@@ -118,25 +119,46 @@ public class ShopScreen extends Scene {
                         MainMenu mainMenu = new MainMenu(engine);
                         changeScene(mainMenu);
                     } else {
-                        windowState = CONFIRM_BUY_STATE;
-                        isOK = false;
+                        //Jika udah beli, langsung ke equip state
+                        if(itemButtons[cursorState].getItem().isBought()){
+                            windowState = CONFIRM_EQUIP_STATE;
+                            isOK = itemButtons[cursorState].getItem().isEquipped();
+                            
+                        }
+                        
+                        //jika uang cukup buat beli
+                        else if (profile.getMoney() >= itemButtons[cursorState].getItem().getPrice() ){
+                            windowState = CONFIRM_BUY_STATE;
+                            isOK = false;
+                        }
+                        
+                        //Jika uang tidak cukup
+                        else{
+                            //bunyi eng ing eng. fulus ente nggak cukup
+                        }
                     }
                 } else if (windowState == CONFIRM_BUY_STATE ){
                     if(isOK){
+                        profile.setMoney(profile.getMoney()-itemButtons[cursorState].getItem().getPrice());
+                        itemButtons[cursorState].getItem().setBought(true);
+                        
                         windowState = CONFIRM_EQUIP_STATE;
                         isOK = false;
                     } else {
-                        
+                        windowState = BROWSE_STATE;
+                        isOK = false;
                     }
                 } else if (windowState == CONFIRM_EQUIP_STATE){
                     windowState = BROWSE_STATE;
                     if(isOK){
-                        
-                    } else {
-                        
+                        if(itemButtons[cursorState].getItem() instanceof Weapon){
+                            ItemDatabase.unequipAllWeapons();
+                        }
+                        itemButtons[cursorState].getItem().setEquipped(true);
                     }
                     windowState = BROWSE_STATE;
                 }
+                updateButtonsState();
                 break;
             case GameCanvas.DOWN: 
                 if(windowState == BROWSE_STATE){
@@ -175,7 +197,13 @@ public class ShopScreen extends Scene {
                 }
                 updateButtonsState();
                 break;
+            
         }
+        
+        
+        if(rawKeyCode == GameCanvas.KEY_NUM0)
+            profile.setMoney(5000);
+        moneyFrame.setLabel(""+profile.getMoney());
     }
 
     public void pointerPressed(int x, int y) {

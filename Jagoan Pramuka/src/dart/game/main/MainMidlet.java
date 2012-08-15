@@ -23,7 +23,7 @@ public class MainMidlet extends ChocoMIDlet {
 
         //Ambil save data permainan sebelumnya. increment
         profile = new MainProfile();
-        engine.initProfile(profile, "MainSaveData");
+        engine.initProfile(profile, "JagoanPramuka0.3");
 
         //Buat scene level 1
         MainMenu game = new MainMenu(engine);
