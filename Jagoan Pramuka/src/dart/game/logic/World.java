@@ -12,6 +12,8 @@ import java.util.Vector;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.game.Layer;
 import dart.game.sprite.*;
+import java.io.IOException;
+import javax.microedition.lcdui.Image;
 
 
 /**
@@ -22,6 +24,7 @@ public class World {
     private static final int LANE_NUMBER = 3;
     private Hero[] heroes;
     private Vector[] enemiesLanes;
+    private Vector coins;
     private Lanes lanes;
     private Random r;
     private EnemyGenerator eg;
@@ -50,6 +53,7 @@ public class World {
         this.heroes =  heroes;
         
         enemiesLanes = new Vector[LANE_NUMBER];
+        coins = new Vector();
         for (int i = 0; i < LANE_NUMBER; i++){
             enemiesLanes[i] = new Vector();
         }
@@ -72,6 +76,7 @@ public class World {
             return;
         }
         updateEnemies(currentTime);
+        updateCoins (currentTime);
 
         for(int i = 0; i< 3; i++){
             heroes[i].update(currentTime, attackStatus[i]);
@@ -92,6 +97,13 @@ public class World {
                 }
             }
         }
+        
+        for(int i = 0; i < coins.size(); i++){
+                CoinEffect c = (CoinEffect)coins.elementAt(i);
+                if(c != null){
+                    c.paint(g);
+                }
+            }
         
         for(int i =0; i < heroes.length; i++){
             heroes[i].pseudoPaint(g);
@@ -120,6 +132,25 @@ public class World {
             }
         }
     }
+    
+    private void updateCoins (long currentTime){
+        for (int i=0; i< coins.size();){
+            CoinEffect c = (CoinEffect) coins.elementAt(i);
+            if (c!=null){
+                c.update(currentTime);
+                int x = c.getX();
+                int y = c.getY();
+                
+                if (x >= 220 || y<=20){
+                    hud.incMoney(c.getAmount());
+                    coins.setElementAt(null, i);
+                    coins.removeElementAt(i);
+                } else {
+                    i++;
+                }
+            }
+        }
+    }
 
     private void fixHeroesPlacement() {
         for(int i = 0; i < heroes.length; i++)
@@ -134,6 +165,27 @@ public class World {
         enemiesLanes[laneIndex].addElement(specEnemy);
     }
     
+    public void addCoin (int coinAmount, int posX, int posY){
+        Image coinImage = null;
+        
+        try {
+            if (coinAmount == 100){
+                coinImage = Image.createImage("/Coin.png");
+            } else if (coinAmount == 50){
+                coinImage = Image.createImage("/Silver.png");
+            } else if (coinAmount == 10){
+                coinImage = Image.createImage("/Bronze.png");
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        CoinEffect coinEffect = new CoinEffect(coinImage, 15,15,coinAmount);
+        coinEffect.setPosition(posX, posY);
+        
+        coins.addElement(coinEffect);
+        
+    }
+    
     void setEnemyPosition(Enemy e, int laneIndex){
         e.setPosition(320, lanes.getY(laneIndex));
     }
@@ -146,7 +198,10 @@ public class World {
                 if (applyDamage(attack,e,laneIndex,i)){
                     i--;
                     hud.incScore(e.getScore());
-                    hud.incMoney(e.getCoin());
+                    int c = e.getCoin();
+                    if (c > 0){
+                        this.addCoin(c, e.getX(), e.getY());
+                    }
                 }
                 Debug.println("kombo ++");
                 comboObj.hit(1);

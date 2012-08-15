@@ -17,9 +17,9 @@ import javax.microedition.lcdui.Graphics;
  */
 public class Enemy extends AnimatedSprite {
     
-    public static int bronzeAmount = 10;
-    public static int silverAmount = 50;
-    public static int goldAmount = 100;
+    public static int BRONZE_AMOUNT = 10;
+    public static int SILVER_AMOUNT = 50;
+    public static int GOLD_AMOUNT = 100;
     
     private int LP;
     private int score;
@@ -105,11 +105,11 @@ public class Enemy extends AnimatedSprite {
     
     public int getCoin(){
         if (coinChance.nextInt(100) < this.goldChance){
-            return Enemy.goldAmount;
+            return Enemy.GOLD_AMOUNT;
         } else if (coinChance.nextInt(100) < this.silverChance){
-            return Enemy.silverAmount;
+            return Enemy.SILVER_AMOUNT;
         } else if (coinChance.nextInt(100) < this.bronzeChance){
-            return Enemy.bronzeAmount;
+            return Enemy.BRONZE_AMOUNT;
         } else {
             return 0;
         }

@@ -86,7 +86,7 @@ public class HUD {
     
     public void paint(Graphics g) throws IOException{
         scoreFont.paintString(g, "Score: "+score, 220, 0, Graphics.LEFT|Graphics.TOP);
-        scoreFont.paintString(g, "Coin: "+money, 220, 50, Graphics.LEFT|Graphics.TOP);
+        scoreFont.paintString(g, "Coin: "+money, 220, 20, Graphics.LEFT|Graphics.TOP);
         
         int barLength = (int) Math.ceil(bar * (0.8));
         g.setColor(255,0,0);
