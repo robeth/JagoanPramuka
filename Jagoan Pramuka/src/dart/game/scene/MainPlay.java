@@ -54,7 +54,7 @@ public class MainPlay extends Scene {
 
             aryaImage = Image.createImage("/arya_mini.png");
             bimaImage = Image.createImage("/bima_mini.png");
-            cintaImage = Image.createImage("/cinta_mini.png");
+            cintaImage = Image.createImage("/cintas.png");
             backgroundImage = Image.createImage("/map.jpg");
             winImage = Image.createImage("/Sukses.png");
             loseImage = Image.createImage("/Gagal.png");
@@ -62,7 +62,7 @@ public class MainPlay extends Scene {
             heroes = new Hero[3];
             heroes[0] = new Hero(aryaImage, 37, 45, 0, Hero.ARYA);
             heroes[1] = new Hero(bimaImage, 37, 45, 0, Hero.BIMA);
-            heroes[2] = new Hero(cintaImage, 41, 45, 0, Hero.CINTA);
+            heroes[2] = new Hero(cintaImage, 46, 44, 100, Hero.CINTA);
             background = new ChocoSprite(backgroundImage);
 
             background.setPosition(0, 0);
@@ -141,7 +141,7 @@ public class MainPlay extends Scene {
                 changeScene(mainMenu);
             }
         } else if (keyCode == GameCanvas.FIRE && gameState != PLAY_STATE) {
-            profile.setMoney(world.getHUDMoney() + profile.getMoney());
+            profile.setMoney(world.getHUDMoney());
             profile.setBestCombo(level, Math.max(profile.getBestCombo(level),world.getComboObj().getHighestCombo()));
             profile.setHighscore(level, Math.max(profile.getHighscore(level),hud.getScore()));
             profile.setSavedAnimals(level, Math.max(profile.getSavedAnimals(level), hud.getLife()));

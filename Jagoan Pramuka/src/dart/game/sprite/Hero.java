@@ -55,6 +55,7 @@ public class Hero extends AnimatedSprite {
         if (showEffect && (time - effectTimeLast)>EFFECT_TIME){
             showEffect = false;
         }
+        
     }
     
     public void setPosition(int x, int y){
