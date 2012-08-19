@@ -86,6 +86,10 @@ public class World {
             }
         }     
         eg.update(currentTime);
+        
+        for(int i =0; i < heroes.length; i++){
+            heroes[i].update(currentTime);
+        }
     }
 
     public void paint(Graphics g){

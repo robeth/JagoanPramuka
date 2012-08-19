@@ -20,6 +20,7 @@ public class Hero extends AnimatedSprite {
     private boolean showEffect;
     private long effectTimeLast;
     private HitEffect hitEffect;
+    private boolean hitEffectDone;
     
     public Hero(Image image, int frameWidth, int frameHeight, int frameDuration,int type) throws IOException {
         super(image, frameWidth, frameHeight, frameDuration);
@@ -34,6 +35,8 @@ public class Hero extends AnimatedSprite {
         hitEffect = getEffect(type);
         hitEffect.setPosition(this.getX()+this.getWidth(), this.getY() + 5);
         showEffect = false;
+        this.stop();
+        this.hitEffectDone = false;
     }
 
     public void update(long time, boolean isAttack){        
@@ -54,6 +57,15 @@ public class Hero extends AnimatedSprite {
         
         if (showEffect && (time - effectTimeLast)>EFFECT_TIME){
             showEffect = false;
+        }
+        
+        if (this.getFrame() == 1){
+            this.hitEffectDone = true;
+        }
+        
+        if (this.getFrame() == 0 && this.hitEffectDone == true){
+            this.stop();
+            this.hitEffectDone = false;
         }
         
     }
@@ -83,6 +95,7 @@ public class Hero extends AnimatedSprite {
     public void finishAttack () {
         attack = false;
         showEffect = true;
+        this.play();
         this.effectTimeLast = System.currentTimeMillis();
         attackArea.reset();
     }

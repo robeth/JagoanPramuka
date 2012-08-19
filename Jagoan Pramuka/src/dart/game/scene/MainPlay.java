@@ -52,16 +52,16 @@ public class MainPlay extends Scene {
     public void init() throws Exception {
         try {
 
-            aryaImage = Image.createImage("/arya_mini.png");
-            bimaImage = Image.createImage("/bima_mini.png");
+            aryaImage = Image.createImage("/aryas.png");
+            bimaImage = Image.createImage("/bimas.png");
             cintaImage = Image.createImage("/cintas.png");
             backgroundImage = Image.createImage("/map.jpg");
             winImage = Image.createImage("/Sukses.png");
             loseImage = Image.createImage("/Gagal.png");
 
             heroes = new Hero[3];
-            heroes[0] = new Hero(aryaImage, 37, 45, 0, Hero.ARYA);
-            heroes[1] = new Hero(bimaImage, 37, 45, 0, Hero.BIMA);
+            heroes[0] = new Hero(aryaImage, 50, 43, 200, Hero.ARYA);
+            heroes[1] = new Hero(bimaImage, 42, 44, 200, Hero.BIMA);
             heroes[2] = new Hero(cintaImage, 46, 44, 100, Hero.CINTA);
             background = new ChocoSprite(backgroundImage);
 
