@@ -15,10 +15,13 @@ public class Hero extends AnimatedSprite {
     public static int BIMA = 112;
     public static int CINTA = 113;
     public static int EFFECT_TIME = 120;
+    public static int ATTACK_DELAY = 300;
     private AttackArea attackArea;
     private boolean attack;
     private boolean showEffect;
+    private boolean canAttack;
     private long effectTimeLast;
+    private long lastAttack=0;
     private HitEffect hitEffect;
     private boolean hitEffectDone;
     
@@ -35,24 +38,27 @@ public class Hero extends AnimatedSprite {
         hitEffect = getEffect(type);
         hitEffect.setPosition(this.getX()+this.getWidth(), this.getY() + 5);
         showEffect = false;
+        canAttack = true;
         this.stop();
         this.hitEffectDone = false;
     }
 
-    public void update(long time, boolean isAttack){        
-        if(attackArea.isCharging()){
-            if(isAttack){
-                Debug.println("update!!");
-                attackArea.updateCharge(time);
+    public void update(long time, boolean isAttack){ 
+        if (isCanAttack()){
+            if(attackArea.isCharging()){
+                if(isAttack){
+                    Debug.println("update!!");
+                    attackArea.updateCharge(time);
+                } else {
+                    //give attack flag
+                    attack = true;
+                }
             } else {
-                //give attack flag
-                attack = true;
-            }
-        } else {
-            if(isAttack){
-                Debug.println("Start charging");
-                attackArea.startCharging(time);
-            }
+                if(isAttack){
+                    Debug.println("Start charging");
+                    attackArea.startCharging(time);
+                }
+        }
         }
         
         if (showEffect && (time - effectTimeLast)>EFFECT_TIME){
@@ -61,11 +67,17 @@ public class Hero extends AnimatedSprite {
         
         if (this.getFrame() == 1){
             this.hitEffectDone = true;
+            showEffect = true;
+            this.effectTimeLast = System.currentTimeMillis();
         }
         
         if (this.getFrame() == 0 && this.hitEffectDone == true){
             this.stop();
             this.hitEffectDone = false;
+        }
+        
+        if (System.currentTimeMillis() - this.lastAttack > Hero.ATTACK_DELAY){
+            this.canAttack = true;
         }
         
     }
@@ -94,9 +106,14 @@ public class Hero extends AnimatedSprite {
     
     public void finishAttack () {
         attack = false;
-        showEffect = true;
+        //showEffect = true;
+        int[] attackSequence = {0,1};
+        this.setFrameSequence(attackSequence);
+        this.setTimePerFrame(Hero.ATTACK_DELAY/this.getFrameSequenceLength());
         this.play();
-        this.effectTimeLast = System.currentTimeMillis();
+        this.canAttack = false;
+        this.lastAttack = System.currentTimeMillis();
+        //this.effectTimeLast = System.currentTimeMillis();
         attackArea.reset();
     }
     
@@ -108,5 +125,9 @@ public class Hero extends AnimatedSprite {
         } else {
             return new HitEffect(Image.createImage("/effect3.png"),49,27);
         }
+    }
+    
+    public boolean isCanAttack(){
+        return canAttack;
     }
 }

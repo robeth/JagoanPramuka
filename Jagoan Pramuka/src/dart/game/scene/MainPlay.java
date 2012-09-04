@@ -44,6 +44,7 @@ public class MainPlay extends Scene {
     private CustomFont berlin, gothic;
     private MainProfile profile;
     private int level;
+    private int curScore;
 
     MainPlay(Engine engine, int level) {
         super(engine);
@@ -78,6 +79,7 @@ public class MainPlay extends Scene {
 
             world = new World(this, heroes, hud);
             gameState = PLAY_STATE;
+            curScore = 0;
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -100,7 +102,10 @@ public class MainPlay extends Scene {
             updateKeyStates();
             world.update(currentTime, keyDownStates);
             hud.update(world.getComboObj(), world.getFaObj());
+        } else {
+            
         }
+        
     }
 
     public void paint(Graphics g) {
