@@ -20,6 +20,7 @@ public class Hero extends AnimatedSprite {
     private boolean attack;
     private boolean showEffect;
     private boolean canAttack;
+    private boolean charged;
     private long effectTimeLast;
     private long lastAttack=0;
     private HitEffect hitEffect;
@@ -41,6 +42,7 @@ public class Hero extends AnimatedSprite {
         canAttack = true;
         this.stop();
         this.hitEffectDone = false;
+        this.charged = false;
     }
 
     public void update(long time, boolean isAttack){ 
@@ -52,6 +54,9 @@ public class Hero extends AnimatedSprite {
                 } else {
                     //give attack flag
                     attack = true;
+                    if (attackArea.getStack() >= 1){
+                        charged = true;
+                    }
                 }
             } else {
                 if(isAttack){
@@ -113,6 +118,7 @@ public class Hero extends AnimatedSprite {
         this.play();
         this.canAttack = false;
         this.lastAttack = System.currentTimeMillis();
+        this.charged = false;
         //this.effectTimeLast = System.currentTimeMillis();
         attackArea.reset();
     }
@@ -129,5 +135,9 @@ public class Hero extends AnimatedSprite {
     
     public boolean isCanAttack(){
         return canAttack;
+    }
+    
+    public boolean isCharged(){
+        return charged;
     }
 }

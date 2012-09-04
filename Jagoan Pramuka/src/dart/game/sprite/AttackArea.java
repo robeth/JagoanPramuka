@@ -28,6 +28,7 @@ public class AttackArea extends ChocoSprite {
     private int initHeight;
     private int currentWidth;
     private int currentHeight;
+    private int stack;
 
     public AttackArea(Image image, int width, int height, int initWidth, int initHeight) {
         super(image, width, height);
@@ -50,7 +51,7 @@ public class AttackArea extends ChocoSprite {
 
     public void updateCharge(long currentTime) {
 
-        int stack = (int) (System.currentTimeMillis() - startTime) / incrementDuration;
+        stack = (int) (System.currentTimeMillis() - startTime) / incrementDuration;
         Debug.println("Stack:"+stack);
         if (stack > maxIncrement) {
             stack = maxIncrement;
@@ -120,6 +121,10 @@ public class AttackArea extends ChocoSprite {
 
     public boolean isCharging() {
         return state == CHARGING_STATE;
+    }
+    
+    public int getStack(){
+        return stack;
     }
 
     public boolean canDamage(Enemy e) {

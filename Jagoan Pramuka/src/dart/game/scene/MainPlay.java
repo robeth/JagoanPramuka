@@ -103,7 +103,9 @@ public class MainPlay extends Scene {
             world.update(currentTime, keyDownStates);
             hud.update(world.getComboObj(), world.getFaObj());
         } else {
-            
+            if (curScore < hud.getScore()){
+                curScore++;
+            }
         }
         
     }
@@ -117,7 +119,7 @@ public class MainPlay extends Scene {
             if (gameState != PLAY_STATE) {
                 Image notificationImage = (gameState == WIN_STATE)? winImage : loseImage;
                 g.drawImage(notificationImage, g.getClipWidth() / 2, g.getClipHeight() / 2, Graphics.HCENTER | Graphics.VCENTER);
-                berlin.paintString(g, Integer.toString(hud.getScore()), 150, 110, Graphics.LEFT | Graphics.TOP);
+                berlin.paintString(g, Integer.toString(curScore), 150, 110, Graphics.LEFT | Graphics.TOP);
                 berlin.paintString(g, Integer.toString(world.getComboObj().getHighestCombo()), 150, 130, Graphics.LEFT | Graphics.TOP);
                 if (gameState == WIN_STATE) {
                    int life = hud.getLife();
@@ -146,16 +148,20 @@ public class MainPlay extends Scene {
                 changeScene(mainMenu);
             }
         } else if (keyCode == GameCanvas.FIRE && gameState != PLAY_STATE) {
-            profile.setMoney(world.getHUDMoney());
-            profile.setBestCombo(level, Math.max(profile.getBestCombo(level),world.getComboObj().getHighestCombo()));
-            profile.setHighscore(level, Math.max(profile.getHighscore(level),hud.getScore()));
-            profile.setSavedAnimals(level, Math.max(profile.getSavedAnimals(level), hud.getLife()));
-         
-            if(gameState == WIN_STATE)
+            if (curScore == hud.getScore()){
+                profile.setMoney(world.getHUDMoney());
+                profile.setBestCombo(level, Math.max(profile.getBestCombo(level),world.getComboObj().getHighestCombo()));
+                profile.setHighscore(level, Math.max(profile.getHighscore(level),hud.getScore()));
+                profile.setSavedAnimals(level, Math.max(profile.getSavedAnimals(level), hud.getLife()));
+                
+                if(gameState == WIN_STATE)
                 profile.setLastLevel(Math.max(profile.getLastLevel(), level));
             
-            MainMenu mainMenu = new MainMenu(engine);
-            changeScene(mainMenu);
+                MainMenu mainMenu = new MainMenu(engine);
+                changeScene(mainMenu);
+            } else {
+                curScore = hud.getScore();
+            }
         }
 
     }
