@@ -4,6 +4,7 @@
  */
 package dart.game.sprite;
 
+import com.chocoarts.component.Timer;
 import com.chocoarts.debug.Debug;
 import com.chocoarts.drawing.AnimatedSprite;
 import dart.game.logic.EnemyGenerator;
@@ -20,6 +21,8 @@ public class Enemy extends AnimatedSprite {
     public static int BRONZE_AMOUNT = 10;
     public static int SILVER_AMOUNT = 50;
     public static int GOLD_AMOUNT = 100;
+    public static int WALKING = 8765;
+    public static int SUFFERRING = 9765;
     
     private int LP;
     private int score;
@@ -30,6 +33,8 @@ public class Enemy extends AnimatedSprite {
     private int bronzeChance;
     private int silverChance;
     private Random coinChance;
+    private int state;
+    
 
     public Enemy(Image image, int frameWidth, int frameHeight, int frameDuration,int enemyType) { 
         
@@ -60,7 +65,9 @@ public class Enemy extends AnimatedSprite {
         LPBar = new HealthBar(image,frameWidth,frameHeight,LP);
         LPBar.setPosition(this.getX(), this.getY()-HealthBar.BAR_HEIGHT);
         coinChance = new Random();
+        state= WALKING;
     }
+    
 
     public void update(long currentTime) {
         super.update(currentTime);
@@ -79,6 +86,7 @@ public class Enemy extends AnimatedSprite {
     }
     
     public boolean attacked (int damage) {
+        this.setFrame(4);
         setLP(getLP()-damage);
         if (LP <= 0){
             return true;

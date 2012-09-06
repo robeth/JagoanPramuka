@@ -78,11 +78,14 @@ public class EnemyGenerator {
         Image enemyImage = null;
         // tambah untuk gambar yang berbeda
         try {
-            enemyImage = Image.createImage("/penjahats.png");
+            enemyImage = Image.createImage("/Mafia_mini.png");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return new Enemy(enemyImage, 34, 42, 400, enemiesPool[enemyPoolIndex]);
+        Enemy e = new Enemy(enemyImage, 42, 42, 400, enemiesPool[enemyPoolIndex]); 
+        int[] sequence = {0,1,2,3};
+        e.setFrameSequence(sequence);
+        return e;
      
     }
     
