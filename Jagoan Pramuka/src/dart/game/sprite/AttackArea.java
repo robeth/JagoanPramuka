@@ -127,10 +127,11 @@ public class AttackArea extends ChocoSprite {
         return stack;
     }
 
-    public boolean canDamage(Enemy e) {
+    public boolean canDamage(Enemy e,int chargedCount) {
         return (
-                ((getX() < e.getX()) && (getX()+currentWidth > e.getX())) ||
-                ((getX() < e.getX()+e.getWidth()) && (getX()+currentWidth > e.getX() + e.getWidth()))
+                ((getX()+chargedCount*50 < e.getX()) && (getX()+(chargedCount+1)*50 > e.getX())) ||
+                ((getX()+chargedCount*50 < e.getX()+20) && (getX()+(chargedCount+1)*50 > e.getX() + 20))
                 ); 
     }
+    
 }

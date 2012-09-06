@@ -77,7 +77,7 @@ public class MainPlay extends Scene {
             gothic = new CustomFont("/font/gothic10White");
             hud = new HUD(berlin, gothic, profile.getMoney());
 
-            world = new World(this, heroes, hud);
+            world = new World(this, heroes, hud,level);
             gameState = PLAY_STATE;
             curScore = 0;
         } catch (IOException ex) {
