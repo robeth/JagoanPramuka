@@ -22,6 +22,7 @@ import javax.microedition.lcdui.Image;
  */
 public class World {
     private static final int LANE_NUMBER = 3;
+    private static final int CHARGED_DELAY = 200;
     private Hero[] heroes;
     private Vector[] enemiesLanes;
     private Vector coins;
@@ -33,10 +34,14 @@ public class World {
     private HUD hud;
     private MainPlay context;
     private boolean isWaveEnd;
+    private boolean commenceCA;
+    private int CAheroes;
+    private long lastCharged;
+    private int chargePos;
     private MainProfile profile;
     
 
-    public World(MainPlay context, Hero[] heroes,HUD hud){
+    public World(MainPlay context, Hero[] heroes,HUD hud,int level){
         this.context = context;
         profile = (MainProfile)context.engine.getProfile();
         
@@ -65,9 +70,12 @@ public class World {
         en[0] = EnemyGenerator.ALIEN;
         en[1] = EnemyGenerator.ALIEN2;
         en[2] = EnemyGenerator.ALIEN3;
-        eg = new EnemyGenerator(this, 1000, en, 1000);
+        eg = new EnemyGenerator(this, 1000, en, 1000,level);
         
         isWaveEnd = false;
+        commenceCA = false;
+        lastCharged = 0;
+        chargePos = 0;
     }
 
     public void update(long currentTime, boolean[] attackStatus){
@@ -81,14 +89,54 @@ public class World {
         for(int i = 0; i< 3; i++){
             heroes[i].update(currentTime, attackStatus[i]);
             if(heroes[i].isAttacking()){
-                applyAttack(heroes[i].getAttack(),i);
-                heroes[i].finishAttack();
+                if (!heroes[i].isCharged()){
+                    applyAttack(heroes[i].getAttack(),i,0);
+                    heroes[i].finishAttack();
+                } else {
+                    commenceCA = true;
+                    lastCharged = currentTime;
+                    CAheroes = i;
+                }
             }
         }     
         eg.update(currentTime);
         
         for(int i =0; i < heroes.length; i++){
             heroes[i].update(currentTime);
+        }
+        
+        // disini lakukan 
+        if (commenceCA){
+            if (currentTime - lastCharged >= CHARGED_DELAY * 3 && chargePos == 3){
+                applyAttack(heroes[CAheroes].getAttack(),CAheroes,4);
+                heroes[CAheroes].finishAttack();
+                chargePos = 0;
+                commenceCA = false;
+            } else if (currentTime - lastCharged >= CHARGED_DELAY * 2 && chargePos == 2){
+                applyAttack(heroes[CAheroes].getAttack(),CAheroes,3);
+                heroes[CAheroes].finishAttack();
+                chargePos ++;
+                if (heroes[CAheroes].getAttack().getStack() == 3){
+                    chargePos = 0;
+                    commenceCA = false;
+                }
+            } else if (currentTime - lastCharged >= CHARGED_DELAY * 1 && chargePos == 1){
+                applyAttack(heroes[CAheroes].getAttack(),CAheroes,2);
+                heroes[CAheroes].finishAttack();
+                chargePos ++;
+                if (heroes[CAheroes].getAttack().getStack() == 2){
+                    chargePos = 0;
+                    commenceCA = false;
+                }
+            } else if (currentTime - lastCharged >= 0 && chargePos == 0){
+                applyAttack(heroes[CAheroes].getAttack(),CAheroes,1);
+                heroes[CAheroes].finishAttack();
+                chargePos ++;
+                if (heroes[CAheroes].getAttack().getStack() == 1){
+                    chargePos = 0;
+                    commenceCA = false;
+                }
+            }
         }
     }
 
@@ -194,11 +242,11 @@ public class World {
         e.setPosition(320, lanes.getY(laneIndex));
     }
 
-    private void applyAttack(AttackArea attack, int laneIndex) {
+    private void applyAttack(AttackArea attack, int laneIndex,int chargeCount) {
         boolean missed = true;
-        for(int i =0; i < enemiesLanes[laneIndex].size(); i++ ){
+        for(int i = 0; i < enemiesLanes[laneIndex].size(); i++ ){
             Enemy e = (Enemy) enemiesLanes[laneIndex].elementAt(i);
-            if(e!=null && attack.canDamage(e)){
+            if(e!=null && attack.canDamage(e,chargeCount)){
                 if (applyDamage(attack,e,laneIndex,i)){
                     i--;
                     hud.incScore(e.getScore());

@@ -103,13 +103,9 @@ public class MainPlay extends Scene {
             gothic = new CustomFont("/font/gothic10White");
             hud = new HUD(berlin, gothic, profile.getMoney());
 
-            world = new World(this, heroes, hud);
-            gameState = PRE_STATE;
-            curScore = ZERO;
-
-            timer = new Timer(1000);
-            preState = ZERO;
-            postState = SCORE;
+            world = new World(this, heroes, hud,level);
+            gameState = PLAY_STATE;
+            curScore = 0;
         } catch (IOException ex) {
             ex.printStackTrace();
         }
