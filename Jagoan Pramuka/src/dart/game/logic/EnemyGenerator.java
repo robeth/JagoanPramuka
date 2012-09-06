@@ -55,6 +55,7 @@ public class EnemyGenerator {
                 case 4 : enemyArrayUsed = enemyArrayLv4;
                 case 5 : enemyArrayUsed = enemyArrayLv5;
         }
+        enemyArrayUsed = enemyArrayLv1;
                 
         
     }

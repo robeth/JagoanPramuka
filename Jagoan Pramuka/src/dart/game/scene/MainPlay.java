@@ -29,6 +29,7 @@ public class MainPlay extends Scene {
             WIN_STATE = 20998,
             LOSE_STATE = 1019,
             PRE_STATE = 9090;
+    
     private Image aryaImage,
             bimaImage,
             cintaImage,
@@ -104,8 +105,10 @@ public class MainPlay extends Scene {
             hud = new HUD(berlin, gothic, profile.getMoney());
 
             world = new World(this, heroes, hud,level);
-            gameState = PLAY_STATE;
+            gameState = PRE_STATE;
+            postState = SCORE;
             curScore = 0;
+            timer = new Timer(1000);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
