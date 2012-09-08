@@ -114,8 +114,8 @@ public class HUD {
         //comboFont.paintString(g, "BarAttack: "+bar, 220, 40, Graphics.LEFT|Graphics.TOP);
 
         g.drawImage(life >= 1 ? animal1 : animal1fail, 10, 0, 0);
-        g.drawImage(life >= 2 ? animal2 : animal2fail, 30, 1, 0);
-        g.drawImage(life >= 3 ? animal3 : animal3fail, 50, 2, 0);
+        g.drawImage(life >= 2 ? animal2 : animal2fail, 42, 0, 0);
+        g.drawImage(life >= 3 ? animal3 : animal3fail, 74, 0, 0);
 
     }
 

@@ -108,26 +108,21 @@ public class MainPlay extends Scene {
 
     public void init() throws Exception {
         try {
-
             aryaImage = Image.createImage("/aryas.png");
             bimaImage = Image.createImage("/bimas.png");
             cintaImage = Image.createImage("/cintas.png");
-            backgroundImage = Image.createImage("/map_malam_seram.jpg");
             winImage = Image.createImage("/Sukses.png");
             loseImage = Image.createImage("/Gagal.png");
             oneImage = Image.createImage("/1.png");
             twoImage = Image.createImage("/2.png");
             threeImage = Image.createImage("/3.png");
-            startImage = Image.createImage("/semangat.png");
-            
+            startImage = Image.createImage("/semangat.png");         
 
             heroes = new Hero[3];
             heroes[0] = new Hero(aryaImage, 50, 43, 200, Hero.ARYA);
             heroes[1] = new Hero(bimaImage, 42, 44, 200, Hero.BIMA);
             heroes[2] = new Hero(cintaImage, 46, 44, 100, Hero.CINTA);
-            background = new ChocoSprite(backgroundImage);
-
-            background.setPosition(0, 0);
+           
             keyDownStates = new boolean[4];
 
             //profile
@@ -142,20 +137,26 @@ public class MainPlay extends Scene {
             curScore = 0;
             timer = new Timer(1000);
             
-            System.out.println("LEvel :" + level);
             if (level == 1){
                 hud = new HUD(berlin, gothic, profile.getMoney(),AYAM,KAMBING,SAPI,AYAM_NO,KAMBING_NO,SAPI_NO);
+                backgroundImage = Image.createImage("/map1.jpg");
             } else if (level == 2){
                 hud = new HUD(berlin, gothic, profile.getMoney(),ANOA,BABIRUSA,BEKANTAN,ANOA_NO,BABIRUSA_NO,BEKANTAN_NO);
+                backgroundImage = Image.createImage("/map2.jpg");
             } else if (level == 3){
                 hud = new HUD(berlin, gothic, profile.getMoney(),BERUANG_MADU,ENGGANG,BINTURUNG,BERUANG_MADU_NO,ENGGANG_NO,BINTURUNG_NO);
+                backgroundImage = Image.createImage("/map3.jpg");
             } else if (level == 4){
                 hud = new HUD(berlin, gothic, profile.getMoney(),BADAK,MALEO,HARIMAU,BADAK_NO,MALEO_NO,HARIMAU_NO);
+                backgroundImage = Image.createImage("/map4.jpg");
             } else if (level == 5){
                 hud = new HUD(berlin, gothic, profile.getMoney(),CENDRAWASIH,KOMODO,GAJAH,CENDRAWASIH_NO,KOMODO_NO,GAJAH_NO);
+                backgroundImage = Image.createImage("/map5.jpg");
             }
             
+            background = new ChocoSprite(backgroundImage);
             world = new World(this, heroes, hud,level);
+            background.setPosition(0, 0);
             
             
                  
@@ -286,6 +287,7 @@ public class MainPlay extends Scene {
     }
 
     public void keyPressed(int keyCode, int rawKeyCode) {
+        System.out.println("KEYCODE : " + keyCode + "rawKeyCode : " + rawKeyCode);
         if (rawKeyCode == GameCanvas.KEY_NUM5) {
             if (gameState == PLAY_STATE) {
                 world.applyFinalAttack();

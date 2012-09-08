@@ -239,11 +239,11 @@ public class World {
         Image coinImage = null;
         
         try {
-            if (coinAmount == 100){
+            if (coinAmount == Enemy.GOLD_AMOUNT){
                 coinImage = Image.createImage("/Gold.png");
-            } else if (coinAmount == 50){
+            } else if (coinAmount == Enemy.SILVER_AMOUNT){
                 coinImage = Image.createImage("/Silver.png");
-            } else if (coinAmount == 10){
+            } else if (coinAmount == Enemy.BRONZE_AMOUNT){
                 coinImage = Image.createImage("/Bronze.png");
             }
         } catch (IOException ex) {
@@ -303,8 +303,8 @@ public class World {
             Enemy e = (Enemy) enemiesLanes[laneIndex].elementAt(i);
             if(e!=null){
                 if (e.attacked(damage)){
-                    enemiesLanes[laneIndex].removeElementAt(i);
-                    i--;
+                    e.setState(Enemy.DYING);
+                    //i--;
                     hud.incScore(e.getScore());
                 }
                 Debug.println("damaged" + damage);

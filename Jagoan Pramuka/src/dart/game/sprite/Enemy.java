@@ -20,8 +20,9 @@ import javax.microedition.lcdui.Graphics;
 public class Enemy extends AnimatedSprite {
 
     public static int BRONZE_AMOUNT = 10;
-    public static int SILVER_AMOUNT = 50;
-    public static int GOLD_AMOUNT = 100;
+    public static int SILVER_AMOUNT = 25;
+    public static int GOLD_AMOUNT = 50;
+    public static int TOTAL_CHANCE = 300;
     public static int WALKING = 8765;
     public static int SUFFERRING = 9765;
     public static int DEATH = 10765;
@@ -71,7 +72,7 @@ public class Enemy extends AnimatedSprite {
         Enemy.initialize();
         if (enemyType == EnemyGenerator.MALING) {
             Debug.println("enemy LP=50");
-            LP = 100;
+            LP = 50;
             score = 10;
             goldChance = 1;
             speed = 2;
@@ -79,7 +80,7 @@ public class Enemy extends AnimatedSprite {
             bronzeChance = 10;
         } else if (enemyType == EnemyGenerator.MAFIA) {
             Debug.println("enemy LP=100");
-            LP = 150;
+            LP = 100;
             score = 20;
             speed = 2;
             goldChance = 5;
@@ -199,11 +200,11 @@ public class Enemy extends AnimatedSprite {
     }
 
     public int getCoin() {
-        if (coinChance.nextInt(100) < this.goldChance) {
+        if (coinChance.nextInt(TOTAL_CHANCE) < this.goldChance) {
             return Enemy.GOLD_AMOUNT;
-        } else if (coinChance.nextInt(100) < this.silverChance) {
+        } else if (coinChance.nextInt(TOTAL_CHANCE) < this.silverChance) {
             return Enemy.SILVER_AMOUNT;
-        } else if (coinChance.nextInt(100) < this.bronzeChance) {
+        } else if (coinChance.nextInt(TOTAL_CHANCE) < this.bronzeChance) {
             return Enemy.BRONZE_AMOUNT;
         } else {
             return 0;
@@ -212,5 +213,8 @@ public class Enemy extends AnimatedSprite {
 
     public int getState() {
         return state;
+    }
+    public void setState(int state){
+        this.state = state;
     }
 }
