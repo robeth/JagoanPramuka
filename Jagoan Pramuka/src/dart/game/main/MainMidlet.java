@@ -7,6 +7,7 @@ package dart.game.main;
 import com.chocoarts.ChocoMIDlet;
 import com.chocoarts.Engine;
 import dart.game.scene.MainMenu;
+import dart.game.scene.SplashScreen;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.game.GameCanvas;
 
@@ -27,7 +28,7 @@ public class MainMidlet extends ChocoMIDlet {
         profile.printStatus();
         
         //Buat scene level 1
-        MainMenu game = new MainMenu(engine);
+        SplashScreen game = new SplashScreen(engine);
         engine.setFirstScene(game);
 
         //Register music
