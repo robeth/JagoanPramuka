@@ -34,6 +34,8 @@ public class Enemy extends AnimatedSprite {
     private int silverChance;
     private Random coinChance;
     private int state;
+    private int sufferringTime = 500;
+    private Timer sufferringTimer;
     
 
     public Enemy(Image image, int frameWidth, int frameHeight, int frameDuration,int enemyType) { 
@@ -66,13 +68,28 @@ public class Enemy extends AnimatedSprite {
         LPBar.setPosition(this.getX(), this.getY()-HealthBar.BAR_HEIGHT);
         coinChance = new Random();
         state= WALKING;
+        sufferringTimer = new Timer(sufferringTime);
+        
     }
     
 
     public void update(long currentTime) {
-        super.update(currentTime);
-        move(-1, 0);
-        LPBar.move(-1, 0);
+        if(state == WALKING){
+            super.update(currentTime);
+            move(-1, 0);
+            LPBar.move(-1, 0);
+        } else if(state == SUFFERRING){
+            
+            
+            if(sufferringTimer.isTicked(currentTime)){
+                state = WALKING;
+                sufferringTimer.reset();
+            } else {
+                this.setFrame(4);
+                LPBar.move(1, 0);
+                move(1,0);
+            }
+        }
     }
     
     public void pseudoPaint(Graphics g){
@@ -86,7 +103,8 @@ public class Enemy extends AnimatedSprite {
     }
     
     public boolean attacked (int damage) {
-        this.setFrame(4);
+        state =SUFFERRING;
+        
         setLP(getLP()-damage);
         if (LP <= 0){
             return true;
