@@ -198,6 +198,10 @@ public class World {
                     } else if (finalAttackState == THREE) {
                         finalAttackState = EARTHQUAKE;
                         earthquakeTimer.reset();
+                        attackLane(0);
+                        attackLane(1);
+                        attackLane(2);
+                        faObj.resetBar();
                     } else if (finalAttackState == EARTHQUAKE ){
                         
                     }
@@ -313,11 +317,11 @@ public class World {
         Image coinImage = null;
 
         try {
-            if (coinAmount == 100) {
+            if (coinAmount == Enemy.GOLD_AMOUNT) {
                 coinImage = Image.createImage("/Gold.png");
-            } else if (coinAmount == 50) {
+            } else if (coinAmount == Enemy.SILVER_AMOUNT) {
                 coinImage = Image.createImage("/Silver.png");
-            } else if (coinAmount == 10) {
+            } else if (coinAmount == Enemy.BRONZE_AMOUNT) {
                 coinImage = Image.createImage("/Bronze.png");
             }
         } catch (IOException ex) {
@@ -362,25 +366,21 @@ public class World {
     }
 
     public void applyFinalAttack() {
-        int damage = heroes[0].getAttack().getAttackDamage() * faObj.getMultiplier();
 
         if (faObj.canDo()) {
-            attackLane(damage, 0);
-            attackLane(damage, 1);
-            attackLane(damage, 2);
-            faObj.resetBar();
             resetFinalAttackAnimation();
             state = FINAL_ATTACK;
         }
     }
 
-    private void attackLane(int damage, int laneIndex) {
+    private void attackLane(int laneIndex) {
+        int damage = heroes[0].getAttack().getAttackDamage() * faObj.getMultiplier();
         for (int i = 0; i < enemiesLanes[laneIndex].size(); i++) {
             Enemy e = (Enemy) enemiesLanes[laneIndex].elementAt(i);
             if (e != null) {
                 if (e.attacked(damage)) {
-                    enemiesLanes[laneIndex].removeElementAt(i);
-                    i--;
+                    e.setState(Enemy.DYING);
+                    //i--;
                     hud.incScore(e.getScore());
                 }
                 Debug.println("damaged" + damage);
