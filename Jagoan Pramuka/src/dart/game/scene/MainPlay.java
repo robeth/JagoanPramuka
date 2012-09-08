@@ -222,6 +222,7 @@ public class MainPlay extends Scene {
 
     public void paint(Graphics g) {
         try {
+            background.setPosition(world.getDeltaX(), world.getDeltaY());
             background.paint(g);
             world.paint(g);
             hud.paint(g);
