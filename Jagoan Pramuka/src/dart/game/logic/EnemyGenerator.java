@@ -18,8 +18,10 @@ public class EnemyGenerator {
     private int[] enemiesPool;
     private long lastUpdate;
     public static final int MALING = 10009;
-    public static final int KOLORIJO = 10010;
-    public static final int MAFIA = 10011;
+    public static final int MAFIA = 10010;
+    public static final int KUNTILANAK = 10011;
+    public static final int[] SEQUENCE_KUNTI = {0,1,2};
+    public static final int[] SEQUENCE_MALING = {0,1,2,3};
     int indexEnemyArray;
     private static final String[] enemyArrayLv1 = {"1","","","","","","1","","","","",""
             ,"1","","","","1","1","","1","","","","","1","1","","","1"
@@ -112,20 +114,23 @@ public class EnemyGenerator {
     
     public Enemy getEnemy(int enemyPoolIndex){
         Image enemyImage = null;
+        int[] sequence = null;
         // tambah untuk gambar yang berbeda
         try {
             if (enemyPoolIndex == 0){
-                enemyImage = Image.createImage("/Mafia_mini.png");
+                enemyImage = Image.createImage("/Penjahat_mini.png");
+                sequence = EnemyGenerator.SEQUENCE_MALING;
             } else if (enemyPoolIndex == 1){
                 enemyImage = Image.createImage("/Mafia_mini.png");
+                sequence = EnemyGenerator.SEQUENCE_MALING;
             } else if (enemyPoolIndex == 2){
-                enemyImage = Image.createImage("/Mafia_mini.png");
+                enemyImage = Image.createImage("/Kuntilanak_mini.png");
+                sequence = EnemyGenerator.SEQUENCE_KUNTI;
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
         Enemy e = new Enemy(enemyImage, 42, 42, 400, enemiesPool[enemyPoolIndex]); 
-        int[] sequence = {0,1,2,3};
         e.setFrameSequence(sequence);
         return e;
      

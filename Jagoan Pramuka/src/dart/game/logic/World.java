@@ -39,7 +39,7 @@ public class World {
     private long lastCharged;
     private int chargePos;
     private MainProfile profile;
-    
+    private boolean chargeMiss;
 
     public World(MainPlay context, Hero[] heroes,HUD hud,int level){
         this.context = context;
@@ -49,7 +49,7 @@ public class World {
         
         
         //Lanes component
-        lanes = new Lanes(LANE_NUMBER, 40, 2, 80);
+        lanes = new Lanes(LANE_NUMBER, 40, 2, 70);
         comboObj = new Combo();
         faObj = new FinalAttack();
         
@@ -68,14 +68,15 @@ public class World {
         
         int[] en = new int[3];
         en[0] = EnemyGenerator.MALING;
-        en[1] = EnemyGenerator.KOLORIJO;
-        en[2] = EnemyGenerator.MAFIA;
+        en[1] = EnemyGenerator.MAFIA;
+        en[2] = EnemyGenerator.KUNTILANAK;
         eg = new EnemyGenerator(this, 1000, en, 1000,level);
         
         isWaveEnd = false;
         commenceCA = false;
         lastCharged = 0;
         chargePos = 0;
+        chargeMiss = true;
     }
 
     public void update(long currentTime, boolean[] attackStatus){
@@ -90,8 +91,8 @@ public class World {
             heroes[i].update(currentTime, attackStatus[i]);
             if(heroes[i].isAttacking()){
                 if (!heroes[i].isCharged()){
-                    applyAttack(heroes[i].getAttack(),i,0);
-                    heroes[i].finishAttack();
+                    applyAttack(heroes[i].getAttack(),i,0,true);
+                    heroes[i].finishAttack(true);
                 } else {
                     commenceCA = true;
                     lastCharged = currentTime;
@@ -107,40 +108,56 @@ public class World {
         
         // disini lakukan 
         if (commenceCA){
+            
             if (currentTime - lastCharged >= CHARGED_DELAY * 3 && chargePos == 3){
-                applyAttack(heroes[CAheroes].getAttack(),CAheroes,4);
-                heroes[CAheroes].finishAttack();
+                chargeMiss = applyAttack(heroes[CAheroes].getAttack(),CAheroes,4,chargeMiss);
+                heroes[CAheroes].setCharge(false);
+                heroes[CAheroes].finishAttack(false);
                 chargePos = 0;
                 commenceCA = false;
+                heroes[CAheroes].resetAttack();
             } else if (currentTime - lastCharged >= CHARGED_DELAY * 2 && chargePos == 2){
-                applyAttack(heroes[CAheroes].getAttack(),CAheroes,3);
-                heroes[CAheroes].finishAttack();
+                chargeMiss = applyAttack(heroes[CAheroes].getAttack(),CAheroes,3,chargeMiss);
+                heroes[CAheroes].finishAttack(false);
                 chargePos ++;
                 if (heroes[CAheroes].getAttack().getStack() == 3){
                     chargePos = 0;
                     commenceCA = false;
+                    heroes[CAheroes].resetAttack();
+                    heroes[CAheroes].setCharge(false);
+                    heroes[CAheroes].finishAttack(false);
                 }
             } else if (currentTime - lastCharged >= CHARGED_DELAY * 1 && chargePos == 1){
-                applyAttack(heroes[CAheroes].getAttack(),CAheroes,2);
-                heroes[CAheroes].finishAttack();
+                chargeMiss = applyAttack(heroes[CAheroes].getAttack(),CAheroes,2,chargeMiss);
+                heroes[CAheroes].finishAttack(false);
                 chargePos ++;
                 if (heroes[CAheroes].getAttack().getStack() == 2){
                     chargePos = 0;
                     commenceCA = false;
+                    heroes[CAheroes].resetAttack();
+                    heroes[CAheroes].setCharge(false);
+                    heroes[CAheroes].finishAttack(false);
                 }
             } else if (currentTime - lastCharged >= 0 && chargePos == 0){
-                applyAttack(heroes[CAheroes].getAttack(),CAheroes,1);
-                heroes[CAheroes].finishAttack();
+                chargeMiss = applyAttack(heroes[CAheroes].getAttack(),CAheroes,1,true);
+                heroes[CAheroes].finishAttack(true);
                 chargePos ++;
                 if (heroes[CAheroes].getAttack().getStack() == 1){
                     chargePos = 0;
                     commenceCA = false;
+                    heroes[CAheroes].resetAttack();
+                    heroes[CAheroes].setCharge(false);
+                    heroes[CAheroes].finishAttack(false);
                 }
             }
         }
     }
 
     public void paint(Graphics g){
+        for(int i =0; i < heroes.length; i++){
+            heroes[i].pseudoPaint(g);
+        }
+        
         for(int j = 0; j < enemiesLanes.length; j++){
             for(int i = 0; i < enemiesLanes[j].size(); i++){
                 Enemy p = (Enemy)enemiesLanes[j].elementAt(i);
@@ -157,9 +174,7 @@ public class World {
                 }
             }
         
-        for(int i =0; i < heroes.length; i++){
-            heroes[i].pseudoPaint(g);
-        }
+        
     }
     
     private void updateEnemies(long currentTime) {
@@ -177,9 +192,12 @@ public class World {
                         if (hud.stealed()){
                             context.setGameState(MainPlay.LOSE_STATE);
                         }
+                    } else if (locEnemy.getState()== Enemy.DECAY){
+                         enemies.removeElementAt(counter);
                     } else {
                         counter++;
                     }
+                    
                 }
             }
         }
@@ -242,13 +260,13 @@ public class World {
         e.setPosition(320, lanes.getY(laneIndex));
     }
 
-    private void applyAttack(AttackArea attack, int laneIndex,int chargeCount) {
-        boolean missed = true;
+    private boolean applyAttack(AttackArea attack, int laneIndex,int chargeCount,boolean miss) {
+        boolean missed = miss;
         for(int i = 0; i < enemiesLanes[laneIndex].size(); i++ ){
             Enemy e = (Enemy) enemiesLanes[laneIndex].elementAt(i);
             if(e!=null && attack.canDamage(e,chargeCount)){
-                if (applyDamage(attack,e,laneIndex,i)){
-                    i--;
+                if (e.attacked(attack.getAttackDamage())){
+                    //i--;
                     hud.incScore(e.getScore());
                     int c = e.getCoin();
                     if (c > 0){
@@ -265,6 +283,8 @@ public class World {
             comboObj.miss();
             Debug.println("miss" + comboObj.getComboStack() );
         }
+        
+        return missed;
     }
     
     public void applyFinalAttack() {
@@ -292,14 +312,6 @@ public class World {
         }
     }
 
-    private boolean applyDamage(AttackArea attack, Enemy e, int laneIndex, int index) {
-        //kurangi hape, animasi dll
-        if (e.attacked(attack.getAttackDamage())){
-            enemiesLanes[laneIndex].removeElementAt(index);
-            return true;
-        }
-        return false; 
-    }
     
     public Combo getComboObj(){
         return comboObj;

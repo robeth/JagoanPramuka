@@ -56,18 +56,19 @@ public class HUD {
 
     }
 
-    public HUD(CustomFont scoreFont, CustomFont comboFont, int money) {
+    public HUD(CustomFont scoreFont, CustomFont comboFont, int money, String animalS1,String animalS2,String animalS3,
+            String animal_no1, String animal_no2, String animal_no3) {
         this.scoreFont = scoreFont;
         this.comboFont = comboFont;
         this.money = money;
         this.life = 3;
         try {
-            animal1 = Image.createImage("/1_ayam.png");
-            animal2 = Image.createImage("/2_kambing.png");
-            animal3 = Image.createImage("/3_sapi.png");
-            animal1fail = Image.createImage("/1_ayam_no.png");
-            animal2fail = Image.createImage("/2_kambing_no.png");
-            animal3fail = Image.createImage("/3_sapi_no.png");
+            animal1 = Image.createImage(animalS1);
+            animal2 = Image.createImage(animalS2);
+            animal3 = Image.createImage(animalS3);
+            animal1fail = Image.createImage(animal_no1);
+            animal2fail = Image.createImage(animal_no2);
+            animal3fail = Image.createImage(animal_no3);
             comboBar = Image.createImage("/combo.png");
         } catch (IOException ex) {
 

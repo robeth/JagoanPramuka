@@ -30,6 +30,37 @@ public class MainPlay extends Scene {
             LOSE_STATE = 1019,
             PRE_STATE = 9090;
     
+    public static final String AYAM = "/1_ayam.png",
+            KAMBING = "/2_kambing.png",
+            SAPI = "/3_sapi.png",
+            ANOA = "4_anoa.png",
+            BABIRUSA = "5_babirusa.png",
+            BEKANTAN = "6_bekantan.png",
+            BERUANG_MADU = "7_beruangmadu.png",
+            ENGGANG = "8_enggang.png",
+            BINTURUNG = "9_binturung.png",
+            BADAK = "10_badak.png",
+            MALEO = "11_maleo.png",
+            HARIMAU = "12_harimau.png",
+            CENDRAWASIH = "13_cendrawasih.png",
+            KOMODO = "14_komodo.png",
+            GAJAH = "15_gajah.png",
+            AYAM_NO = "/1_ayam_no.png",
+            KAMBING_NO = "/2_kambing_no.png",
+            SAPI_NO = "/3_sapi_no.png",
+            ANOA_NO = "4_anoa_no.png",
+            BABIRUSA_NO = "5_babirusa_no.png",
+            BEKANTAN_NO = "6_bekantan_no.png",
+            BERUANG_MADU_NO = "7_beruangmadu_no.png",
+            ENGGANG_NO = "8_enggang_no.png",
+            BINTURUNG_NO = "9_binturung_no.png",
+            BADAK_NO = "10_badak_no.png",
+            MALEO_NO = "11_maleo_no.png",
+            HARIMAU_NO = "12_harimau_no.png",
+            CENDRAWASIH_NO = "13_cendrawasih_no.png",
+            KOMODO_NO = "14_komodo_no.png",
+            GAJAH_NO = "15_gajah_no.png";
+    
     private Image aryaImage,
             bimaImage,
             cintaImage,
@@ -68,6 +99,7 @@ public class MainPlay extends Scene {
             ANIM1 = 0,
             ANIM2 = 1,
             ANIM3 = 2;
+    
 
     MainPlay(Engine engine, int level) {
         super(engine);
@@ -80,13 +112,14 @@ public class MainPlay extends Scene {
             aryaImage = Image.createImage("/aryas.png");
             bimaImage = Image.createImage("/bimas.png");
             cintaImage = Image.createImage("/cintas.png");
-            backgroundImage = Image.createImage("/map.jpg");
+            backgroundImage = Image.createImage("/map_malam_seram.jpg");
             winImage = Image.createImage("/Sukses.png");
             loseImage = Image.createImage("/Gagal.png");
             oneImage = Image.createImage("/1.png");
             twoImage = Image.createImage("/2.png");
             threeImage = Image.createImage("/3.png");
             startImage = Image.createImage("/semangat.png");
+            
 
             heroes = new Hero[3];
             heroes[0] = new Hero(aryaImage, 50, 43, 200, Hero.ARYA);
@@ -103,13 +136,30 @@ public class MainPlay extends Scene {
             //hud
             berlin = new CustomFont("/font/berlinSansFB12White");
             gothic = new CustomFont("/font/gothic10White");
-            hud = new HUD(berlin, gothic, profile.getMoney());
 
-            world = new World(this, heroes, hud,level);
             gameState = PRE_STATE;
             postState = SCORE;
             curScore = 0;
             timer = new Timer(1000);
+            
+            System.out.println("LEvel :" + level);
+            if (level == 1){
+                hud = new HUD(berlin, gothic, profile.getMoney(),AYAM,KAMBING,SAPI,AYAM_NO,KAMBING_NO,SAPI_NO);
+            } else if (level == 2){
+                hud = new HUD(berlin, gothic, profile.getMoney(),ANOA,BABIRUSA,BEKANTAN,ANOA_NO,BABIRUSA_NO,BEKANTAN_NO);
+            } else if (level == 3){
+                hud = new HUD(berlin, gothic, profile.getMoney(),BERUANG_MADU,ENGGANG,BINTURUNG,BERUANG_MADU_NO,ENGGANG_NO,BINTURUNG_NO);
+            } else if (level == 4){
+                hud = new HUD(berlin, gothic, profile.getMoney(),BADAK,MALEO,HARIMAU,BADAK_NO,MALEO_NO,HARIMAU_NO);
+            } else if (level == 5){
+                hud = new HUD(berlin, gothic, profile.getMoney(),CENDRAWASIH,KOMODO,GAJAH,CENDRAWASIH_NO,KOMODO_NO,GAJAH_NO);
+            }
+            
+            world = new World(this, heroes, hud,level);
+            
+            
+                 
+            
         } catch (IOException ex) {
             ex.printStackTrace();
         }
