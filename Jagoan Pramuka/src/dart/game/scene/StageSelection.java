@@ -93,14 +93,15 @@ public class StageSelection extends Scene {
             }
         }
         
-        berlin.paintString(g, "Skor: "+profile.getHighscore(level), 50, 135, Graphics.TOP| Graphics.LEFT);
-        berlin.paintString(g, "Kombo: "+profile.getBestCombo(level), 50, 150, Graphics.LEFT | Graphics.TOP);
-        berlin.paintString(g, "Hewan: "+profile.getSavedAnimals(level), 50, 165, Graphics.LEFT | Graphics.TOP);
-        berlin.paintString(g, "Geng cicak: level "+(level+1), 150, 135, Graphics.TOP | Graphics.LEFT);
+        
         
         if(isBack){
             g.drawImage(cursorImage,35,210,0);
         }else {
+            berlin.paintString(g, "Skor: "+profile.getHighscore(level), 50, 135, Graphics.TOP| Graphics.LEFT);
+            berlin.paintString(g, "Kombo: "+profile.getBestCombo(level), 50, 150, Graphics.LEFT | Graphics.TOP);
+            berlin.paintString(g, "Hewan: "+profile.getSavedAnimals(level), 50, 165, Graphics.LEFT | Graphics.TOP);
+            berlin.paintString(g, "Geng cicak: level "+(level+1), 150, 135, Graphics.TOP | Graphics.LEFT);
             g.drawImage(cursorImage,cursorPosition[level][0], cursorPosition[level][1],0);
         }
     }
@@ -111,8 +112,10 @@ public class StageSelection extends Scene {
                 MainMenu mainMenu = new MainMenu(engine);
                 changeScene(mainMenu);
             } else {
-                MainPlay mainPlay = new MainPlay(engine, level + 1);
-                changeScene(mainPlay);
+                if(level <= profile.getLastLevel()){
+                    MainPlay mainPlay = new MainPlay(engine, level + 1);
+                    changeScene(mainPlay);
+                }
             }
         } else if (keyCode == GameCanvas.LEFT) {
             if (--level < 0) {
