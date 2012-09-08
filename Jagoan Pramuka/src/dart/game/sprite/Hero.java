@@ -1,5 +1,6 @@
 package dart.game.sprite;
 
+import com.chocoarts.component.Timer;
 import com.chocoarts.debug.Debug;
 import com.chocoarts.drawing.AnimatedSprite;
 import java.io.IOException;
@@ -25,7 +26,9 @@ public class Hero extends AnimatedSprite {
     private long lastAttack=0;
     private HitEffect hitEffect;
     private boolean hitEffectDone;
-    
+    private Timer chargeTimer;
+    private boolean isCharge1;
+    private Image chargeEffect1, chargeEffect2;
     public Hero(Image image, int frameWidth, int frameHeight, int frameDuration,int type) throws IOException {
         super(image, frameWidth, frameHeight, frameDuration);
        
@@ -43,6 +46,11 @@ public class Hero extends AnimatedSprite {
         this.stop();
         this.hitEffectDone = false;
         this.charged = false;
+        chargeTimer = new Timer(200);
+        isCharge1= true;
+        
+        chargeEffect1= Image.createImage("/c_effect1.png");
+        chargeEffect2= Image.createImage("/c_effect2.png");
     }
 
     public void update(long time, boolean isAttack){ 
@@ -85,6 +93,11 @@ public class Hero extends AnimatedSprite {
             this.canAttack = true;
         }
         
+        if(attackArea.isChargingAttack() && chargeTimer.isTicked(time)){
+            isCharge1= !isCharge1;
+            chargeTimer.reset();
+        }
+        
     }
     
     public void setPosition(int x, int y){
@@ -95,6 +108,13 @@ public class Hero extends AnimatedSprite {
     
     public void pseudoPaint(Graphics g){
         paint(g);
+        if(attackArea.isChargingAttack())
+            g.drawImage((isCharge1) ? chargeEffect1: chargeEffect2, this.getX(), this.getY(), Graphics.TOP| Graphics.LEFT);
+        
+        
+        
+        
+        
         attackArea.pseudoPaint(g);
         if (showEffect){
             hitEffect.paint(g);
