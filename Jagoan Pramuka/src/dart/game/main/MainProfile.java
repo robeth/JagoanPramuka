@@ -168,6 +168,7 @@ public class MainProfile extends Profile{
 
     void printStatus() {
         System.out.println("Money: "+money);
+        System.out.println("Last Level:"+lastLevel);
         for(int i = 1; i < 6; i++){
             System.out.println("--Level "+i+"--");
             System.out.println("Highscore:"+highscore[i-1]);

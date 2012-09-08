@@ -71,6 +71,7 @@ public class MainPlay extends Scene {
 
     MainPlay(Engine engine, int level) {
         super(engine);
+        this.level = level;
     }
 
     public void init() throws Exception {
@@ -255,9 +256,9 @@ public class MainPlay extends Scene {
                 case CONFIRM:
                     if (curScore == hud.getScore()) {
                         profile.setMoney(world.getHUDMoney());
-                        profile.setBestCombo(level, Math.max(profile.getBestCombo(level), world.getComboObj().getHighestCombo()));
-                        profile.setHighscore(level, Math.max(profile.getHighscore(level), hud.getScore()));
-                        profile.setSavedAnimals(level, Math.max(profile.getSavedAnimals(level), hud.getLife()));
+                        profile.setBestCombo(level-1, Math.max(profile.getBestCombo(level-1), world.getComboObj().getHighestCombo()));
+                        profile.setHighscore(level-1, Math.max(profile.getHighscore(level-1), hud.getScore()));
+                        profile.setSavedAnimals(level-1, Math.max(profile.getSavedAnimals(level-1), hud.getLife()));
 
                         if (gameState == WIN_STATE) {
                             profile.setLastLevel(Math.max(profile.getLastLevel(), level));

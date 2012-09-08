@@ -4,3 +4,6 @@
 *.jar
 *.war
 *.ear
+/Jagoan Pramuka/nbproject/private/
+/Jagoan Pramuka/build/
+/Jagoan Pramuka/dist/

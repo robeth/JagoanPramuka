@@ -17,25 +17,40 @@ public class EnemyGenerator {
     private long duration;
     private int[] enemiesPool;
     private long lastUpdate;
-    public static final int ALIEN = 10009;
-    public static final int ALIEN2 = 10010;
-    public static final int ALIEN3 = 10011;
+    public static final int MALING = 10009;
+    public static final int KOLORIJO = 10010;
+    public static final int MAFIA = 10011;
     int indexEnemyArray;
     private static final String[] enemyArrayLv1 = {"1","","","","","","1","","","","",""
             ,"1","","","","1","1","","1","","","","","1","1","","","1"
             ,"1","1","","","","1","","1","","1","","","1","1","","1","1"
             ,"1","","1","","11","1","","","","","","1","1","11","","","11"
             ,"1","1","","1","1","1","","","1","","","1","11","","1","","11"
-            /*,"1","1","1","1","","1","1","","11","1","","11","","11","","","11"
-            ,"","11","11","","11","11","1","","11","","1","","11","1","","1","11"
-            ,"11","1","11","","11","","1","","11","","11","11","","11","","1","1"
-            ,"1","111","","","11","11","11","","11","1","1","11","111","","11","","111"*/};
+            };
     private static final String[] enemyArrayLv2 = {"1","","","","1","","","","","1","",""
             ,"2","","1","","","2","","1","","","","1","","1","","","2"
+            ,"1","","1","","","2","","2","","","2","1","","1","","","2"
+            ,"2","","2","","","2","1","2","","","2","1","","1","1","","2"
+            ,"2","2","","2","","","2","2","","2","21","11","","12","","1","2"
             };
-    private static final String[] enemyArrayLv3 = {};
-    private static final String[] enemyArrayLv4 = {};
-    private static final String[] enemyArrayLv5 = {};
+    private static final String[] enemyArrayLv3 = {"1","","","1","","","","","1","1","",""
+            ,"2","","1","","","2","","1","","","","1","2","1","","","2"
+            ,"2","","2","","2","2","","2","","1","2","1","","1","","1","2"
+            ,"2","","1","","1","1","1","","2","","2","2","","1","2","","2"
+            ,"1","2","","2","","","2","2","","2","22","12","","12","","1","2"
+            };
+    private static final String[] enemyArrayLv4 = {"1","","","1","","","","2","","","","2"
+            ,"1","","3","","","2","","","3","","","2","2","","","","2"
+            ,"2","","2","","2","2","","2","","","2","1","","1","","2","2"
+            ,"2","","3","","2","1","","","3","","2","1","","","2","","3"
+            ,"3","2","","2","","","2","","","23","2","12","","32","","13","3"
+            };
+    private static final String[] enemyArrayLv5 = {"1","","","2","","","","3","","","","2"
+            ,"2","","3","","","2","1","","3","","","2","3","","","","3"
+            ,"2","","2","","3","3","","2","","","3","1","","1","","3","2"
+            ,"3","","3","","2","3","","","3","","2","3","","","2","","3"
+            ,"3","3","","3","","","2","","","23","3","13","","32","","23","3"
+            };
     private String[] enemyArrayUsed;
     private Random r;
     private World world;
@@ -50,12 +65,16 @@ public class EnemyGenerator {
         
         switch (lv) {
                 case 1 : enemyArrayUsed = enemyArrayLv1;
+                    break;
                 case 2 : enemyArrayUsed = enemyArrayLv2;
+                    break;
                 case 3 : enemyArrayUsed = enemyArrayLv3;
+                    break;
                 case 4 : enemyArrayUsed = enemyArrayLv4;
+                    break;
                 case 5 : enemyArrayUsed = enemyArrayLv5;
+                    break;
         }
-        enemyArrayUsed = enemyArrayLv1;
                 
         
     }
@@ -95,7 +114,13 @@ public class EnemyGenerator {
         Image enemyImage = null;
         // tambah untuk gambar yang berbeda
         try {
-            enemyImage = Image.createImage("/Mafia_mini.png");
+            if (enemyPoolIndex == 0){
+                enemyImage = Image.createImage("/Mafia_mini.png");
+            } else if (enemyPoolIndex == 1){
+                enemyImage = Image.createImage("/Mafia_mini.png");
+            } else if (enemyPoolIndex == 2){
+                enemyImage = Image.createImage("/Mafia_mini.png");
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }

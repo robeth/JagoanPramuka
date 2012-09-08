@@ -130,7 +130,7 @@ public class AttackArea extends ChocoSprite {
     public boolean canDamage(Enemy e,int chargedCount) {
         return (
                 ((getX()+chargedCount*50 < e.getX()) && (getX()+(chargedCount+1)*50 > e.getX())) ||
-                ((getX()+chargedCount*50 < e.getX()+20) && (getX()+(chargedCount+1)*50 > e.getX() + 20))
+                ((getX()+chargedCount*50 < e.getX()+e.getWidth()) && (getX()+(chargedCount+1)*50 > e.getX() + e.getWidth()))
                 ); 
     }
     

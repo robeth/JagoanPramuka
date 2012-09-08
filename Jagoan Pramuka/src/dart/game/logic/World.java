@@ -67,9 +67,9 @@ public class World {
         r = new Random();
         
         int[] en = new int[3];
-        en[0] = EnemyGenerator.ALIEN;
-        en[1] = EnemyGenerator.ALIEN2;
-        en[2] = EnemyGenerator.ALIEN3;
+        en[0] = EnemyGenerator.MALING;
+        en[1] = EnemyGenerator.KOLORIJO;
+        en[2] = EnemyGenerator.MAFIA;
         eg = new EnemyGenerator(this, 1000, en, 1000,level);
         
         isWaveEnd = false;

@@ -40,23 +40,23 @@ public class Enemy extends AnimatedSprite {
         
         super(image, frameWidth, frameHeight, frameDuration);
         this.Type = enemyType;
-        if (enemyType == EnemyGenerator.ALIEN){
-            Debug.println("enemy LP=100");
-            LP = 100;
+        if (enemyType == EnemyGenerator.MALING){
+            Debug.println("enemy LP=50");
+            LP = 50;
             score = 10;
             goldChance = 1;
             silverChance = 5;
             bronzeChance = 10;
-        } else if (enemyType == EnemyGenerator.ALIEN2){
-            Debug.println("enemy LP=200");
-            LP = 200;
+        } else if (enemyType == EnemyGenerator.KOLORIJO){
+            Debug.println("enemy LP=100");
+            LP = 100;
             score = 20;
             goldChance = 5;
             silverChance = 15;
             bronzeChance = 30;
-        } else if (enemyType == EnemyGenerator.ALIEN3){
-            Debug.println("enemy LP=300");
-            LP = 300;
+        } else if (enemyType == EnemyGenerator.MAFIA){
+            Debug.println("enemy LP=150");
+            LP = 200;
             score = 30;
             goldChance = 10;
             silverChance = 20;
