@@ -20,6 +20,7 @@ public class EnemyGenerator {
     public static final int MALING = 10009;
     public static final int MAFIA = 10010;
     public static final int KUNTILANAK = 10011;
+    public static final int BOS_CICAK = 10012;
     public static final int[] SEQUENCE_KUNTI = {0,1,2};
     public static final int[] SEQUENCE_MALING = {0,1,2,3};
     int indexEnemyArray;
@@ -38,20 +39,20 @@ public class EnemyGenerator {
     private static final String[] enemyArrayLv3 = {"1","","","1","","","","","1","1","",""
             ,"2","","1","","","2","","1","","","","1","2","1","","","2"
             ,"2","","2","","2","2","","2","","1","2","1","","1","","1","2"
-            ,"2","","1","","1","1","1","","2","","2","2","","1","2","","2"
-            ,"1","2","","2","","","2","2","","2","22","12","","12","","1","2"
+            ,"2","","4","","1","4","1","","2","","2","2","","4","2","","2"
+            ,"1","2","","2","","","4","2","","2","24","12","","12","","1","4"
             };
     private static final String[] enemyArrayLv4 = {"1","","","1","","","","2","","","","2"
             ,"1","","3","","","2","","","3","","","2","2","","","","2"
-            ,"2","","2","","2","2","","2","","","2","1","","1","","2","2"
-            ,"2","","3","","2","1","","","3","","2","1","","","2","","3"
-            ,"3","2","","2","","","2","","","23","2","12","","32","","13","3"
+            ,"2","","2","","2","2","","2","","","2","1","","4","","2","2"
+            ,"2","","3","","2","4","","","3","","2","4","","","2","","3"
+            ,"3","2","","2","","","2","","","23","2","42","","32","","43","3"
             };
     private static final String[] enemyArrayLv5 = {"1","","","2","","","","3","","","","2"
             ,"2","","3","","","2","1","","3","","","2","3","","","","3"
-            ,"2","","2","","3","3","","2","","","3","1","","1","","3","2"
+            ,"2","","2","","3","3","","2","","","3","4","","4","","3","2"
             ,"3","","3","","2","3","","","3","","2","3","","","2","","3"
-            ,"3","3","","3","","","2","","","23","3","13","","32","","23","3"
+            ,"3","3","","3","","","2","","","23","3","43","","32","","23","3"
             };
     private String[] enemyArrayUsed;
     private Random r;
@@ -107,6 +108,8 @@ public class EnemyGenerator {
             return getEnemy(1);
         } else if (enemyCode == '3'){
             return getEnemy(2);
+        } else if (enemyCode == '4'){
+            return getEnemy(3);
         } else {
             return getEnemy(0);
         }
@@ -125,6 +128,9 @@ public class EnemyGenerator {
                 sequence = EnemyGenerator.SEQUENCE_MALING;
             } else if (enemyPoolIndex == 2){
                 enemyImage = Image.createImage("/Kuntilanak_mini.png");
+                sequence = EnemyGenerator.SEQUENCE_KUNTI;
+            } else if (enemyPoolIndex == 3){
+                enemyImage = Image.createImage("/Boss_mini.png");
                 sequence = EnemyGenerator.SEQUENCE_KUNTI;
             }
         } catch (IOException ex) {

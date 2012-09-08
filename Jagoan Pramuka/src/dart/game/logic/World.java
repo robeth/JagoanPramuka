@@ -84,10 +84,11 @@ public class World {
         fixHeroesPlacement();
         r = new Random();
 
-        int[] en = new int[3];
+        int[] en = new int[4];
         en[0] = EnemyGenerator.MALING;
         en[1] = EnemyGenerator.MAFIA;
         en[2] = EnemyGenerator.KUNTILANAK;
+        en[3] = EnemyGenerator.BOS_CICAK;
         eg = new EnemyGenerator(this, 1000, en, 1000, level);
 
         isWaveEnd = false;

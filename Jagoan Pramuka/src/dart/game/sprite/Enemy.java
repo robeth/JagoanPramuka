@@ -87,13 +87,21 @@ public class Enemy extends AnimatedSprite {
             silverChance = 15;
             bronzeChance = 30;
         } else if (enemyType == EnemyGenerator.KUNTILANAK) {
-            Debug.println("enemy LP=150");
+            Debug.println("enemy LP=200");
             LP = 200;
             score = 30;
             speed = 3;
             goldChance = 10;
             silverChance = 20;
             bronzeChance = 40;
+        } else if (enemyType == EnemyGenerator.BOS_CICAK) {
+            Debug.println("enemy LP=150");
+            LP = 150;
+            score = 25;
+            speed = 2;
+            goldChance = 8;
+            silverChance = 16;
+            bronzeChance = 32;
         }
         LPBar = new HealthBar(image, frameWidth, frameHeight, LP);
         LPBar.setPosition(this.getX(), this.getY() - HealthBar.BAR_HEIGHT);
