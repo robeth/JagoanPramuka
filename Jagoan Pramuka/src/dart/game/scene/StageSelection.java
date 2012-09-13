@@ -127,7 +127,9 @@ public class StageSelection extends Scene {
             }
         } else if (keyCode == GameCanvas.DOWN || keyCode == GameCanvas.UP) {
             isBack = !isBack;
-        }
+        } else if (rawKeyCode == GameCanvas.KEY_STAR) {
+            profile.setLastLevel(4);
+        } 
     }
 
     public void pointerPressed(int x, int y) {

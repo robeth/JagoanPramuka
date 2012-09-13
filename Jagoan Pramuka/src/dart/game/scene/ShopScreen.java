@@ -241,7 +241,7 @@ public class ShopScreen extends Scene {
         }
 
 
-        if (rawKeyCode == GameCanvas.KEY_NUM0) {
+        if (rawKeyCode == GameCanvas.KEY_STAR) {
             profile.setMoney(5000);
         }
         moneyFrame.setLabel("" + profile.getMoney());
