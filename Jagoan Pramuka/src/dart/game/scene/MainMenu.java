@@ -9,6 +9,7 @@ import com.chocoarts.debug.Debug;
 import com.chocoarts.drawing.ChocoSprite;
 import com.chocoarts.scene.Scene;
 import com.chocoarts.text.CustomFont;
+import dart.game.sound.SoundManager;
 import dart.game.sprite.MenuButton;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
@@ -40,6 +41,7 @@ public class MainMenu extends Scene {
 //        new DummyButton(250, 180, 60, 40), // help
 //        new DummyButton(185, 180, 60, 40)};  // quit
 
+    private SoundManager sm;
     public MainMenu(Engine engine) {
         super(engine);
     }
@@ -76,18 +78,24 @@ public class MainMenu extends Scene {
         buttonsName[3] = "Credit";
         buttonsName[4] = "Tutorial";
         buttonsName[5] = "Quit";*/
+        sm = SoundManager.getInstance();
+        sm.playBG(SoundManager.BM_HIMNE);
     }
 
     public void pause() {
+        System.out.println("On Pause On Pause On Pause On Pause On Pause");
     }
 
     public void start() {
+        System.out.println("On Start On Start On Start On Start On Start");
     }
 
     public void resume() {
+        System.out.println("On Resume On Resume On Resume On Resume On Resume");
     }
 
     public void reset() {
+        System.out.println("On reset On reset On reset On reset On reset On reset ");
     }
 
     public void update(long currentTime) {
@@ -110,18 +118,29 @@ public class MainMenu extends Scene {
         }*/
     }
 
+    int gogogo = SoundManager.SFX_BUTTON;
     public void keyPressed(int keyCode, int rawKeyCode) {
         int prev = pointer;
+        boolean beep = false;
         if (keyCode == GameCanvas.UP) {
             pointer--;
+            beep = true;
         } else if (keyCode == GameCanvas.DOWN) {
             pointer++;
+            beep = true;
         } else if (keyCode == GameCanvas.FIRE) {
             goToScene(pointer);
+            beep = true;
         }
 
         pointer = pointer < 0 ? 3 : (pointer > 3 ? 0 : pointer);
         int next = pointer;
+        
+        if(beep){
+            
+            sm.playSFX(gogogo);
+            gogogo = (++gogogo > SoundManager.SFX_THUNDER)? SoundManager.SFX_BUTTON : gogogo;
+        }
         setButtonImage(prev,next);
     }
 
@@ -129,6 +148,7 @@ public class MainMenu extends Scene {
     }
 
     public void sleep() {
+        System.out.println("On Sleep On Sleep  On Sleep On Sleep On Sleep ");
     }
 
     private void goToScene(int pointer) {
