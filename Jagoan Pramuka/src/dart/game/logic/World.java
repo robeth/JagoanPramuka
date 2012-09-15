@@ -60,6 +60,9 @@ public class World {
     private int deltaY;
     private Random randomizer;
     private boolean firstCharge;
+    private int kuntilanakCount;
+    private int finalAttackCount;
+    private boolean noFAlv5;
 
     public World(MainPlay context, Hero[] heroes, HUD hud, int level) {
         this.context = context;
@@ -109,6 +112,15 @@ public class World {
         
         firstCharge = true;
         
+        if (level == 5){
+            noFAlv5 = true;
+        } else {
+            noFAlv5 = false;
+        }
+        
+        finalAttackCount = 0;
+        kuntilanakCount = profile.getKuntilanakKill();
+        
         try {
             arya = Image.createImage("/aryabox.png");
             bima = Image.createImage("/bimabox.png");
@@ -132,6 +144,7 @@ public class World {
             }
             updateEnemies(currentTime);
             updateCoins(currentTime);
+            comboObj.update(currentTime);
 
             for (int i = 0; i < 3; i++) {
                 heroes[i].update(currentTime, attackStatus[i]);
@@ -243,6 +256,8 @@ public class World {
     }
 
     public void paint(Graphics g) {
+        comboObj.pseudoPaint(g);
+        
         for (int i = 0; i < heroes.length; i++) {
             heroes[i].pseudoPaint(g);
         }
@@ -298,6 +313,9 @@ public class World {
                             context.setGameState(MainPlay.LOSE_STATE);
                         }
                     } else if (locEnemy.getState() == Enemy.DECAY) {
+                        if (locEnemy.getJenis() == EnemyGenerator.KUNTILANAK){
+                            kuntilanakCount ++;
+                        }
                         enemies.removeElementAt(counter);
                     } else {
                         counter++;
@@ -421,6 +439,10 @@ public class World {
         if (faObj.canDo()) {
             resetFinalAttackAnimation();
             state = FINAL_ATTACK;
+            finalAttackCount++;
+            if (noFAlv5){
+                noFAlv5 = false;
+            }
         }
     }
 
@@ -474,5 +496,17 @@ public class World {
 
     public void setDeltaY(int deltaY) {
         this.deltaY = deltaY;
+    }
+    
+    public int getKuntilanakCount(){
+        return kuntilanakCount;
+    }
+    
+    public int getFACount(){
+        return finalAttackCount;
+    }
+    
+    public boolean getNoFAlv5(){
+        return noFAlv5;
     }
 }

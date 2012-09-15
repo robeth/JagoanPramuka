@@ -35,6 +35,7 @@ public class Enemy extends AnimatedSprite {
     protected int score;
     protected int speed;
     protected int type;
+    protected int jenis;
     protected HealthBar LPBar;
     protected int goldChance; // on percentage
     protected int bronzeChance;
@@ -76,6 +77,7 @@ public class Enemy extends AnimatedSprite {
 
         super(image, frameWidth, frameHeight, frameDuration);
         Enemy.initialize();
+        jenis = enemyType;
         if (enemyType == EnemyGenerator.MALING) {
             Debug.println("enemy LP=50");
             LP = 50;
@@ -237,6 +239,10 @@ public class Enemy extends AnimatedSprite {
     
     public int getType(){
         return type;
+    }
+    
+    public int getJenis(){
+        return jenis;
     }
     
 }

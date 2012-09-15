@@ -353,7 +353,7 @@ public class MainPlay extends Scene {
                     pauseCursor = MIN_PAUSE_MENU;
                 }
             }
-            if (keyCode == GameCanvas.FIRE){
+            if (keyCode == GameCanvas.FIRE || rawKeyCode == GameCanvas.KEY_NUM5){
                 switch (pauseCursor){
                     case 0:
                         this.resume();
@@ -380,12 +380,12 @@ public class MainPlay extends Scene {
         if (rawKeyCode == GameCanvas.KEY_NUM5) {
             if (gameState == PLAY_STATE) {
                 world.applyFinalAttack();
-            } else {
+            } else if (gameState == WIN_STATE || gameState == LOSE_STATE){
                 StageSelection stageSelection = new StageSelection(engine);
-                changeScene(stageSelection);
-                
+                changeScene(stageSelection);  
             }
-        } else if (keyCode == GameCanvas.FIRE) {
+        }
+        if (keyCode == GameCanvas.FIRE) {
             if (isGameEnd()) {
                 switch (postState) {
                     case SCORE:
@@ -402,6 +402,13 @@ public class MainPlay extends Scene {
                             profile.setBestCombo(level - 1, Math.max(profile.getBestCombo(level - 1), world.getComboObj().getHighestCombo()));
                             profile.setHighscore(level - 1, Math.max(profile.getHighscore(level - 1), hud.getScore()));
                             profile.setSavedAnimals(level - 1, Math.max(profile.getSavedAnimals(level - 1), hud.getLife()));
+                            profile.setKuntilanakKill(world.getKuntilanakCount());
+                            if (profile.getMaxFinalAttackCount() < world.getFACount()){
+                                profile.setMaxFinalAttackCount(world.getFACount());
+                            }
+                            if (world.getNoFAlv5()){
+                                profile.setFinalAttackLastLevel(true);
+                            }
 
                             if (gameState == WIN_STATE) {
                                 profile.setLastLevel(Math.max(profile.getLastLevel(), level));
@@ -416,7 +423,6 @@ public class MainPlay extends Scene {
                         break;
                 }
             } else {
-
                 if (isTutorial) {
                     currentTutorialIndex++;
                     if (currentTutorialIndex > 3) {
@@ -434,9 +440,15 @@ public class MainPlay extends Scene {
 
     public void updateKeyStates() {
         int keyState = engine.getKeyStates();
-        keyDownStates[0] = keyState == GameCanvas.UP_PRESSED;
-        keyDownStates[1] = keyState == GameCanvas.LEFT_PRESSED;
-        keyDownStates[2] = keyState == GameCanvas.DOWN_PRESSED;
+        if (engine.isPotrait){
+            keyDownStates[0] = keyState == GameCanvas.RIGHT_PRESSED;
+            keyDownStates[1] = keyState == GameCanvas.UP_PRESSED;
+            keyDownStates[2] = keyState == GameCanvas.LEFT_PRESSED;
+        } else {
+            keyDownStates[0] = keyState == GameCanvas.UP_PRESSED;
+            keyDownStates[1] = keyState == GameCanvas.LEFT_PRESSED;
+            keyDownStates[2] = keyState == GameCanvas.DOWN_PRESSED;
+        }
     }
 
     public void pointerPressed(int i, int i1) {
