@@ -77,8 +77,8 @@ public class ImageSlider {
                 w2Source = Math.min(imageWidth, w2Source);
                 x2Dest = Math.min(x + width, x2Pos);
 
-                System.out.println("progress: x1source-w1source-x1dest: " +progress+"--" + x1Source + "--" + w1Source + "--" + x1Dest);
-                System.out.println("progress: x2source-w2source-x2dest: " +progress+"--" + x2Source + "--" + w2Source + "--" + x2Dest);
+//                System.out.println("progress: x1source-w1source-x1dest: " +progress+"--" + x1Source + "--" + w1Source + "--" + x1Dest);
+//                System.out.println("progress: x2source-w2source-x2dest: " +progress+"--" + x2Source + "--" + w2Source + "--" + x2Dest);
             }
         } else if (state == SLIDING_RIGHT) {
             if (slidingTimer.isTicked(currentTime)) {

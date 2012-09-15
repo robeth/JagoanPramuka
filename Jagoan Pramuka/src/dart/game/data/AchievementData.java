@@ -33,7 +33,7 @@ public class AchievementData {
 
         public boolean isSatisfyCondition() {
 
-            return ItemDatabase.ALAT_MASAK.isBought() && ItemDatabase.TALI.isBought() && ItemDatabase.TONGKAT.isBought();
+            return ItemDatabase.ALAT_MASAK.isBought() && ItemDatabase.PEDANG.isBought() && ItemDatabase.TONGKAT.isBought();
         }
     };
     private static final AchievementCondition JURAGAN_CONDITION = new AchievementCondition() {
@@ -99,31 +99,45 @@ public class AchievementData {
             return !profile.isFinalAttackLastLevel();
         }
     };
-    public static Achievement[] BADGES = {
-        new Achievement("Dukun Cilik", "Kalahkan 50 Kuntilanak", "/Dukun.png", false, DUKUN_CONDITION),
-        new Achievement("Earthshaker", "Lakukan 5 final attack dalam 1 level", "/Earthshaker.png", false, EARTH_CONDITION),
-        new Achievement("Hedonis", "Beli semua barang di toko", "/Hedonis.png", false, HEDON_CONDITION),
-        new Achievement("Juragan", "Kumpulkan 10000 rupiah", "/Juragan.png", false, JURAGAN_CONDITION),
-        new Achievement("Pawang Cicak", "Selesaikan semua level", "/PawangCicak1.png", false, null),
-        new Achievement("Penegak", "Lakukan 100 kombo", "/Penegak.png", false, PENEGAK_CONDITION),
-        new Achievement("Penggalang", "Lakukan 50 kombo", "/Penggalang.png", false, PENGGALANG_CONDITION),
+    
+    public static Achievement[] BADGES = {   
         new Achievement("Siaga", "Lakukan 10 kombo", "/Siaga.png", false, SIAGA_CONDITION),
-        new Achievement("Raja Hutan", "Selamatkan 15 hewan yang dilindungi", "/Raja-Hutan.png", false, RAJA_CONDITION),
-        new Achievement("Penyayang Alam", "Selesaikan level 5 tanpa final attack", "/Penyayang-Alam.png", false, PENYAYANG_CONDITION)
+        new Achievement("Penggalang", "Lakukan 50 kombo", "/Penggalang.png", false, PENGGALANG_CONDITION),
+        new Achievement("Penegak", "Lakukan 100 kombo", "/Penegak.png", false, PENEGAK_CONDITION),
+        new Achievement("Penggetar Bumi", "Lakukan 10 final attack", "/Earthshaker.png", false, EARTH_CONDITION),
+        new Achievement("Penyayang Alam", "Kalahkan bos tanpa bom", "/Penyayang-Alam.png", false, PENYAYANG_CONDITION),
+        new Achievement("Raja Hutan", "Selamatkan 15 hewan", "/Raja-Hutan.png", false, RAJA_CONDITION),
+        new Achievement("Tukang Jajan", "Beli semua barang di toko", "/Hedonis.png", false, HEDON_CONDITION),
+        new Achievement("Juragan", "Kumpulkan 10000 rupiah", "/Juragan.png", false, JURAGAN_CONDITION),
+        new Achievement("Dukun Cilik", "Kalahkan 50 Kuntilanak", "/Dukun.png", false, DUKUN_CONDITION),
+        new Achievement("Pawang Cicak", "Selesaikan semua level", "/PawangCicak1.png", false, null)
     };
-    public static final int DUKUN = 0,
-            EARTH = 1,
-            HEDON = 2,
-            JURAGAN = 3,
-            PAWANG = 4,
-            PENEGAK = 5,
-            PENGGALANG = 6,
-            SIAGA = 7,
-            RAJA = 8,
-            ALAM = 9;
+    public static final int SIAGA = 0,
+            PENGGALANG = 1,
+            PENEGAK = 2,
+            EARTH = 3,
+            ALAM = 4,
+            RAJA = 5,
+            JAJAN = 6,
+            UANG = 7,
+            DUKUN = 8,
+            CICAK = 9;
 
     public static int[] getNewUnlockedAchievement() {
         return null;
+    }
+    
+    public static boolean updateAchievementsState(){
+        boolean newAchievements = false;
+        for(int i=0; i < BADGES.length; i++){
+            if(!BADGES[i].isUnlocked()){
+                if(BADGES[i].checkUnlockCondition()){
+                    BADGES[i].setUnlocked(true);
+                    newAchievements = true;
+                };
+            }
+        }
+        return newAchievements;
     }
 
     public static void writeData(DataOutputStream stream) throws IOException {

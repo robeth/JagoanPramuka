@@ -30,26 +30,17 @@ public class ShopScreen extends Scene {
     private int windowState;
     private static final int BROWSE_STATE = 0,
             CONFIRM_BUY_STATE = 1,
-            CONFIRM_EQUIP_STATE = 2;
+            CONFIRM_EQUIP_STATE = 2,
+            MENU_UTAMA = 3;
     private int cursorState;
     private int prevCursorState;
     private static final int KITCHEN_SET = 0,
             TONGKAT = 1,
-            TALI = 2,
-            HASDUK = 3,
-            RING = 4,
-            EMBLEM = 5,
-            MENU_UTAMA = 6;
+            PEDANG = 2;
+    private Weapon weapons[];
     private boolean isOK;
-    private ItemButton itemButtons[];
-    private DummyButton2 okButton, cancelButton, previewFrame, confirmFrame,
-            descriptionFrame, moneyFrame;
-    private Image padlockImage, cursorImage, background, coinImage, backImage, boxImage, yesImage, cancelImage;
-    private int[][] cursorPosition = {
-        {40, 110}, {100, 110}, {160, 110},
-        {40, 170}, {100, 170}, {160, 170},
-        {40, 200}
-    };
+    private Image padlockImage, cursorImage, background, boxImage, yesImage, cancelImage, equippedImage;
+    
 
     public ShopScreen(Engine engine) {
         super(engine);
@@ -59,42 +50,24 @@ public class ShopScreen extends Scene {
     public void init() {
         try {
             berlin = new CustomFont("/font/berlinSansFB12White");
-            coinImage = Image.createImage("/CoinShop.png");
-            background = Image.createImage("/ShopBG.png");
-            padlockImage = Image.createImage("/Padlock.png");
+            background = Image.createImage("/TokoBG.jpg");
+            padlockImage = Image.createImage("/Gembok.png");
             cursorImage = Image.createImage("/Cursor.png");
-            backImage = Image.createImage("/KembaliShop.png");
             boxImage = Image.createImage("/boxNotif.png");
             yesImage = Image.createImage("/Iya.png");
             cancelImage = Image.createImage("/Batal.png");
+            equippedImage = Image.createImage("/Equipped.png");
+            weapons = new Weapon[3];
+            weapons[PEDANG] = (Weapon) ItemDatabase.PEDANG;
+            weapons[KITCHEN_SET] = (Weapon) ItemDatabase.ALAT_MASAK;
+            weapons[TONGKAT] = (Weapon) ItemDatabase.TONGKAT;
         } catch (IOException ex) {
             ex.printStackTrace();
         }
 
         profile = (MainProfile) engine.getProfile();
-
-        itemButtons = new ItemButton[7];
-
-        itemButtons[KITCHEN_SET] = new ItemButton(ItemDatabase.ALAT_MASAK, berlin, 10, 10, 50, 50, true, true, Color.BLACK, Color.WHITE, Color.RED, Color.BLUE);
-        itemButtons[TONGKAT] = new ItemButton(ItemDatabase.TONGKAT, berlin, 70, 10, 50, 50, true, true, Color.BLACK, Color.WHITE, Color.RED, Color.BLUE);
-        itemButtons[TALI] = new ItemButton(ItemDatabase.TALI, berlin, 130, 10, 50, 50, true, true, Color.BLACK, Color.WHITE, Color.RED, Color.BLUE);
-        itemButtons[HASDUK] = new ItemButton(ItemDatabase.HASDUK, berlin, 10, 70, 50, 50, true, true, Color.BLACK, Color.WHITE, Color.RED, Color.BLUE);
-        itemButtons[RING] = new ItemButton(ItemDatabase.RING, berlin, 70, 70, 50, 50, true, true, Color.BLACK, Color.WHITE, Color.RED, Color.BLUE);
-        itemButtons[EMBLEM] = new ItemButton(ItemDatabase.BADGE, berlin, 130, 70, 50, 50, true, true, Color.BLACK, Color.WHITE, Color.RED, Color.BLUE);
-        itemButtons[MENU_UTAMA] = new ItemButton(berlin, 10, 150, 50, 50, true, true, "Back", Color.BLACK, Color.WHITE, Color.RED, Color.BLUE);
-
-        okButton = new DummyButton2(berlin, 130, 70, 50, 50, true, true, "OK", Color.BLACK, Color.WHITE, Color.RED, Color.BLUE);
-        cancelButton = new DummyButton2(berlin, 190, 70, 50, 50, true, true, "Cancel", Color.BLACK, Color.WHITE, Color.RED, Color.BLUE);
-        previewFrame = new DummyButton2(berlin, 200, 10, 100, 200, true, true, "PreviewFrame", Color.BLACK, Color.WHITE, Color.RED, Color.BLUE);
-        descriptionFrame = new DummyButton2(berlin, 210, 100, 80, 90, true, true, "Description Frame", Color.BLACK, Color.WHITE, Color.RED, Color.BLUE);
-        confirmFrame = new DummyButton2(berlin, 120, 60, 130, 80, true, true, "", Color.BLACK, Color.WHITE, Color.RED, Color.BLUE);
-        moneyFrame = new DummyButton2(berlin, 260, 10, 50, 30, true, true, "Money: ", Color.BLACK, Color.WHITE, Color.RED, Color.BLUE);
         cursorState = KITCHEN_SET;
         windowState = BROWSE_STATE;
-        itemButtons[cursorState].setIsChosen(true);
-
-
-
     }
 
     public void pause() {
@@ -114,23 +87,28 @@ public class ShopScreen extends Scene {
 
     public void paint(Graphics g) {
         g.drawImage(background, 0, 0, 0);
-        g.drawImage(backImage, 40, 190, 0);
-        berlin.paintString(g, Integer.toString(profile.getMoney()), 228, 37, Graphics.TOP | Graphics.LEFT);
-        if (cursorState != MENU_UTAMA) {
-            berlin.paintString(g, itemButtons[cursorState].getItem().getName(), 235, 100, Graphics.TOP | Graphics.LEFT);
-            berlin.paintString(g, itemButtons[cursorState].getItem().getDescription(), 130, 190, Graphics.TOP | Graphics.LEFT);
+        berlin.paintString(g, Integer.toString(profile.getMoney()), 235, 40, Graphics.TOP | Graphics.LEFT);
+        if (cursorState != MENU_UTAMA && windowState == BROWSE_STATE) {
+            berlin.paintString(g, weapons[cursorState].getName(), 35, 165, Graphics.TOP | Graphics.LEFT);
+            berlin.paintString(g, "Kekuatan:"+weapons[cursorState].getAttack()+" Jangkauan:"+weapons[cursorState].getMaxStack(), 35, 185, Graphics.TOP | Graphics.LEFT);
         }
 
         for (int i = 0; i < MENU_UTAMA; i++) {
-            if (!itemButtons[i].getItem().isBought()) {
-                g.drawImage(coinImage, cursorPosition[i][0] + 10, cursorPosition[i][1], 0);
-                berlin.paintString(g, Integer.toString(itemButtons[i].getItem().getPrice()), cursorPosition[i][0] + 20, cursorPosition[i][1] - 5, Graphics.TOP | Graphics.LEFT);
-                g.drawImage(padlockImage, cursorPosition[i][0] + 30, cursorPosition[i][1] - 25, 0);
+            if (!weapons[i].isBought()) {
+                berlin.paintString(g, Integer.toString(weapons[i].getPrice()), 60 + 90*i , 140, Graphics.TOP | Graphics.LEFT);
+                g.drawImage(padlockImage, 80 + i*90, 80, 0);
             }
-
+            if(weapons[i].isEquipped()){
+                g.drawImage(equippedImage, 80 + i*90, 105, 0);
+            }
         }
-        g.drawImage(cursorImage, cursorPosition[cursorState][0], cursorPosition[cursorState][1], 0);
         
+        if(cursorState == MENU_UTAMA){
+            g.drawImage(cursorImage, 213, 205, 0);
+        } else {
+            g.drawImage(cursorImage, 35 + 90 * cursorState, 120, 0);
+            
+        }
         if(windowState != BROWSE_STATE){
             String message = (windowState == CONFIRM_BUY_STATE)? "Beli barang ini?" : "Pakai barang ini?";
             g.drawImage(boxImage, 35,20, 0);
@@ -151,12 +129,12 @@ public class ShopScreen extends Scene {
                         changeScene(mainMenu);
                     } else {
                         //Jika udah beli, langsung ke equip state
-                        if (itemButtons[cursorState].getItem().isBought()) {
+                        if (weapons[cursorState].isBought()) {
                             windowState = CONFIRM_EQUIP_STATE;
-                            isOK = itemButtons[cursorState].getItem().isEquipped();
+                            isOK = weapons[cursorState].isEquipped();
 
                         } //jika uang cukup buat beli
-                        else if (profile.getMoney() >= itemButtons[cursorState].getItem().getPrice()) {
+                        else if (profile.getMoney() >= weapons[cursorState].getPrice()) {
                             windowState = CONFIRM_BUY_STATE;
                             isOK = false;
                         } //Jika uang tidak cukup
@@ -166,8 +144,8 @@ public class ShopScreen extends Scene {
                     }
                 } else if (windowState == CONFIRM_BUY_STATE) {
                     if (isOK) {
-                        profile.setMoney(profile.getMoney() - itemButtons[cursorState].getItem().getPrice());
-                        itemButtons[cursorState].getItem().setBought(true);
+                        profile.setMoney(profile.getMoney() - weapons[cursorState].getPrice());
+                        weapons[cursorState].setBought(true);
 
                         windowState = CONFIRM_EQUIP_STATE;
                         isOK = false;
@@ -178,64 +156,49 @@ public class ShopScreen extends Scene {
                 } else if (windowState == CONFIRM_EQUIP_STATE) {
                     windowState = BROWSE_STATE;
                     if (isOK) {
-                        if (itemButtons[cursorState].getItem() instanceof Weapon) {
+                        if (weapons[cursorState] instanceof Weapon) {
                             ItemDatabase.unequipAllWeapons();
                         }
-                        itemButtons[cursorState].getItem().setEquipped(true);
+                        weapons[cursorState].setEquipped(true);
                     }
                     windowState = BROWSE_STATE;
                 }
-                updateButtonsState();
                 break;
             case GameCanvas.DOWN:
                 if (windowState == BROWSE_STATE) {
-                    cursorState += 3;
-                    if (cursorState > 8) {
-                        cursorState = KITCHEN_SET;
-                    } else if (cursorState > EMBLEM) {
+                    if (cursorState != MENU_UTAMA) {
                         cursorState = MENU_UTAMA;
+                    } else {
+                        cursorState = KITCHEN_SET;
                     }
                 }
-                updateButtonsState();
                 break;
             case GameCanvas.UP:
                 if (windowState == BROWSE_STATE) {
-                    cursorState -= 3;
-                    if (cursorState < KITCHEN_SET) {
+                    if (cursorState != MENU_UTAMA) {
                         cursorState = MENU_UTAMA;
+                    } else {
+                        cursorState = KITCHEN_SET;
                     }
                 }
-                updateButtonsState();
                 break;
             case GameCanvas.RIGHT:
                 if (windowState == BROWSE_STATE) {
                     cursorState++;
-                    if (cursorState == HASDUK) {
-                        cursorState = KITCHEN_SET;
-                    } else if (cursorState == MENU_UTAMA) {
-                        cursorState = HASDUK;
-                    } else if (cursorState > MENU_UTAMA) {
-                        cursorState = MENU_UTAMA;
-                    }
+                    if(cursorState > PEDANG) cursorState = KITCHEN_SET;
                 } else if (windowState == CONFIRM_BUY_STATE || windowState == CONFIRM_EQUIP_STATE) {
                     isOK = !isOK;
                 }
-                updateButtonsState();
                 break;
             case GameCanvas.LEFT:
                 if (windowState == BROWSE_STATE) {
                     cursorState--;
                     if (cursorState < KITCHEN_SET) {
-                        cursorState = TALI;
-                    } else if (cursorState == TALI) {
-                        cursorState = EMBLEM;
-                    } else if (cursorState == EMBLEM) {
-                        cursorState = MENU_UTAMA;
+                        cursorState = PEDANG;
                     }
                 } else if (windowState == CONFIRM_BUY_STATE || windowState == CONFIRM_EQUIP_STATE) {
                     isOK = !isOK;
                 }
-                updateButtonsState();
                 break;
 
         }
@@ -244,7 +207,6 @@ public class ShopScreen extends Scene {
         if (rawKeyCode == GameCanvas.KEY_STAR) {
             profile.setMoney(5000);
         }
-        moneyFrame.setLabel("" + profile.getMoney());
     }
 
     public void pointerPressed(int x, int y) {
@@ -253,10 +215,4 @@ public class ShopScreen extends Scene {
     public void sleep() {
     }
 
-    private void updateButtonsState() {
-        itemButtons[prevCursorState].setIsChosen(false);
-        itemButtons[cursorState].setIsChosen(true);
-        okButton.setIsChosen(isOK);
-        cancelButton.setIsChosen(!isOK);
-    }
 }
