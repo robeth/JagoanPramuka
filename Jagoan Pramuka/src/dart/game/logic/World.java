@@ -170,8 +170,9 @@ public class World {
             // disini lakukan 
             if (commenceCA) {
                 if (firstCharge){
-                    System.out.println("charge 1");
-                        chargeMiss = applyAttack(heroes[CAheroes].getAttack(), CAheroes, 1, true);
+                        if (!applyAttack(heroes[CAheroes].getAttack(), CAheroes, 1, false)){
+                            chargeMiss = false; 
+                        }
                         heroes[CAheroes].finishAttack(true);
                         chargePos++;
                         firstCharge = false;
@@ -182,19 +183,31 @@ public class World {
                             heroes[CAheroes].setCharge(false);
                             heroes[CAheroes].finishAttack(false);
                             firstCharge = true;
+                            if (chargeMiss){
+                                comboObj.miss();
+                            }
+                            chargeMiss = true;
                         }
                 }
                 if (chargeAttackTimer.isTicked(currentTime)) {
                     if (chargePos == 3) {
-                        chargeMiss = applyAttack(heroes[CAheroes].getAttack(), CAheroes, 4, chargeMiss);
+                        if (!applyAttack(heroes[CAheroes].getAttack(), CAheroes, 4, false)){
+                            chargeMiss = false; 
+                        }
                         heroes[CAheroes].setCharge(false);
                         heroes[CAheroes].finishAttack(false);
                         chargePos = 0;
                         commenceCA = false;
                         heroes[CAheroes].resetAttack();
                         firstCharge = true;
+                        if (chargeMiss){    
+                            comboObj.miss();
+                        }
+                        chargeMiss = true;
                     } else if (chargePos == 2) {
-                        chargeMiss = applyAttack(heroes[CAheroes].getAttack(), CAheroes, 3, chargeMiss);
+                        if (!applyAttack(heroes[CAheroes].getAttack(), CAheroes, 3, false)){
+                            chargeMiss = false; 
+                        }
                         heroes[CAheroes].finishAttack(false);
                         chargePos++;
                         if (heroes[CAheroes].getAttack().getStack() == 3) {
@@ -204,10 +217,15 @@ public class World {
                             heroes[CAheroes].setCharge(false);
                             heroes[CAheroes].finishAttack(false);
                             firstCharge = true;
+                            if (chargeMiss){
+                                comboObj.miss();
+                            }
+                            chargeMiss = true;
                         }
                     } else if (chargePos == 1) {
-                        System.out.println("charge 2");
-                        chargeMiss = applyAttack(heroes[CAheroes].getAttack(), CAheroes, 2, chargeMiss);
+                        if (!applyAttack(heroes[CAheroes].getAttack(), CAheroes, 2, false)){
+                            chargeMiss = false; 
+                        }
                         heroes[CAheroes].finishAttack(false);
                         chargePos++;
                         if (heroes[CAheroes].getAttack().getStack() == 2) {
@@ -217,9 +235,11 @@ public class World {
                             heroes[CAheroes].setCharge(false);
                             heroes[CAheroes].finishAttack(false);
                             firstCharge = true;
+                            if (chargeMiss){
+                                comboObj.miss();
+                            }
+                           chargeMiss = true;
                         }
-                    } else {
-                        
                     }
                     chargeAttackTimer.reset();
                 }
@@ -402,7 +422,7 @@ public class World {
     }
 
     private boolean applyAttack(AttackArea attack, int laneIndex, int chargeCount, boolean miss) {
-        boolean missed = miss;
+        boolean missed = true;
         for (int i = 0; i < enemiesLanes[laneIndex].size(); i++) {
             Enemy e = (Enemy) enemiesLanes[laneIndex].elementAt(i);
             if (e != null && attack.canDamage(e, chargeCount)) {
@@ -426,7 +446,7 @@ public class World {
                 missed = false;
             }
         }
-        if (missed) {
+        if (missed && miss) {
             comboObj.miss();
             Debug.println("miss" + comboObj.getComboStack());
         }
