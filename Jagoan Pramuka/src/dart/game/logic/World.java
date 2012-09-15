@@ -8,6 +8,7 @@ import com.chocoarts.component.Timer;
 import com.chocoarts.debug.Debug;
 import dart.game.main.MainProfile;
 import dart.game.scene.MainPlay;
+import dart.game.sound.SoundManager;
 import java.util.Random;
 import java.util.Vector;
 import javax.microedition.lcdui.Graphics;
@@ -63,6 +64,7 @@ public class World {
     private int kuntilanakCount;
     private int finalAttackCount;
     private boolean noFAlv5;
+    private SoundManager sm;
 
     public World(MainPlay context, Hero[] heroes, HUD hud, int level) {
         this.context = context;
@@ -120,6 +122,9 @@ public class World {
         
         finalAttackCount = 0;
         kuntilanakCount = profile.getKuntilanakKill();
+        
+        sm = SoundManager.getInstance();
+        sm.playBG(SoundManager.BM_HIMNE);
         
         try {
             arya = Image.createImage("/aryabox.png");
@@ -249,8 +254,10 @@ public class World {
                 if (finalAttackTimer.isTicked(currentTime)) {
                     if (finalAttackState == ONE) {
                         finalAttackState = TWO;
+                        sm.playSFX(SoundManager.SFX_THUNDER);
                     } else if (finalAttackState == TWO) {
                         finalAttackState = THREE;
+                        sm.playSFX(SoundManager.SFX_THUNDER);
                     } else if (finalAttackState == THREE) {
                         finalAttackState = EARTHQUAKE;
                         earthquakeTimer.reset();
@@ -258,7 +265,9 @@ public class World {
                         attackLane(1);
                         attackLane(2);
                         faObj.resetBar();
+                        sm.playSFX(SoundManager.SFX_THUNDER);
                     } else if (finalAttackState == EARTHQUAKE) {
+                        sm.playSFX(SoundManager.SFX_ULTI_EARTHQUAKE);
                     }
                     finalAttackTimer.reset();
                 }
@@ -310,6 +319,10 @@ public class World {
             }
         }
 
+    }
+    
+    public void pause(){
+        sm.pauseBG();
     }
 
     private void updateEnemies(long currentTime) {
@@ -423,9 +436,11 @@ public class World {
 
     private boolean applyAttack(AttackArea attack, int laneIndex, int chargeCount, boolean miss) {
         boolean missed = true;
+        sm.playSFX(SoundManager.SFX_PUNCH);
         for (int i = 0; i < enemiesLanes[laneIndex].size(); i++) {
             Enemy e = (Enemy) enemiesLanes[laneIndex].elementAt(i);
             if (e != null && attack.canDamage(e, chargeCount)) {
+                sm.playSFX(SoundManager.SFX_HURT_MAN2);
                 if (e.getType() == Enemy.BOSS) {
                     int newLane = ((Boss) e).changeLane();
                     System.out.println("new Lane =" + newLane);

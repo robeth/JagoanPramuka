@@ -10,6 +10,8 @@ import com.chocoarts.debug.Debug;
 import com.chocoarts.drawing.ChocoSprite;
 import com.chocoarts.scene.Scene;
 import com.chocoarts.text.CustomFont;
+import dart.game.data.AchievementData;
+import dart.game.data.ItemDatabase;
 import dart.game.logic.World;
 import dart.game.main.MainProfile;
 import dart.game.sprite.HUD;
@@ -72,7 +74,8 @@ public class MainPlay extends Scene {
             threeImage,
             startImage,
             pauseImage,
-            cursorImage;
+            cursorImage,
+            newAchievementImage;
     private Hero heroes[];
     private ChocoSprite background;
     private World world;
@@ -113,10 +116,31 @@ public class MainPlay extends Scene {
     }
 
     public void init() throws Exception {
+        heroes = new Hero[3];
         try {
-            aryaImage = Image.createImage("/aryas.png");
-            bimaImage = Image.createImage("/bimas.png");
-            cintaImage = Image.createImage("/cintas.png");
+            if (ItemDatabase.equippedWeapon() == ItemDatabase.ALAT_MASAK){
+                aryaImage = Image.createImage("/aryas.png");
+                bimaImage = Image.createImage("/bimas.png");
+                cintaImage = Image.createImage("/cintas.png");
+                heroes[0] = new Hero(aryaImage, 50, 43, 200, Hero.ARYA);
+                heroes[1] = new Hero(bimaImage, 42, 44, 200, Hero.BIMA);
+                heroes[2] = new Hero(cintaImage, 47, 45, 100, Hero.CINTA);
+            } else if (ItemDatabase.equippedWeapon() == ItemDatabase.TONGKAT){
+                aryaImage = Image.createImage("/arya_tongkat.png");
+                bimaImage = Image.createImage("/bima_tongkat.png");
+                cintaImage = Image.createImage("/cinta_tongkat.png");
+                heroes[0] = new Hero(aryaImage, 63, 42, 200, Hero.ARYA);
+                heroes[1] = new Hero(bimaImage, 63, 42, 200, Hero.BIMA);
+                heroes[2] = new Hero(cintaImage, 63, 42, 200, Hero.CINTA);
+            } else if (ItemDatabase.equippedWeapon() == ItemDatabase.PEDANG){
+                aryaImage = Image.createImage("/arya_pedang.png");
+                bimaImage = Image.createImage("/bima_pedang.png");
+                cintaImage = Image.createImage("/cinta_pedang.png");
+                heroes[0] = new Hero(aryaImage, 63, 42, 200, Hero.ARYA);
+                heroes[1] = new Hero(bimaImage, 63, 42, 200, Hero.BIMA);
+                heroes[2] = new Hero(cintaImage, 63, 42, 200, Hero.CINTA);
+            }
+            
             winImage = Image.createImage("/Sukses.png");
             loseImage = Image.createImage("/Gagal.png");
             oneImage = Image.createImage("/1.png");
@@ -125,12 +149,7 @@ public class MainPlay extends Scene {
             startImage = Image.createImage("/semangat.png");
             pauseImage = Image.createImage("/pause.png");
             cursorImage = Image.createImage("/Cursor.png");
-
-
-            heroes = new Hero[3];
-            heroes[0] = new Hero(aryaImage, 50, 43, 200, Hero.ARYA);
-            heroes[1] = new Hero(bimaImage, 42, 44, 200, Hero.BIMA);
-            heroes[2] = new Hero(cintaImage, 46, 44, 100, Hero.CINTA);
+            newAchievementImage = Image.createImage("/NotifikasiPenghargaan.png");
 
             keyDownStates = new boolean[4];
 
@@ -299,6 +318,9 @@ public class MainPlay extends Scene {
                 if (isGameEnd()) {
                     Image notificationImage = (gameState == WIN_STATE) ? winImage : loseImage;
                     g.drawImage(notificationImage, g.getClipWidth() / 2, g.getClipHeight() / 2, Graphics.HCENTER | Graphics.VCENTER);
+                    if (AchievementData.updateAchievementsState()){
+                        g.drawImage(newAchievementImage, 0, 0, 0);
+                    }
 
                     berlin.paintString(g, Integer.toString(curScore), 130, 88, Graphics.LEFT | Graphics.TOP);
                     if (postState >= COMBO) {
