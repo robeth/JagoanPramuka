@@ -30,8 +30,8 @@ public class SoundManager {
             SFX_POINT2 = 10,
             SFX_THUNDER = 11;
     public static final String[][] SOUND_DATA = {
-        {"/alamluas.mid", "audio/midi"},
-        {"/himne.mid", "audio/midi"},
+        {"/alamluas+drum.mid", "audio/midi"},
+        {"/himne+drum.mid", "audio/midi"},
         {"/jump.wav", "audio/X-wav"},
         {"/clang.mp3", "audio/mpeg"},
         {"/alienhurt.mp3", "audio/mpeg"},

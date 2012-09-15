@@ -28,17 +28,17 @@ public class CoinEffect extends ChocoSprite{
     }
     
      public void update(long currentTime) {
-        if (this.getX() < 220) {
+        if (this.getX() < 245) {
             move(getXSpeed(), 0);
         }
-        if (this.getY() > 20) {
+        if (this.getY() > 30) {
             move(0,ySpeed);
         }
     }
      
      private int getXSpeed (){
-         int xDistance = 220 - this.getX();
-         int yDistance = this.getY() - 20;
+         int xDistance = 245 - this.getX();
+         int yDistance = this.getY() - 30;
          
          xSpeed = (xDistance/yDistance) * ySpeed * -1;
          

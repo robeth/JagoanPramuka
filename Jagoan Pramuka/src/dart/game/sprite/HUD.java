@@ -81,7 +81,11 @@ public class HUD {
     }
 
     public void incScore(int score) {
-        this.score += score;
+        int multiplier = (int) Math.ceil((double)this.combo/10);
+        if (this.combo == 0) {
+            multiplier = 1;
+        }
+        this.score += multiplier * score;
     }
 
     public void setCombo(int combo) {
@@ -101,8 +105,8 @@ public class HUD {
     }
 
     public void paint(Graphics g) throws IOException {
-        scoreFont.paintString(g, "Score: " + score, 220, 0, Graphics.LEFT | Graphics.TOP);
-        scoreFont.paintString(g, "Coin: " + money, 220, 20, Graphics.LEFT | Graphics.TOP);
+        scoreFont.paintString(g, "Score: " + score, 245, 10, Graphics.LEFT | Graphics.TOP);
+        scoreFont.paintString(g, "Coin: " + money, 245, 30, Graphics.LEFT | Graphics.TOP);
 
         int barLength = (int) Math.ceil(bar * (0.8));
         g.setColor(255, 0, 0);
@@ -136,5 +140,10 @@ public class HUD {
 
     public void incMoney(int money) {
         this.money += money;
+    }
+    
+    public void reset(){
+        this.life = 3;
+        this.score = 0;
     }
 }

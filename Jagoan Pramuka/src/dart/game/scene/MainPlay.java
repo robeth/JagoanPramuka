@@ -28,7 +28,8 @@ public class MainPlay extends Scene {
     public static final int PLAY_STATE = 1092,
             WIN_STATE = 20998,
             LOSE_STATE = 1019,
-            PRE_STATE = 9090;
+            PRE_STATE = 9090,
+            PAUSE_STATE = 1095;
     public static final String AYAM = "/1_ayam.png",
             KAMBING = "/2_kambing.png",
             SAPI = "/3_sapi.png",
@@ -69,7 +70,9 @@ public class MainPlay extends Scene {
             oneImage,
             twoImage,
             threeImage,
-            startImage;
+            startImage,
+            pauseImage,
+            cursorImage;
     private Hero heroes[];
     private ChocoSprite background;
     private World world;
@@ -87,7 +90,9 @@ public class MainPlay extends Scene {
             ONE = 1,
             TWO = 2,
             THREE = 3,
-            START = 4;
+            START = 4,
+            MAX_PAUSE_MENU = 2,
+            MIN_PAUSE_MENU = 0;
     // Attributes of Post Game
     private int postState, animCounter;
     private static final int SCORE = 1,
@@ -100,6 +105,7 @@ public class MainPlay extends Scene {
     private Image currentTutorialImage;
     private int currentTutorialIndex;
     private boolean isTutorial;
+    private int pauseCursor;
 
     MainPlay(Engine engine, int level) {
         super(engine);
@@ -108,7 +114,6 @@ public class MainPlay extends Scene {
 
     public void init() throws Exception {
         try {
-
             aryaImage = Image.createImage("/aryas.png");
             bimaImage = Image.createImage("/bimas.png");
             cintaImage = Image.createImage("/cintas.png");
@@ -118,6 +123,8 @@ public class MainPlay extends Scene {
             twoImage = Image.createImage("/2.png");
             threeImage = Image.createImage("/3.png");
             startImage = Image.createImage("/semangat.png");
+            pauseImage = Image.createImage("/pause.png");
+            cursorImage = Image.createImage("/Cursor.png");
 
 
             heroes = new Hero[3];
@@ -165,21 +172,37 @@ public class MainPlay extends Scene {
             if (isTutorial) {
                 currentTutorialImage = getTutorialImage(0);
             }
+            
+            pauseCursor = 0;
+            
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
     public void pause() {
+        gameState = PAUSE_STATE;
     }
 
     public void start() {
     }
 
     public void resume() {
+        gameState = PLAY_STATE;
+        world.startEnemies();
     }
 
     public void reset() {
+//        try {
+//            this.init();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//        
+            world = new World(this, heroes, hud,level);
+            hud.reset();
+            gameState = PRE_STATE;
+            preState = ZERO;
     }
 
     public void update(long currentTime) {
@@ -257,15 +280,29 @@ public class MainPlay extends Scene {
                             break;
                     }
                     g.drawImage(preImage, 160, 120, Graphics.HCENTER | Graphics.VCENTER);
+                } else if (gameState == PAUSE_STATE){
+                    g.drawImage(pauseImage, g.getClipWidth() / 2, g.getClipHeight() / 2, Graphics.HCENTER | Graphics.VCENTER);
+                    int cursorY = g.getClipHeight() / 2;
+                    switch (pauseCursor){
+                        case 0:
+                            cursorY = cursorY - 33;
+                            break;
+                        case 2:
+                            cursorY = cursorY + 33;
+                            break;
+                        default:
+                            break;
+                    }
+                    g.drawImage(cursorImage,(g.getClipWidth() / 2) - 5, cursorY, 0);
                 }
 
                 if (isGameEnd()) {
                     Image notificationImage = (gameState == WIN_STATE) ? winImage : loseImage;
                     g.drawImage(notificationImage, g.getClipWidth() / 2, g.getClipHeight() / 2, Graphics.HCENTER | Graphics.VCENTER);
 
-                    berlin.paintString(g, Integer.toString(curScore), 150, 110, Graphics.LEFT | Graphics.TOP);
+                    berlin.paintString(g, Integer.toString(curScore), 130, 88, Graphics.LEFT | Graphics.TOP);
                     if (postState >= COMBO) {
-                        berlin.paintString(g, Integer.toString(world.getComboObj().getHighestCombo()), 150, 130, Graphics.LEFT | Graphics.TOP);
+                        berlin.paintString(g, Integer.toString(world.getComboObj().getHighestCombo()), 130, 108, Graphics.LEFT | Graphics.TOP);
                     }
 
                     if (postState >= ANIMAL) {
@@ -273,23 +310,23 @@ public class MainPlay extends Scene {
 
                         if (animCounter > ANIM1) {
                             if (life >= 1) {
-                                g.drawImage(hud.getAnimal1(), 150, 150, 0);
+                                g.drawImage(hud.getAnimal1(), 130, 130, 0);
                             } else {
-                                g.drawImage(hud.getAnimal1Fail(), 150, 150, 0);
+                                g.drawImage(hud.getAnimal1Fail(), 130, 130, 0);
                             }
                         }
                         if (animCounter > ANIM2) {
                             if (life >= 2) {
-                                g.drawImage(hud.getAnimal2(), 170, 150, 0);
+                                g.drawImage(hud.getAnimal2(), 165, 130, 0);
                             } else {
-                                g.drawImage(hud.getAnimal2Fail(), 170, 150, 0);
+                                g.drawImage(hud.getAnimal2Fail(), 165, 130, 0);
                             }
                         }
                         if (animCounter > ANIM3) {
                             if (life >= 3) {
-                                g.drawImage(hud.getAnimal3(), 190, 150, 0);
+                                g.drawImage(hud.getAnimal3(), 200, 130, 0);
                             } else {
-                                g.drawImage(hud.getAnimal3Fail(), 190, 150, 0);
+                                g.drawImage(hud.getAnimal3Fail(), 200, 130, 0);
                             }
                         }
                     }
@@ -301,6 +338,45 @@ public class MainPlay extends Scene {
     }
 
     public void keyPressed(int keyCode, int rawKeyCode) {
+        if (gameState == PAUSE_STATE){
+            if (keyCode == GameCanvas.UP){
+                if (pauseCursor > MIN_PAUSE_MENU){
+                    pauseCursor--;
+                } else {
+                    pauseCursor = MAX_PAUSE_MENU;
+                }
+            }
+            if (keyCode == GameCanvas.DOWN){
+                if (pauseCursor < MAX_PAUSE_MENU){
+                    pauseCursor++;
+                } else {
+                    pauseCursor = MIN_PAUSE_MENU;
+                }
+            }
+            if (keyCode == GameCanvas.FIRE){
+                switch (pauseCursor){
+                    case 0:
+                        this.resume();
+                        break;
+                    case 1:
+                        this.reset();
+                        break;
+                    case 2:
+                        MainMenu mainMenu = new MainMenu(engine);
+                        changeScene(mainMenu);
+                        break;
+                }
+            }
+                
+        }
+        if (rawKeyCode == -7 || rawKeyCode == GameCanvas.KEY_POUND){
+            if (gameState == PLAY_STATE){
+                this.pause();
+            } else if (gameState == PAUSE_STATE){
+                this.resume();
+            }
+            
+        }
         if (rawKeyCode == GameCanvas.KEY_NUM5) {
             if (gameState == PLAY_STATE) {
                 world.applyFinalAttack();
@@ -377,7 +453,7 @@ public class MainPlay extends Scene {
         return gameState == WIN_STATE || gameState == LOSE_STATE;
     }
     private static final String[] tutorials = {
-        "/help_1.png", "/help_2.png", "help_3.png", "help_4.png"};
+        "/help_1.png", "/help_2.png", "/help_3.png", "/help_4.png"};
 
     private Image getTutorialImage(int index) {
         Image image = null;

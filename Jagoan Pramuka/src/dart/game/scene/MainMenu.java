@@ -43,7 +43,7 @@ public class MainMenu extends Scene {
     public void init() throws Exception {
         bgmenu = Image.createImage("/BGMenuBaru.jpg");
         sm = SoundManager.getInstance();
-        sm.playBG(SoundManager.BM_HIMNE);
+        sm.playBG(SoundManager.BM_ALAM_LUAS);
         
         Image[] images = new Image[6];
         images[0] = Image.createImage("/Mulai.png");
