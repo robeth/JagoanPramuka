@@ -42,6 +42,7 @@ public class MainMidlet extends ChocoMIDlet {
     public void destroyApp(boolean unconditional) {
         try {
             engine.getProfile().writeProfile();
+            super.notifyDestroyed();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
