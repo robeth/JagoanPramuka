@@ -35,7 +35,7 @@ public class StageSelection extends Scene {
 //            new DummyButton(135,160,50,50),
 //            new DummyButton(195,160,50,50),
 //            new DummyButton(255,160,50,50)};
-    Image background, backImage, cursorImage, padlockImage;
+    Image background,cursorImage, padlockImage;
     private int level;
     private boolean isBack;
     private MainProfile profile;
@@ -55,7 +55,6 @@ public class StageSelection extends Scene {
             berlin = new CustomFont("/font/berlinSansFB12White");
             background = Image.createImage("/levelBG.png");
             cursorImage = Image.createImage("/Cursor.png");
-            backImage = Image.createImage("/KembaliShop.png");
             padlockImage = Image.createImage("/Padlock.png");
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -83,7 +82,6 @@ public class StageSelection extends Scene {
 
     public void paint(Graphics g) {
         g.drawImage(background,0,0,0);
-        g.drawImage(backImage,40,190,0);
         
         int lastLevel = profile.getLastLevel();
         for(int i = 0; i < 5; i++){
@@ -96,7 +94,7 @@ public class StageSelection extends Scene {
         
         
         if(isBack){
-            g.drawImage(cursorImage,35,210,0);
+            g.drawImage(cursorImage,215,205,0);
         }else {
             berlin.paintString(g, "Skor: "+profile.getHighscore(level), 50, 135, Graphics.TOP| Graphics.LEFT);
             berlin.paintString(g, "Kombo: "+profile.getBestCombo(level), 50, 150, Graphics.LEFT | Graphics.TOP);

@@ -9,6 +9,7 @@ import com.chocoarts.Engine;
 import dart.game.data.AchievementData;
 import dart.game.scene.MainMenu;
 import dart.game.scene.SplashScreen;
+import dart.game.sound.SoundManager;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.game.GameCanvas;
 
@@ -32,7 +33,7 @@ public class MainMidlet extends ChocoMIDlet {
         SplashScreen game = new SplashScreen(engine);
         engine.setFirstScene(game);
         AchievementData.profile = (MainProfile) engine.getProfile();
-        
+        SoundManager.profile = (MainProfile) engine.getProfile();
         //engine.re
         Display.getDisplay(this).setCurrent(engine);
     }

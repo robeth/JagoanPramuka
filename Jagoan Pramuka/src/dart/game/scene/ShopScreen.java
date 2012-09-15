@@ -11,6 +11,7 @@ import com.chocoarts.text.CustomFont;
 import dart.game.data.ItemDatabase;
 import dart.game.data.Weapon;
 import dart.game.main.MainProfile;
+import dart.game.sound.SoundManager;
 import dart.game.sprite.Color;
 import dart.game.sprite.DummyButton2;
 import dart.game.sprite.ItemButton;
@@ -40,6 +41,7 @@ public class ShopScreen extends Scene {
     private Weapon weapons[];
     private boolean isOK;
     private Image padlockImage, cursorImage, background, boxImage, yesImage, cancelImage, equippedImage;
+    private SoundManager sm;
     
 
     public ShopScreen(Engine engine) {
@@ -64,19 +66,24 @@ public class ShopScreen extends Scene {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
+        
         profile = (MainProfile) engine.getProfile();
         cursorState = KITCHEN_SET;
         windowState = BROWSE_STATE;
+        sm = SoundManager.getInstance();
+        sm.playBG(SoundManager.BM_ALAM_LUAS);
     }
 
     public void pause() {
+        sm.stopBG();
+        sm.stopSFX();
     }
 
     public void start() {
     }
 
     public void resume() {
+        sm.playBG(SoundManager.BM_ALAM_LUAS);
     }
 
     public void reset() {
@@ -120,6 +127,7 @@ public class ShopScreen extends Scene {
     }
 
     public void keyPressed(int keyCode, int rawKeyCode) {
+        boolean beep = false;
         prevCursorState = cursorState;
         switch (keyCode) {
             case GameCanvas.FIRE:
@@ -163,6 +171,7 @@ public class ShopScreen extends Scene {
                     }
                     windowState = BROWSE_STATE;
                 }
+                beep = true;
                 break;
             case GameCanvas.DOWN:
                 if (windowState == BROWSE_STATE) {
@@ -171,6 +180,7 @@ public class ShopScreen extends Scene {
                     } else {
                         cursorState = KITCHEN_SET;
                     }
+                    beep = true;
                 }
                 break;
             case GameCanvas.UP:
@@ -180,6 +190,7 @@ public class ShopScreen extends Scene {
                     } else {
                         cursorState = KITCHEN_SET;
                     }
+                    beep = true;
                 }
                 break;
             case GameCanvas.RIGHT:
@@ -189,6 +200,7 @@ public class ShopScreen extends Scene {
                 } else if (windowState == CONFIRM_BUY_STATE || windowState == CONFIRM_EQUIP_STATE) {
                     isOK = !isOK;
                 }
+                beep = true;
                 break;
             case GameCanvas.LEFT:
                 if (windowState == BROWSE_STATE) {
@@ -199,6 +211,7 @@ public class ShopScreen extends Scene {
                 } else if (windowState == CONFIRM_BUY_STATE || windowState == CONFIRM_EQUIP_STATE) {
                     isOK = !isOK;
                 }
+                beep = true;
                 break;
 
         }
@@ -213,6 +226,8 @@ public class ShopScreen extends Scene {
     }
 
     public void sleep() {
+        sm.stopBG();
+        sm.stopSFX();
     }
 
 }

@@ -9,6 +9,7 @@ import com.chocoarts.scene.Scene;
 import com.chocoarts.text.CustomFont;
 import dart.game.data.Achievement;
 import dart.game.data.AchievementData;
+import dart.game.sound.SoundManager;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.game.GameCanvas;
@@ -24,6 +25,8 @@ public class AchievementScreen extends Scene{
     private int pointer;
     private boolean exit;
     private CustomFont berlin;
+    private SoundManager sm;
+    
     
     
     public AchievementScreen(Engine engine){
@@ -40,16 +43,21 @@ public class AchievementScreen extends Scene{
         lockedBadge = Image.createImage("/BadgeLocked.png");
         cursor = Image.createImage("/Cursor.png");
         bg = Image.createImage("/PenghargaanBG.png");
+        sm = SoundManager.getInstance();
+        sm.playBG(SoundManager.BM_ALAM_LUAS);
         exit =false;
     }
 
     public void pause() {
+        sm.stopBG();
+        sm.stopSFX();
     }
 
     public void start() {
     }
 
     public void resume() {
+        sm.playSFX(SoundManager.BM_ALAM_LUAS);
     }
 
     public void reset() {
@@ -83,8 +91,12 @@ public class AchievementScreen extends Scene{
     }
 
     public void keyPressed(int keyCode, int rawKeyCode) {
+        boolean beep = false;
+        
         if (keyCode == GameCanvas.FIRE) {
+            
             if (exit) {
+                beep = true;
                 MainMenu mainMenu = new MainMenu(engine);
                 changeScene(mainMenu);
             }
@@ -94,10 +106,12 @@ public class AchievementScreen extends Scene{
                 
             }
             if(pointer < 0) pointer =4;
+            beep = true;
         } else if (keyCode == GameCanvas.RIGHT) {
             if (++pointer % 5 == 0) {
                 pointer -= 5;
             }
+            beep = true;
         } else if (keyCode == GameCanvas.DOWN) {
             if(pointer < 5){
                 pointer += 5;
@@ -107,6 +121,7 @@ public class AchievementScreen extends Scene{
             } else {
                 exit = !exit;
             }
+            beep = true;
         } else if (keyCode == GameCanvas.UP) {
             if(pointer < 5){
                 exit = !exit;
@@ -117,14 +132,17 @@ public class AchievementScreen extends Scene{
             } else {
                 pointer -= 5;
             }
+            beep = true;
         } 
-        System.out.println("Penghargaan pointer:"+pointer+" exit:"+exit);
+        if(beep) sm.playSFX(SoundManager.SFX_BUTTON);
     }
 
     public void pointerPressed(int i, int i1) {
     }
 
     public void sleep() {
+        sm.stopBG();
+        sm.stopSFX();
     }
     
 }

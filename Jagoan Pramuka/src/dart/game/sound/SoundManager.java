@@ -5,6 +5,7 @@
 package dart.game.sound;
 
 import com.chocoarts.debug.Debug;
+import dart.game.main.MainProfile;
 import java.io.IOException;
 import javax.microedition.media.Manager;
 import javax.microedition.media.MediaException;
@@ -51,6 +52,7 @@ public class SoundManager {
     private static SoundManager soundManager;
     private Player bmPlayer, sfxPlayer;
     private int activeBG, activeSFX;
+    public static MainProfile profile;
 
     private SoundManager() {
         bmPlayer = sfxPlayer = null;
@@ -65,6 +67,7 @@ public class SoundManager {
     }
 
     public void playBG(int audioID) {
+        if(!profile.getSound()) return;
         if (activeBG == audioID) {
             //do nothing 
         } else {
@@ -102,7 +105,7 @@ public class SoundManager {
     }
 
     public void resumeBG() {
-        if (bmPlayer != null && stateBM == PAUSING) {
+        if (bmPlayer != null && stateBM == PAUSING && profile.getSound()) {
             try {
                 bmPlayer.start();
                 stateBM = PLAYING;
@@ -138,6 +141,7 @@ public class SoundManager {
     }
 
     public void playSFX(int sfxID) {
+        if(!profile.getSound()) return;
         if (activeSFX == sfxID) {
             //do nothing 
         } else {

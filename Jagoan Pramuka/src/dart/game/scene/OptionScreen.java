@@ -8,6 +8,7 @@ import com.chocoarts.Engine;
 import com.chocoarts.scene.Scene;
 import com.chocoarts.text.CustomFont;
 import dart.game.main.MainProfile;
+import dart.game.sound.SoundManager;
 import dart.game.sprite.DummyButton;
 import java.io.IOException;
 import javax.microedition.lcdui.Graphics;
@@ -30,18 +31,7 @@ public class OptionScreen extends Scene {
     private boolean isReset;
     private boolean isConfirmReset;
     private Image background, boxImage, resetImage, backImage, yesImage, cancelImage, cursorImage;
-//    private DummyButton 
-//            TITLE = new DummyButton(110,0 ,100,40),
-//            SOUND = new DummyButton(20 ,50, 80,40),
-//            SOUND_ON = new DummyButton (120, 50, 50, 40),
-//            SOUND_OFF = new DummyButton(200, 50, 50, 40),
-//            RESET = new DummyButton(20, 120, 80, 40),
-//            MAIN_MENU = new DummyButton(220, 180, 80,40),
-//            OVERLAY_FRAME = new DummyButton(30,30,260, 150),
-//            OVERLAY_TITLE = new DummyButton(130, 40, 80,60),
-//            OVERLAY_CONTENT = new DummyButton(60, 110, 200,40 ),
-//            OVERLAY_YES = new DummyButton(90, 170, 60,40),
-//            OVERLAY_NO = new DummyButton(170, 170, 60,40);
+    private SoundManager sm;
 
     public OptionScreen(Engine engine) {
         super(engine);
@@ -75,15 +65,20 @@ public class OptionScreen extends Scene {
         currentRow = SOUND_ROW;
         isReset = false;
         isConfirmReset = false;
+        sm = SoundManager.getInstance();
+        sm.playBG(SoundManager.BM_ALAM_LUAS);
     }
 
     public void pause() {
+        sm.stopBG();
+        sm.stopSFX();
     }
 
     public void start() {
     }
 
     public void resume() {
+        sm.playBG(SoundManager.BM_ALAM_LUAS);
     }
 
     public void reset() {
@@ -127,7 +122,9 @@ public class OptionScreen extends Scene {
     }
 
     public void keyPressed(int keyCode, int rawKeyCode) {
+        boolean beep = false;
         if (keyCode == GameCanvas.FIRE) {
+            beep = true;
             switch (currentRow) {
                 case CONFIRM_ROW:
                     applyChange();
@@ -146,30 +143,45 @@ public class OptionScreen extends Scene {
                     break;
             }
         } else if (keyCode == GameCanvas.DOWN && !isReset) {
+            beep = true;
             if (++currentRow > CONFIRM_ROW) {
                 currentRow = SOUND_ROW;
             }
         } else if (keyCode == GameCanvas.UP && !isReset) {
+            beep = true;
             if (--currentRow < SOUND_ROW) {
                 currentRow = CONFIRM_ROW;
             }
         } else if (keyCode == GameCanvas.RIGHT || keyCode == GameCanvas.LEFT) {
             switch (currentRow) {
                 case SOUND_ROW:
+                    beep = true;
                     currentSound = !currentSound;
+                    if(currentSound){
+                        sm.stopBG();
+                        sm.stopSFX();
+                    } else {
+                        sm.playSFX(SoundManager.SFX_BUTTON);
+                        sm.playBG(SoundManager.BM_ALAM_LUAS);
+                    }
                     break;
                 case RESET_ROW:
+                    beep = true;
                     if (isReset) {
                         isConfirmReset = !isConfirmReset;
                     }
                     break;
             }
         }
+        
+        if(beep) sm.playSFX(SoundManager.SFX_BUTTON);
     }
 
     public void pointerPressed(int x, int y) {
     }
 
     public void sleep() {
+        sm.stopBG();
+        sm.stopSFX();
     }
 }
