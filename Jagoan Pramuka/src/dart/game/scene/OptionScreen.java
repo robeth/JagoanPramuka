@@ -30,18 +30,8 @@ public class OptionScreen extends Scene {
     private boolean isReset;
     private boolean isConfirmReset;
     private Image background, boxImage, resetImage, backImage, yesImage, cancelImage, cursorImage,soundOnImage,soundOffImage;
-//    private DummyButton 
-//            TITLE = new DummyButton(110,0 ,100,40),
-//            SOUND = new DummyButton(20 ,50, 80,40),
-//            SOUND_ON = new DummyButton (120, 50, 50, 40),
-//            SOUND_OFF = new DummyButton(200, 50, 50, 40),
-//            RESET = new DummyButton(20, 120, 80, 40),
-//            MAIN_MENU = new DummyButton(220, 180, 80,40),
-//            OVERLAY_FRAME = new DummyButton(30,30,260, 150),
-//            OVERLAY_TITLE = new DummyButton(130, 40, 80,60),
-//            OVERLAY_CONTENT = new DummyButton(60, 110, 200,40 ),
-//            OVERLAY_YES = new DummyButton(90, 170, 60,40),
-//            OVERLAY_NO = new DummyButton(170, 170, 60,40);
+
+    
 
     public OptionScreen(Engine engine) {
         super(engine);

@@ -34,8 +34,8 @@ public class MainMenu extends Scene {
     private ChocoSprite bgsprite;
     private ImageSlider imageSlider;
     private Arrow leftArrow, rightArrow;
-    
     private SoundManager sm;
+    
     public MainMenu(Engine engine) {
         super(engine);
     }
@@ -60,6 +60,8 @@ public class MainMenu extends Scene {
 
     public void pause() {
         System.out.println("On Pause On Pause On Pause On Pause On Pause");
+        sm.stopBG();
+        sm.stopSFX();
     }
 
     public void start() {
@@ -68,6 +70,7 @@ public class MainMenu extends Scene {
 
     public void resume() {
         System.out.println("On Resume On Resume On Resume On Resume On Resume");
+        sm.playBG(SoundManager.BM_ALAM_LUAS);
     }
 
     public void reset() {
@@ -117,6 +120,8 @@ public class MainMenu extends Scene {
 
     public void sleep() {
         System.out.println("On Sleep On Sleep  On Sleep On Sleep On Sleep ");
+        sm.stopBG();
+        sm.stopSFX();
     }
 
     private void goToScene(int pointer) {
