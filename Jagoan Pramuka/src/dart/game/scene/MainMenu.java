@@ -128,7 +128,7 @@ public class MainMenu extends Scene {
                 nextScene = new CreditScreen(engine);
                 break;
             case ACHIEVEMENT_BUTTON:
-                nextScene = new HelpScreen(engine);
+                nextScene = new AchievementScreen(engine);
                 break;
             case OPTION_BUTTON:
                 nextScene = new OptionScreen(engine);

@@ -71,17 +71,11 @@ public class MainProfile extends Profile{
         
         stream.writeBoolean(ItemDatabase.ALAT_MASAK.isBought());
         stream.writeBoolean(ItemDatabase.TONGKAT.isBought());
-        stream.writeBoolean(ItemDatabase.TALI.isBought());
-        stream.writeBoolean(ItemDatabase.HASDUK.isBought());
-        stream.writeBoolean(ItemDatabase.RING.isBought());
-        stream.writeBoolean(ItemDatabase.BADGE.isBought());
+        stream.writeBoolean(ItemDatabase.PEDANG.isBought());
         
         stream.writeBoolean(ItemDatabase.ALAT_MASAK.isEquipped());
         stream.writeBoolean(ItemDatabase.TONGKAT.isEquipped());
-        stream.writeBoolean(ItemDatabase.TALI.isEquipped());
-        stream.writeBoolean(ItemDatabase.HASDUK.isEquipped());
-        stream.writeBoolean(ItemDatabase.RING.isEquipped());
-        stream.writeBoolean(ItemDatabase.BADGE.isEquipped());
+        stream.writeBoolean(ItemDatabase.PEDANG.isEquipped());
         AchievementData.writeData(stream);
     }
 
@@ -102,17 +96,11 @@ public class MainProfile extends Profile{
         
         ItemDatabase.ALAT_MASAK.setBought(stream.readBoolean());
         ItemDatabase.TONGKAT.setBought(stream.readBoolean());
-        ItemDatabase.TALI.setBought(stream.readBoolean());
-        ItemDatabase.HASDUK.setBought(stream.readBoolean());
-        ItemDatabase.RING.setBought(stream.readBoolean());
-        ItemDatabase.BADGE.setBought(stream.readBoolean());
+        ItemDatabase.PEDANG.setBought(stream.readBoolean());
         
         ItemDatabase.ALAT_MASAK.setEquipped(stream.readBoolean());
         ItemDatabase.TONGKAT.setEquipped(stream.readBoolean());
-        ItemDatabase.TALI.setEquipped(stream.readBoolean());
-        ItemDatabase.HASDUK.setEquipped(stream.readBoolean());
-        ItemDatabase.RING.setEquipped(stream.readBoolean());
-        ItemDatabase.BADGE.setEquipped(stream.readBoolean());
+        ItemDatabase.PEDANG.setEquipped(stream.readBoolean());
         AchievementData.readData(stream);
     }
     
@@ -204,11 +192,6 @@ public class MainProfile extends Profile{
     public void setFinalAttackLastLevel(boolean finalAttackLastLevel) {
         this.finalAttackLastLevel = finalAttackLastLevel;
     }
-    
-    
-    
-    
-
     
     void printStatus() {
         System.out.println("Money: "+money);

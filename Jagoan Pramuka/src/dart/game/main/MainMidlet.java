@@ -6,6 +6,7 @@ package dart.game.main;
 
 import com.chocoarts.ChocoMIDlet;
 import com.chocoarts.Engine;
+import dart.game.data.AchievementData;
 import dart.game.scene.MainMenu;
 import dart.game.scene.SplashScreen;
 import javax.microedition.lcdui.Display;
@@ -30,7 +31,7 @@ public class MainMidlet extends ChocoMIDlet {
         //Buat scene level 1
         SplashScreen game = new SplashScreen(engine);
         engine.setFirstScene(game);
-
+        AchievementData.profile = (MainProfile) engine.getProfile();
         
         //engine.re
         Display.getDisplay(this).setCurrent(engine);
