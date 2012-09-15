@@ -10,6 +10,8 @@ import com.chocoarts.drawing.ChocoSprite;
 import com.chocoarts.scene.Scene;
 import com.chocoarts.text.CustomFont;
 import dart.game.sound.SoundManager;
+import dart.game.sprite.Arrow;
+import dart.game.sprite.ImageSlider;
 import dart.game.sprite.MenuButton;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
@@ -20,66 +22,40 @@ import javax.microedition.lcdui.game.GameCanvas;
  * @author Maviosso
  */
 public class MainMenu extends Scene {
-    //Play
-    //Shop
-    //Option
-    //Credit
-    //Help
 
     private static final int PLAY_BUTTON = 0,
             SHOP_BUTTON = 1,
             OPTION_BUTTON = 2,
-            //CREDIT_BUTTON = 3,
-            //HELP_BUTTON = 4,
-            QUIT_BUTTON = 3;
+            ACHIEVEMENT_BUTTON = 3,
+            ABOUT_BUTTON = 4,
+            QUIT_BUTTON = 5;
     private Image bgmenu, optionselect, shopselect, exitselect, playselect, optionunselect, shopunselect, exitunselect, playunselect, logo;
     private int pointer = PLAY_BUTTON;
-    //private String[] buttonsName;
-    //private CustomFont berlin;
-    private MenuButton buttons[] = new MenuButton[4];
     private ChocoSprite bgsprite;
-//        new DummyButton(250, 180, 60, 40), // help
-//        new DummyButton(185, 180, 60, 40)};  // quit
-
+    private ImageSlider imageSlider;
+    private Arrow leftArrow, rightArrow;
+    
     private SoundManager sm;
     public MainMenu(Engine engine) {
         super(engine);
     }
 
     public void init() throws Exception {
-        //berlin = new CustomFont("/font/berlinSansFB12White");
-
-        bgmenu = Image.createImage("/bgmenu.jpg");
-        optionselect = Image.createImage("/option_select.png");
-        optionunselect = Image.createImage("/option_unselect.png");
-        playselect = Image.createImage("/play_select.png");
-        playunselect = Image.createImage("/play_unselect.png");
-        shopselect = Image.createImage("/shop_select.png");
-        shopunselect = Image.createImage("/shop_unselect.png");
-        exitselect = Image.createImage("/exit_select.png");
-        exitunselect = Image.createImage("/exit_unselect.png");
-        logo = Image.createImage("/logo.png");
-
-        bgsprite = new ChocoSprite(bgmenu);
-        buttons[0] = new MenuButton(playselect,150,35);
-        buttons[1] = new MenuButton(shopunselect,150,35);
-        buttons[2] = new MenuButton(optionunselect,150,35);
-        buttons[3] = new MenuButton(exitunselect,150,35);
-        bgsprite.setPosition(0, 0);
-
-        for(int i = 0; i < buttons.length; i++){
-            buttons[i].setPosition(170,100 + i*35);
-        }
-
-        /*buttonsName = new String[6];
-        buttonsName[0] = "Play";
-        buttonsName[1] = "Shop";
-        buttonsName[2] = "Option";
-        buttonsName[3] = "Credit";
-        buttonsName[4] = "Tutorial";
-        buttonsName[5] = "Quit";*/
+        bgmenu = Image.createImage("/BGMenuBaru.jpg");
         sm = SoundManager.getInstance();
         sm.playBG(SoundManager.BM_HIMNE);
+        
+        Image[] images = new Image[6];
+        images[0] = Image.createImage("/Mulai.png");
+        images[1] = Image.createImage("/Toko.png");
+        images[2] = Image.createImage("/Atur.png");
+        images[3] = Image.createImage("/Penghargaan.png");
+        images[4] = Image.createImage("/Tentang.png");
+        images[5] = Image.createImage("/Keluar.png");
+        
+        imageSlider = new ImageSlider(images, 90, 160, 160, 50, 150, 35, 500);
+        leftArrow = new Arrow(Image.createImage("/leftArrow.png"), 60, 195, 250, -10, false);
+        rightArrow = new Arrow(Image.createImage("/rightArrow.png"), 240, 195, 250, 10, false);
     }
 
     public void pause() {
@@ -99,49 +75,41 @@ public class MainMenu extends Scene {
     }
 
     public void update(long currentTime) {
+        imageSlider.update(currentTime);
+        leftArrow.update(currentTime);
+        rightArrow.update(currentTime);
     }
 
     public void paint(Graphics g) {
-        bgsprite.paint(g);
-        g.drawImage(logo, g.getClipWidth()/2, 0, Graphics.TOP | Graphics.HCENTER);
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].paint(g);
-        }
-        /*for (int i = 0; i < buttonsName.length; i++) {
-        if (pointer == i) {
-        g.setColor(255, 0, 0);
-        } else {
-        g.setColor(0, 0, 255);
-        }
-        buttons[i].fill(g);
-        buttons[i].drawString(g, berlin, buttonsName[i]);
-        }*/
+        g.drawImage(bgmenu, 0,0, Graphics.TOP | Graphics.LEFT);
+        imageSlider.paint(g);
+        leftArrow.paint(g);
+        rightArrow.paint(g);
     }
 
-    int gogogo = SoundManager.SFX_BUTTON;
     public void keyPressed(int keyCode, int rawKeyCode) {
         int prev = pointer;
         boolean beep = false;
-        if (keyCode == GameCanvas.UP) {
-            pointer--;
-            beep = true;
-        } else if (keyCode == GameCanvas.DOWN) {
-            pointer++;
-            beep = true;
+        if (keyCode == GameCanvas.LEFT) {
+            if( imageSlider.slideLeft(System.currentTimeMillis())){
+                pointer++;
+                beep = true;
+            }
+        } else if (keyCode == GameCanvas.RIGHT) {
+            if(imageSlider.slideRight(System.currentTimeMillis())){
+                pointer--;
+                beep = true;
+            }
         } else if (keyCode == GameCanvas.FIRE) {
             goToScene(pointer);
             beep = true;
         }
 
-        pointer = pointer < 0 ? 3 : (pointer > 3 ? 0 : pointer);
-        int next = pointer;
+        pointer = pointer < 0 ? 5 : (pointer > 5 ? 0 : pointer);
         
         if(beep){
-            
-            sm.playSFX(gogogo);
-            gogogo = (++gogogo > SoundManager.SFX_THUNDER)? SoundManager.SFX_BUTTON : gogogo;
+            sm.playSFX(SoundManager.SFX_BUTTON);
         }
-        setButtonImage(prev,next);
     }
 
     public void pointerPressed(int x, int y) {
@@ -156,12 +124,12 @@ public class MainMenu extends Scene {
         Scene nextScene = null;
         boolean exit = false;
         switch (pointer) {
-           /* case CREDIT_BUTTON:
+            case ABOUT_BUTTON:
                 nextScene = new CreditScreen(engine);
                 break;
-            case HELP_BUTTON:
+            case ACHIEVEMENT_BUTTON:
                 nextScene = new HelpScreen(engine);
-                break;*/
+                break;
             case OPTION_BUTTON:
                 nextScene = new OptionScreen(engine);
                 break;
@@ -181,37 +149,5 @@ public class MainMenu extends Scene {
         } else {
             changeScene(nextScene);
         }
-    }
-
-    private void setButtonImage(int prev, int next) {
-        switch (prev) {
-            case OPTION_BUTTON:
-                buttons[prev].setImage(optionunselect, 150, 35);
-                break;
-            case PLAY_BUTTON:
-                buttons[prev].setImage(playunselect, 150, 35);
-                break;
-            case QUIT_BUTTON:
-                buttons[prev].setImage(exitunselect, 150, 35);
-                break;
-            case SHOP_BUTTON:
-                buttons[prev].setImage(shopunselect, 150, 35);
-                break;
-        }
-        switch (next) {
-            case OPTION_BUTTON:
-                buttons[next].setImage(optionselect, 150, 35);
-                break;
-            case PLAY_BUTTON:
-                buttons[next].setImage(playselect, 150, 35);
-                break;
-            case QUIT_BUTTON:
-                buttons[next].setImage(exitselect, 150, 35);
-                break;
-            case SHOP_BUTTON:
-                buttons[next].setImage(shopselect, 150, 35);
-                break;
-        }
-
     }
 }

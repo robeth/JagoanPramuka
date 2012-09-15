@@ -118,9 +118,11 @@ public class SoundManager {
 
     private void resetBGResources() {
         if (bmPlayer != null && bmPlayer.getState() != Player.UNREALIZED) {
+            bmPlayer.deallocate();
             bmPlayer.close();
             bmPlayer = null;
             stateBM = STAND_BY;
+            System.gc();
         }
     }
 
