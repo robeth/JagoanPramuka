@@ -39,7 +39,7 @@ public class ShopScreen extends Scene {
             PEDANG = 2;
     private Weapon weapons[];
     private boolean isOK;
-    private Image padlockImage, cursorImage, background, boxImage, yesImage, cancelImage;
+    private Image padlockImage, cursorImage, background, boxImage, yesImage, cancelImage, equippedImage;
     
 
     public ShopScreen(Engine engine) {
@@ -56,6 +56,7 @@ public class ShopScreen extends Scene {
             boxImage = Image.createImage("/boxNotif.png");
             yesImage = Image.createImage("/Iya.png");
             cancelImage = Image.createImage("/Batal.png");
+            equippedImage = Image.createImage("/Equipped.png");
             weapons = new Weapon[3];
             weapons[PEDANG] = (Weapon) ItemDatabase.PEDANG;
             weapons[KITCHEN_SET] = (Weapon) ItemDatabase.ALAT_MASAK;
@@ -97,7 +98,9 @@ public class ShopScreen extends Scene {
                 berlin.paintString(g, Integer.toString(weapons[i].getPrice()), 60 + 90*i , 140, Graphics.TOP | Graphics.LEFT);
                 g.drawImage(padlockImage, 80 + i*90, 80, 0);
             }
-
+            if(weapons[i].isEquipped()){
+                g.drawImage(equippedImage, 80 + i*90, 105, 0);
+            }
         }
         
         if(cursorState == MENU_UTAMA){
