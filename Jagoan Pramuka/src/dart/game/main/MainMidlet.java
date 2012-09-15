@@ -31,10 +31,6 @@ public class MainMidlet extends ChocoMIDlet {
         SplashScreen game = new SplashScreen(engine);
         engine.setFirstScene(game);
 
-        //Register music
-        engine.regisMusic("effect", "/sound/button select.mid");
-        engine.regisMusic("crowd", "/sound/crowd.mid");
-        
         
         //engine.re
         Display.getDisplay(this).setCurrent(engine);
