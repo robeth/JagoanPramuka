@@ -68,10 +68,10 @@ public class AttackArea extends ChocoSprite {
 
     public void updateCharge(long currentTime) {
         float floatStack =(System.currentTimeMillis() - startTime) / incrementDuration; 
-        stack = (int) floatStack;
-        if(!charging) charging = floatStack > 0.5f;
         
-        Debug.println("Stack:" + stack);
+        if(!charging) charging = floatStack > 0.5f;
+        stack = (int) floatStack;
+        
         if (stack > maxIncrement) {
             stack = maxIncrement;
         }
@@ -150,13 +150,19 @@ public class AttackArea extends ChocoSprite {
     }
 
     public int getStack() {
-        System.out.println("stack get= " +stack );
         return stack;
     }
 
     public boolean canDamage(Enemy e, int chargedCount) {
-        return (((getX() + chargedCount * 50 < e.getX()) && (getX() + (chargedCount + 1) * 50 > e.getX()))
+        boolean canHit = (((getX() + chargedCount * 50 < e.getX()) && (getX() + (chargedCount + 1) * 50 > e.getX()))
                 || ((getX() + chargedCount * 50 < e.getX() + e.getWidth()) && (getX() + (chargedCount + 1) * 50 > e.getX() + e.getWidth())));
+        
+        if (e.getType() == Enemy.BOSS && this.stack < 1){
+            return false;
+        }
+        canHit = canHit && e.getState() == Enemy.WALKING;
+        
+        return canHit;
     }
     
     public boolean isChargingAttack() {

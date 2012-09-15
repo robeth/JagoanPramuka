@@ -4,9 +4,11 @@
  */
 package dart.game.logic;
 
+import dart.game.sprite.Boss;
 import dart.game.sprite.Enemy;
 import java.io.IOException;
 import java.util.Random;
+import java.util.Vector;
 import javax.microedition.lcdui.Image;
 
 /**
@@ -20,11 +22,14 @@ public class EnemyGenerator {
     public static final int MALING = 10009;
     public static final int MAFIA = 10010;
     public static final int KUNTILANAK = 10011;
-    public static final int BOS_CICAK = 10012;
+    public static final int ALIEN = 10012;
+    public static final int BOS_CICAK = 10013;
     public static final int[] SEQUENCE_KUNTI = {0,1,2};
     public static final int[] SEQUENCE_MALING = {0,1,2,3};
     int indexEnemyArray;
-    private static final String[] enemyArrayLv1 = {"1","","","","","","1","","","","",""
+    private Vector[] enemyLanes;
+    
+    private static final String[] enemyArrayLv1 = {"1","","","","5","","","","1","","",""
             ,"1","","","","1","1","","1","","","","","1","1","","","1"
             ,"1","1","","","","1","","1","","1","","","1","1","","1","1"
             ,"1","","1","","11","1","","","","","","1","1","11","","","11"
@@ -57,14 +62,17 @@ public class EnemyGenerator {
     private String[] enemyArrayUsed;
     private Random r;
     private World world;
+    private Lanes lanes;
     
-    public EnemyGenerator(World world, long duration,int[] enemiesPool, long firstDelay,int lv){
+    public EnemyGenerator(World world, long duration,int[] enemiesPool, long firstDelay,int lv,Vector[] enemyLanes, Lanes lanes){
         this.duration = duration;
         this.enemiesPool = enemiesPool;
         this.lastUpdate = System.currentTimeMillis() + firstDelay;
         this.r = new Random();
         this.world = world;
         this.indexEnemyArray = 0;
+        this.enemyLanes = enemyLanes;
+        this.lanes = lanes;
         
         switch (lv) {
                 case 1 : enemyArrayUsed = enemyArrayLv1;
@@ -110,7 +118,9 @@ public class EnemyGenerator {
             return getEnemy(2);
         } else if (enemyCode == '4'){
             return getEnemy(3);
-        } else {
+        } else if (enemyCode == '5'){
+            return getEnemy(4);
+        }else {
             return getEnemy(0);
         }
     }
@@ -130,13 +140,19 @@ public class EnemyGenerator {
                 enemyImage = Image.createImage("/Kuntilanak_mini.png");
                 sequence = EnemyGenerator.SEQUENCE_KUNTI;
             } else if (enemyPoolIndex == 3){
+                enemyImage = Image.createImage("/Alien_mini.png");
+                sequence = EnemyGenerator.SEQUENCE_MALING;
+            } else if (enemyPoolIndex == 4){
                 enemyImage = Image.createImage("/Boss_mini.png");
-                sequence = EnemyGenerator.SEQUENCE_KUNTI;
+                sequence = EnemyGenerator.SEQUENCE_MALING;
+                Boss b = new Boss(enemyImage,60,60,200,enemiesPool[enemyPoolIndex],enemyLanes,lanes);
+                b.setFrameSequence(sequence);
+                return b;
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        Enemy e = new Enemy(enemyImage, 42, 42, 400, enemiesPool[enemyPoolIndex]); 
+        Enemy e = new Enemy(enemyImage, 42, 42, 200, enemiesPool[enemyPoolIndex]); 
         e.setFrameSequence(sequence);
         return e;
      

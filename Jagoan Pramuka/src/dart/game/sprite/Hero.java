@@ -31,16 +31,17 @@ public class Hero extends AnimatedSprite {
     private Timer chargeTimer;
     private boolean isCharge1;
     private Image chargeEffect1, chargeEffect2;
+    
 
     public Hero(Image image, int frameWidth, int frameHeight, int frameDuration, int type) throws IOException {
         super(image, frameWidth, frameHeight, frameDuration);
 
         attackArea = new AttackArea(image, frameWidth, frameHeight, 50, 50);
         attackArea.setAttackDamage(ItemDatabase.equippedWeapon().getAttack());
-        attackArea.setIncrementDuration(1000);
+        attackArea.setIncrementDuration(500);
         attackArea.setIncrementLength(50);
         attackArea.setMaxIncrement(ItemDatabase.equippedWeapon().getMaxStack());
-        attackArea.setPosition(this.getX() + this.getWidth(), this.getY());
+        attackArea.setPosition(this.getX(), this.getY());
 
         hitEffect = getEffect(type);
         hitEffect.setPosition(this.getX() + this.getWidth(), this.getY() + 5);
@@ -60,7 +61,6 @@ public class Hero extends AnimatedSprite {
         if (isCanAttack()) {
             if (attackArea.isCharging()) {
                 if (isAttack) {
-                    Debug.println("update!!");
                     attackArea.updateCharge(time);
                 } else {
                     //give attack flag

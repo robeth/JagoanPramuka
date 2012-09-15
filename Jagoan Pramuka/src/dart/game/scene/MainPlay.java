@@ -305,8 +305,9 @@ public class MainPlay extends Scene {
             if (gameState == PLAY_STATE) {
                 world.applyFinalAttack();
             } else {
-                MainMenu mainMenu = new MainMenu(engine);
-                changeScene(mainMenu);
+                StageSelection stageSelection = new StageSelection(engine);
+                changeScene(stageSelection);
+                
             }
         } else if (keyCode == GameCanvas.FIRE) {
             if (isGameEnd()) {
@@ -330,8 +331,9 @@ public class MainPlay extends Scene {
                                 profile.setLastLevel(Math.max(profile.getLastLevel(), level));
                             }
 
-                            MainMenu mainMenu = new MainMenu(engine);
-                            changeScene(mainMenu);
+                            //MainMenu mainMenu = new MainMenu(engine);
+                            StageSelection stageSelection = new StageSelection(engine);
+                            changeScene(stageSelection);
                         } else {
                             curScore = hud.getScore();
                         }

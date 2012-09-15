@@ -45,19 +45,21 @@ public class World {
     private static int NORMAL = 0,
             FINAL_ATTACK = 1;
     private int finalAttackState;
+    private int chargedAttacState;
     private static int ONE = 1,
             TWO = 2,
             THREE = 3,
             END = 5,
-            EARTHQUAKE = 4;
+            EARTHQUAKE = 4,
+            FOUR = 4;
     private Timer finalAttackTimer;
     private Timer earthquakeTimer;
+    private Timer chargeAttackTimer;
     private Image arya, bima, cinta;
     private int deltaX;
     private int deltaY;
     private Random randomizer;
-        
-
+    private boolean firstCharge;
 
     public World(MainPlay context, Hero[] heroes, HUD hud, int level) {
         this.context = context;
@@ -84,12 +86,13 @@ public class World {
         fixHeroesPlacement();
         r = new Random();
 
-        int[] en = new int[4];
+        int[] en = new int[5];
         en[0] = EnemyGenerator.MALING;
         en[1] = EnemyGenerator.MAFIA;
         en[2] = EnemyGenerator.KUNTILANAK;
-        en[3] = EnemyGenerator.BOS_CICAK;
-        eg = new EnemyGenerator(this, 1000, en, 1000, level);
+        en[3] = EnemyGenerator.ALIEN;
+        en[4] = EnemyGenerator.BOS_CICAK;
+        eg = new EnemyGenerator(this, 1000, en, 1000, level, enemiesLanes, lanes);
 
         isWaveEnd = false;
         commenceCA = false;
@@ -97,10 +100,15 @@ public class World {
         chargePos = 0;
         chargeMiss = true;
         state = NORMAL;
+        chargeAttackTimer = new Timer(World.CHARGED_DELAY);
         finalAttackTimer = new Timer(1000);
         earthquakeTimer = new Timer(2000);
+        //chargeAttackTimer = new Timer(1000);
         deltaX = deltaY = 0;
         randomizer = new Random();
+        
+        firstCharge = true;
+        
         try {
             arya = Image.createImage("/aryabox.png");
             bima = Image.createImage("/bimabox.png");
@@ -133,7 +141,9 @@ public class World {
                         heroes[i].finishAttack(true);
                     } else {
                         commenceCA = true;
-                        lastCharged = currentTime;
+                        //lastCharged = currentTime;
+                        //chargeAttackTimer.reset();
+                        heroes[i].finishAttack(false);
                         CAheroes = i;
                     }
                 }
@@ -146,51 +156,63 @@ public class World {
 
             // disini lakukan 
             if (commenceCA) {
-
-                if (currentTime - lastCharged >= CHARGED_DELAY * 3 && chargePos == 3) {
-                    chargeMiss = applyAttack(heroes[CAheroes].getAttack(), CAheroes, 4, chargeMiss);
-                    heroes[CAheroes].setCharge(false);
-                    heroes[CAheroes].finishAttack(false);
-                    chargePos = 0;
-                    commenceCA = false;
-                    heroes[CAheroes].resetAttack();
-                } else if (currentTime - lastCharged >= CHARGED_DELAY * 2 && chargePos == 2) {
-                    chargeMiss = applyAttack(heroes[CAheroes].getAttack(), CAheroes, 3, chargeMiss);
-                    heroes[CAheroes].finishAttack(false);
-                    chargePos++;
-                    if (heroes[CAheroes].getAttack().getStack() == 3) {
+                if (firstCharge){
+                    System.out.println("charge 1");
+                        chargeMiss = applyAttack(heroes[CAheroes].getAttack(), CAheroes, 1, true);
+                        heroes[CAheroes].finishAttack(true);
+                        chargePos++;
+                        firstCharge = false;
+                        if (heroes[CAheroes].getAttack().getStack() == 1) {
+                            chargePos = 0;
+                            commenceCA = false;
+                            heroes[CAheroes].resetAttack();
+                            heroes[CAheroes].setCharge(false);
+                            heroes[CAheroes].finishAttack(false);
+                            firstCharge = true;
+                        }
+                }
+                if (chargeAttackTimer.isTicked(currentTime)) {
+                    if (chargePos == 3) {
+                        chargeMiss = applyAttack(heroes[CAheroes].getAttack(), CAheroes, 4, chargeMiss);
+                        heroes[CAheroes].setCharge(false);
+                        heroes[CAheroes].finishAttack(false);
                         chargePos = 0;
                         commenceCA = false;
                         heroes[CAheroes].resetAttack();
-                        heroes[CAheroes].setCharge(false);
+                        firstCharge = true;
+                    } else if (chargePos == 2) {
+                        chargeMiss = applyAttack(heroes[CAheroes].getAttack(), CAheroes, 3, chargeMiss);
                         heroes[CAheroes].finishAttack(false);
-                    }
-                } else if (currentTime - lastCharged >= CHARGED_DELAY * 1 && chargePos == 1) {
-                    chargeMiss = applyAttack(heroes[CAheroes].getAttack(), CAheroes, 2, chargeMiss);
-                    heroes[CAheroes].finishAttack(false);
-                    chargePos++;
-                    if (heroes[CAheroes].getAttack().getStack() == 2) {
-                        chargePos = 0;
-                        commenceCA = false;
-                        heroes[CAheroes].resetAttack();
-                        heroes[CAheroes].setCharge(false);
+                        chargePos++;
+                        if (heroes[CAheroes].getAttack().getStack() == 3) {
+                            chargePos = 0;
+                            commenceCA = false;
+                            heroes[CAheroes].resetAttack();
+                            heroes[CAheroes].setCharge(false);
+                            heroes[CAheroes].finishAttack(false);
+                            firstCharge = true;
+                        }
+                    } else if (chargePos == 1) {
+                        System.out.println("charge 2");
+                        chargeMiss = applyAttack(heroes[CAheroes].getAttack(), CAheroes, 2, chargeMiss);
                         heroes[CAheroes].finishAttack(false);
+                        chargePos++;
+                        if (heroes[CAheroes].getAttack().getStack() == 2) {
+                            chargePos = 0;
+                            commenceCA = false;
+                            heroes[CAheroes].resetAttack();
+                            heroes[CAheroes].setCharge(false);
+                            heroes[CAheroes].finishAttack(false);
+                            firstCharge = true;
+                        }
+                    } else {
+                        
                     }
-                } else if (currentTime - lastCharged >= 0 && chargePos == 0) {
-                    chargeMiss = applyAttack(heroes[CAheroes].getAttack(), CAheroes, 1, true);
-                    heroes[CAheroes].finishAttack(true);
-                    chargePos++;
-                    if (heroes[CAheroes].getAttack().getStack() == 1) {
-                        chargePos = 0;
-                        commenceCA = false;
-                        heroes[CAheroes].resetAttack();
-                        heroes[CAheroes].setCharge(false);
-                        heroes[CAheroes].finishAttack(false);
-                    }
+                    chargeAttackTimer.reset();
                 }
             }
         } else if (state == FINAL_ATTACK) {
-            if(finalAttackState != EARTHQUAKE){
+            if (finalAttackState != EARTHQUAKE) {
                 if (finalAttackTimer.isTicked(currentTime)) {
                     if (finalAttackState == ONE) {
                         finalAttackState = TWO;
@@ -203,15 +225,15 @@ public class World {
                         attackLane(1);
                         attackLane(2);
                         faObj.resetBar();
-                    } else if (finalAttackState == EARTHQUAKE ){
-                        
+                    } else if (finalAttackState == EARTHQUAKE) {
                     }
                     finalAttackTimer.reset();
                 }
-            } else if(earthquakeTimer.isTicked(currentTime)){
-                    state = NORMAL;
-                    deltaY = deltaX = 0;
-            } else{
+            } else if (earthquakeTimer.isTicked(currentTime)) {
+                state = NORMAL;
+                deltaY = deltaX = 0;
+                this.startEnemies();
+            } else {
                 deltaX = randomizer.nextInt(5);
                 deltaY = randomizer.nextInt(5);
             }
@@ -243,10 +265,10 @@ public class World {
 
         if (state == FINAL_ATTACK && finalAttackState < EARTHQUAKE) {
             if (finalAttackState > 0) {
-                g.drawImage(arya,0,240, Graphics.LEFT | Graphics.BOTTOM);
+                g.drawImage(arya, 0, 240, Graphics.LEFT | Graphics.BOTTOM);
             }
             if (finalAttackState > ONE) {
-                g.drawImage(bima, 0,0, Graphics.LEFT | Graphics.TOP);
+                g.drawImage(bima, 0, 0, Graphics.LEFT | Graphics.TOP);
             }
             if (finalAttackState > TWO) {
                 g.drawImage(cinta, 320, 0, Graphics.RIGHT | Graphics.TOP);
@@ -263,10 +285,15 @@ public class World {
                 if (locEnemy != null) {
                     locEnemy.update(currentTime);
                     int x = locEnemy.getX();
-                    if (x <= 20) {
+                    if (x <= -50) {
                         enemies.setElementAt(null, counter);
                         enemies.removeElementAt(counter);
                         this.comboObj.miss();
+                        if (locEnemy.getType() == Enemy.BOSS){
+                            hud.stealed();
+                            hud.stealed();
+                            hud.stealed();
+                        }
                         if (hud.stealed()) {
                             context.setGameState(MainPlay.LOSE_STATE);
                         }
@@ -276,6 +303,18 @@ public class World {
                         counter++;
                     }
 
+                }
+            }
+        }
+    }
+
+    public void startEnemies() {
+        for (int i = 0; i < enemiesLanes.length; i++) {
+            Vector enemies = enemiesLanes[i];
+            for (int counter = 0; counter < enemies.size(); counter++) {
+                Enemy locEnemy = (Enemy) enemies.elementAt(counter);
+                if (locEnemy != null) {
+                    locEnemy.reset();
                 }
             }
         }
@@ -309,6 +348,7 @@ public class World {
     //Called by enemy generator
     public void addEnemy(Enemy specEnemy) {
         int laneIndex = r.nextInt(LANE_NUMBER);
+
         setEnemyPosition(specEnemy, laneIndex);
 
         enemiesLanes[laneIndex].addElement(specEnemy);
@@ -336,7 +376,11 @@ public class World {
     }
 
     void setEnemyPosition(Enemy e, int laneIndex) {
-        e.setPosition(320, lanes.getY(laneIndex));
+        if (e.getType() == Enemy.BOSS){
+            e.setPosition(320, lanes.getY(laneIndex)-18);
+        } else {
+            e.setPosition(320, lanes.getY(laneIndex));
+        }
     }
 
     private boolean applyAttack(AttackArea attack, int laneIndex, int chargeCount, boolean miss) {
@@ -344,6 +388,13 @@ public class World {
         for (int i = 0; i < enemiesLanes[laneIndex].size(); i++) {
             Enemy e = (Enemy) enemiesLanes[laneIndex].elementAt(i);
             if (e != null && attack.canDamage(e, chargeCount)) {
+                if (e.getType() == Enemy.BOSS) {
+                    int newLane = ((Boss) e).changeLane();
+                    System.out.println("new Lane =" + newLane);
+                    enemiesLanes[laneIndex].removeElementAt(i);
+                    i--;
+                    enemiesLanes[newLane].addElement(e);
+                }
                 if (e.attacked(attack.getAttackDamage())) {
                     //i--;
                     hud.incScore(e.getScore());
@@ -351,10 +402,9 @@ public class World {
                     if (c > 0) {
                         this.addCoin(c, e.getX(), e.getY());
                     }
-                }
-                Debug.println("kombo ++");
-                comboObj.hit(1);
-                faObj.incBar(comboObj.getComboStack());
+                    comboObj.hit(1);
+                    faObj.incBar(comboObj.getComboStack());
+                } 
                 missed = false;
             }
         }
@@ -425,8 +475,4 @@ public class World {
     public void setDeltaY(int deltaY) {
         this.deltaY = deltaY;
     }
-
-    
-    
-    
 }
