@@ -8,6 +8,7 @@ import com.chocoarts.Engine;
 import com.chocoarts.scene.Scene;
 import com.chocoarts.text.CustomFont;
 import dart.game.main.MainProfile;
+import dart.game.sound.SoundManager;
 import dart.game.sprite.DummyButton;
 import java.io.IOException;
 import javax.microedition.lcdui.Graphics;
@@ -29,9 +30,8 @@ public class OptionScreen extends Scene {
     private boolean currentSound;
     private boolean isReset;
     private boolean isConfirmReset;
-    private Image background, boxImage, resetImage, backImage, yesImage, cancelImage, cursorImage,soundOnImage,soundOffImage;
-
-    
+    private Image background, boxImage, resetImage, backImage, yesImage, cancelImage, cursorImage;
+    private SoundManager sm;
 
     public OptionScreen(Engine engine) {
         super(engine);
@@ -56,9 +56,6 @@ public class OptionScreen extends Scene {
             cancelImage = Image.createImage("/Batal.png");
             cursorImage = Image.createImage("/Cursor.png");
             resetImage = Image.createImage("/ResetShop.png");
-            soundOnImage = Image.createImage("/Volume.png");
-            soundOffImage = Image.createImage("/VolumeDie.png");
-            
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -68,15 +65,20 @@ public class OptionScreen extends Scene {
         currentRow = SOUND_ROW;
         isReset = false;
         isConfirmReset = false;
+        sm = SoundManager.getInstance();
+        sm.playBG(SoundManager.BM_ALAM_LUAS);
     }
 
     public void pause() {
+        sm.stopBG();
+        sm.stopSFX();
     }
 
     public void start() {
     }
 
     public void resume() {
+        sm.playBG(SoundManager.BM_ALAM_LUAS);
     }
 
     public void reset() {
@@ -88,11 +90,9 @@ public class OptionScreen extends Scene {
     public void paint(Graphics g) {
         g.drawImage(background, 0, 0, 0);
         berlin.paintString(g,"Suara", 35, 80, Graphics.TOP | Graphics.LEFT);
-        //berlin.paintString(g, "Nyala", 120, 80, Graphics.TOP | Graphics.LEFT);
-        //berlin.paintString(g,"Mati", 200, 80, Graphics.TOP | Graphics.LEFT);
-        g.drawImage(soundOnImage,120,80,0);
-        g.drawImage(soundOffImage,200,80,0);
-        g.drawImage(resetImage,30, 130,0);
+        berlin.paintString(g, "Nyala", 120, 80, Graphics.TOP | Graphics.LEFT);
+        berlin.paintString(g,"Mati", 200, 80, Graphics.TOP | Graphics.LEFT);
+        g.drawImage(resetImage, 30, 130, 0 );
         g.drawImage(backImage, 30, 170,0);
         
         int pointerX, pointerY;
@@ -122,7 +122,9 @@ public class OptionScreen extends Scene {
     }
 
     public void keyPressed(int keyCode, int rawKeyCode) {
+        boolean beep = false;
         if (keyCode == GameCanvas.FIRE) {
+            beep = true;
             switch (currentRow) {
                 case CONFIRM_ROW:
                     applyChange();
@@ -141,30 +143,45 @@ public class OptionScreen extends Scene {
                     break;
             }
         } else if (keyCode == GameCanvas.DOWN && !isReset) {
+            beep = true;
             if (++currentRow > CONFIRM_ROW) {
                 currentRow = SOUND_ROW;
             }
         } else if (keyCode == GameCanvas.UP && !isReset) {
+            beep = true;
             if (--currentRow < SOUND_ROW) {
                 currentRow = CONFIRM_ROW;
             }
         } else if (keyCode == GameCanvas.RIGHT || keyCode == GameCanvas.LEFT) {
             switch (currentRow) {
                 case SOUND_ROW:
+                    beep = true;
                     currentSound = !currentSound;
+                    if(currentSound){
+                        sm.stopBG();
+                        sm.stopSFX();
+                    } else {
+                        sm.playSFX(SoundManager.SFX_BUTTON);
+                        sm.playBG(SoundManager.BM_ALAM_LUAS);
+                    }
                     break;
                 case RESET_ROW:
+                    beep = true;
                     if (isReset) {
                         isConfirmReset = !isConfirmReset;
                     }
                     break;
             }
         }
+        
+        if(beep) sm.playSFX(SoundManager.SFX_BUTTON);
     }
 
     public void pointerPressed(int x, int y) {
     }
 
     public void sleep() {
+        sm.stopBG();
+        sm.stopSFX();
     }
 }

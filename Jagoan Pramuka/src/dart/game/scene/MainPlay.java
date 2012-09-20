@@ -125,6 +125,7 @@ public class MainPlay extends Scene {
                 heroes[0] = new Hero(aryaImage, 50, 43, 200, Hero.ARYA);
                 heroes[1] = new Hero(bimaImage, 42, 44, 200, Hero.BIMA);
                 heroes[2] = new Hero(cintaImage, 47, 45, 100, Hero.CINTA);
+                System.out.println("lala");
             } else if (ItemDatabase.equippedWeapon() == ItemDatabase.TONGKAT){
                 aryaImage = Image.createImage("/arya_tongkat.png");
                 bimaImage = Image.createImage("/bima_tongkat.png");
