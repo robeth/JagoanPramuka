@@ -30,7 +30,7 @@ public class OptionScreen extends Scene {
     private boolean currentSound;
     private boolean isReset;
     private boolean isConfirmReset;
-    private Image background, boxImage, resetImage, backImage, yesImage, cancelImage, cursorImage;
+    private Image background, boxImage, resetImage, backImage, yesImage, cancelImage, cursorImage,soundOnImage,soundOffImage;
     private SoundManager sm;
 
     public OptionScreen(Engine engine) {
@@ -56,6 +56,8 @@ public class OptionScreen extends Scene {
             cancelImage = Image.createImage("/Batal.png");
             cursorImage = Image.createImage("/Cursor.png");
             resetImage = Image.createImage("/ResetShop.png");
+            soundOnImage = Image.createImage("/Volume.png");
+            soundOffImage = Image.createImage("/VolumeDie.png");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -90,8 +92,10 @@ public class OptionScreen extends Scene {
     public void paint(Graphics g) {
         g.drawImage(background, 0, 0, 0);
         berlin.paintString(g,"Suara", 35, 80, Graphics.TOP | Graphics.LEFT);
-        berlin.paintString(g, "Nyala", 120, 80, Graphics.TOP | Graphics.LEFT);
-        berlin.paintString(g,"Mati", 200, 80, Graphics.TOP | Graphics.LEFT);
+        //berlin.paintString(g, "Nyala", 120, 80, Graphics.TOP | Graphics.LEFT);
+        //berlin.paintString(g,"Mati", 200, 80, Graphics.TOP | Graphics.LEFT);
+        g.drawImage(soundOnImage,120,80,0);
+        g.drawImage(soundOffImage,200,80,0);
         g.drawImage(resetImage, 30, 130, 0 );
         g.drawImage(backImage, 30, 170,0);
         
