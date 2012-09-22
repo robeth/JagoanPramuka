@@ -8,6 +8,7 @@ import com.chocoarts.Engine;
 import com.chocoarts.scene.Scene;
 import com.chocoarts.text.CustomFont;
 import dart.game.main.MainProfile;
+import dart.game.sound.SoundManager;
 import dart.game.sprite.DummyButton;
 import java.io.IOException;
 import javax.microedition.lcdui.Graphics;
@@ -46,6 +47,8 @@ public class StageSelection extends Scene {
         {180,110},
         {230,110}
             };
+    SoundManager sm;
+    
     public StageSelection(Engine engine) {
         super(engine);
     }
@@ -63,15 +66,24 @@ public class StageSelection extends Scene {
         level = 0;
         isBack = false;
         profile = (MainProfile) engine.getProfile();
+        int[] sfxIDs = new int[1];
+        sfxIDs[0] = SoundManager.SFX_BUTTON;
+        sm = SoundManager.getInstance();
+        sm.playBG(SoundManager.BM_ALAM_LUAS);
+        sm.initSFXs(sfxIDs);
     }
 
     public void pause() {
+        sm.stopBG();
+        sm.stopSFX();
     }
 
     public void start() {
+        
     }
 
     public void resume() {
+        sm.playBG(SoundManager.BM_ALAM_LUAS);
     }
 
     public void reset() {
@@ -134,5 +146,7 @@ public class StageSelection extends Scene {
     }
 
     public void sleep() {
+        sm.stopBG();
+        sm.stopSFX();
     }
 }

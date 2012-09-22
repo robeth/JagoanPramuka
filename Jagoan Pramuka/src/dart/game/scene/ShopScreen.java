@@ -70,8 +70,11 @@ public class ShopScreen extends Scene {
         profile = (MainProfile) engine.getProfile();
         cursorState = KITCHEN_SET;
         windowState = BROWSE_STATE;
+        int[] sfxIDs = new int[1];
+        sfxIDs[0] = SoundManager.SFX_BUTTON;
         sm = SoundManager.getInstance();
         sm.playBG(SoundManager.BM_ALAM_LUAS);
+        sm.initSFXs(sfxIDs);
     }
 
     public void pause() {

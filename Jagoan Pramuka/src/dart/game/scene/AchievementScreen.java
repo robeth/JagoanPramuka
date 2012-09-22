@@ -5,11 +5,14 @@
 package dart.game.scene;
 
 import com.chocoarts.Engine;
+import com.chocoarts.component.Timer;
 import com.chocoarts.scene.Scene;
 import com.chocoarts.text.CustomFont;
 import dart.game.data.Achievement;
 import dart.game.data.AchievementData;
 import dart.game.sound.SoundManager;
+import dart.game.sprite.StarEffect;
+import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.game.GameCanvas;
@@ -27,7 +30,10 @@ public class AchievementScreen extends Scene{
     private CustomFont berlin;
     private SoundManager sm;
     
-    
+    private int[] newAchievements;
+    private StarEffect[] stars;
+    private Timer timer;
+    private int currentStar;
     
     public AchievementScreen(Engine engine){
         super(engine); 
@@ -43,9 +49,22 @@ public class AchievementScreen extends Scene{
         lockedBadge = Image.createImage("/BadgeLocked.png");
         cursor = Image.createImage("/Cursor.png");
         bg = Image.createImage("/PenghargaanBG.png");
+        
+        int[] sfxIDs = new int[1];
+        sfxIDs[0] = SoundManager.SFX_BUTTON;
         sm = SoundManager.getInstance();
         sm.playBG(SoundManager.BM_ALAM_LUAS);
+        sm.initSFXs(sfxIDs);
         exit =false;
+        
+        
+        newAchievements = AchievementData.getNewUnlockedAchievement();
+        AchievementData.resetNewUnlockedIndex();
+        stars = new StarEffect[newAchievements.length];
+        timer = new Timer(500);
+        currentStar = 0;
+        for(int i = 0; i < stars.length; i++)
+            stars[i] = new StarEffect((30 + ((newAchievements[i]%5)*50)), (newAchievements[i] <5)? 70 : 125, 1000, 50);
     }
 
     public void pause() {
@@ -57,13 +76,20 @@ public class AchievementScreen extends Scene{
     }
 
     public void resume() {
-        sm.playSFX(SoundManager.BM_ALAM_LUAS);
+        sm.playBG(SoundManager.BM_ALAM_LUAS);
     }
 
     public void reset() {
     }
 
     public void update(long l) {
+        for(int i =0; i < stars.length; i++){
+            stars[i].update(l);
+        }
+        if(timer.isTicked(l)){
+            if(currentStar < stars.length)
+                stars[currentStar++].activate(l);
+        }
     }
 
     public void paint(Graphics g) {
@@ -88,6 +114,9 @@ public class AchievementScreen extends Scene{
         } else {
             berlin.paintString(g,achievements[pointer].getDescription(), 30, 190, Graphics.TOP | Graphics.LEFT);
         }
+        
+        for(int i = 0; i < stars.length; i++)
+            stars[i].paint(g);
     }
 
     public void keyPressed(int keyCode, int rawKeyCode) {
@@ -138,6 +167,13 @@ public class AchievementScreen extends Scene{
     }
 
     public void pointerPressed(int i, int i1) {
+        Canvas a = new Canvas() {
+
+            protected void paint(Graphics g) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+            
+        };
     }
 
     public void sleep() {

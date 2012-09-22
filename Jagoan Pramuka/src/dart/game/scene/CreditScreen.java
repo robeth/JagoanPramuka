@@ -39,9 +39,13 @@ public class CreditScreen extends Scene {
         mgdw = Image.createImage("/mgdwLogo.png");
         r = Image.createImage("/rightArrow.png");
         l = Image.createImage("/leftArrow.png");
-        leftArrow = new Arrow(l, 10, 105, 250, 10, false);
-        rightArrow = new Arrow(r, 275,105,250,-10,false);
+        leftArrow = new Arrow(l, 10, 105, 250, 10,0, false);
+        rightArrow = new Arrow(r, 275,105,250,-10,0,false);
+        
+        int[] sfxIDs = new int[1];
+        sfxIDs[0] = SoundManager.SFX_BUTTON;
         sm = SoundManager.getInstance();
+        sm.initSFXs(sfxIDs);
         sm.playBG(SoundManager.BM_ALAM_LUAS);
     }
 
@@ -55,7 +59,7 @@ public class CreditScreen extends Scene {
     }
 
     public void resume() {
-        sm.playSFX(SoundManager.BM_ALAM_LUAS);
+        sm.playBG(SoundManager.BM_ALAM_LUAS);
     }
 
     public void reset() {

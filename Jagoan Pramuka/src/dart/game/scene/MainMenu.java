@@ -42,8 +42,12 @@ public class MainMenu extends Scene {
 
     public void init() throws Exception {
         bgmenu = Image.createImage("/BGMenuBaru.jpg");
+        
+        int[] sfxIDs = new int[1];
+        sfxIDs[0] = SoundManager.SFX_BUTTON;
         sm = SoundManager.getInstance();
         sm.playBG(SoundManager.BM_ALAM_LUAS);
+        sm.initSFXs(sfxIDs);
         
         Image[] images = new Image[6];
         images[0] = Image.createImage("/Mulai.png");
@@ -54,14 +58,13 @@ public class MainMenu extends Scene {
         images[5] = Image.createImage("/Keluar.png");
         
         imageSlider = new ImageSlider(images, 90, 160, 160, 50, 150, 35, 500);
-        leftArrow = new Arrow(Image.createImage("/leftArrow.png"), 60, 195, 250, -10, false);
-        rightArrow = new Arrow(Image.createImage("/rightArrow.png"), 240, 195, 250, 10, false);
+        leftArrow = new Arrow(Image.createImage("/leftArrow.png"), 60, 195, 250, -10, 0, false);
+        rightArrow = new Arrow(Image.createImage("/rightArrow.png"), 240, 195, 250, 10, 0, false);
     }
 
     public void pause() {
         System.out.println("On Pause On Pause On Pause On Pause On Pause");
         sm.stopBG();
-        sm.stopSFX();
     }
 
     public void start() {
@@ -121,7 +124,6 @@ public class MainMenu extends Scene {
     public void sleep() {
         System.out.println("On Sleep On Sleep  On Sleep On Sleep On Sleep ");
         sm.stopBG();
-        sm.stopSFX();
     }
 
     private void goToScene(int pointer) {
