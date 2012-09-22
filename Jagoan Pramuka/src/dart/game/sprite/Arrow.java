@@ -14,32 +14,37 @@ import javax.microedition.lcdui.Image;
  * @author Maviosso
  */
 public class Arrow extends ChocoSprite{
-    private int animationDistance;
+    private int animationDistanceX;
+    private int animationDistanceY;
     private long animationTime;
     private boolean goingBack;
     private long startTime;
     private int initX, initY;
     
-    public Arrow(Image image, int initX, int initY,long animationTime, int animationDistance, boolean goingBack){
+    public Arrow(Image image, int initX, int initY,long animationTime, int animationDistanceX, int animationDistanceY, boolean goingBack){
         super(image);
-        this.animationDistance = animationDistance;
+        this.animationDistanceX = animationDistanceX;
+        this.animationDistanceY = animationDistanceY;
         this.animationTime = animationTime;
         this.goingBack = goingBack;
         this.initX = initX;
         this.initY = initY;
     }
-    private int destX, sourceX;
+    private int destX, sourceX, destY, sourceY;
     
     public void update(long currentTime){
         if(currentTime - startTime > animationTime){
             goingBack = !goingBack;
             startTime = currentTime;
-            destX = (goingBack) ? initX : initX + animationDistance;
-            sourceX = (goingBack) ? initX + animationDistance : initX;
+            destX = (goingBack) ? initX : initX + animationDistanceX;
+            sourceX = (goingBack) ? initX + animationDistanceX : initX;
+            destY = (goingBack) ? initY : initY + animationDistanceY;
+            sourceY = (goingBack) ? initY + animationDistanceY : initY;
         } else {
             float progress = ((float)(currentTime - startTime)) / ((float)animationTime); 
-            int displacement = interpolate(sourceX, destX, progress);
-            setPosition(displacement, initY);
+            int displacementX = interpolate(sourceX, destX, progress);
+            int displacementY = interpolate(sourceY, destY, progress);
+            setPosition(displacementX, displacementY);
         }
     }
     

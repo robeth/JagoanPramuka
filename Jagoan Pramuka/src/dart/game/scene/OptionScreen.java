@@ -67,8 +67,11 @@ public class OptionScreen extends Scene {
         currentRow = SOUND_ROW;
         isReset = false;
         isConfirmReset = false;
+        int[] sfxIDs = new int[1];
+        sfxIDs[0] = SoundManager.SFX_BUTTON;
         sm = SoundManager.getInstance();
         sm.playBG(SoundManager.BM_ALAM_LUAS);
+        sm.initSFXs(sfxIDs);
     }
 
     public void pause() {
@@ -161,9 +164,9 @@ public class OptionScreen extends Scene {
                 case SOUND_ROW:
                     beep = true;
                     currentSound = !currentSound;
-                    if(currentSound){
+                    profile.setSound(currentSound);
+                    if(!currentSound){
                         sm.stopBG();
-                        sm.stopSFX();
                     } else {
                         sm.playSFX(SoundManager.SFX_BUTTON);
                         sm.playBG(SoundManager.BM_ALAM_LUAS);

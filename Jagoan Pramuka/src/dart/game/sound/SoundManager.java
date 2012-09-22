@@ -47,16 +47,18 @@ public class SoundManager {
     private static final int STAND_BY = 111,
             PLAYING = 123,
             PAUSING = 1234;
-    private int stateBM = STAND_BY,
-            stateSFX = STAND_BY;
+    private int stateBM = STAND_BY;
     private static SoundManager soundManager;
-    private Player bmPlayer, sfxPlayer;
-    private int activeBG, activeSFX;
+    private Player[] sfxPlayers;
+    private Player bmPlayer;
+    private int activeBG;
+    private int[] activeSFXs;
     public static MainProfile profile;
 
     private SoundManager() {
-        bmPlayer = sfxPlayer = null;
-        activeBG = activeSFX = -1;
+        bmPlayer = null;
+        sfxPlayers = null;
+        activeBG = -1;
     }
 
     public static SoundManager getInstance() {
@@ -67,7 +69,9 @@ public class SoundManager {
     }
 
     public void playBG(int audioID) {
-        if(!profile.getSound()) return;
+        if (!profile.getSound()) {
+            return;
+        }
         if (activeBG == audioID) {
             //do nothing 
         } else {
@@ -83,8 +87,6 @@ public class SoundManager {
                 ex.printStackTrace();
             }
         }
-
-
         try {
             bmPlayer.start();
             stateBM = PLAYING;
@@ -130,43 +132,31 @@ public class SoundManager {
     }
 
     private void resetSFXResources() {
-        if (sfxPlayer != null && sfxPlayer.getState() != Player.UNREALIZED) {
+        if (sfxPlayers != null) {
             System.out.println("on release SFX");
-            sfxPlayer.deallocate();
-            sfxPlayer.close();
-            sfxPlayer = null;
-            stateSFX = STAND_BY;
+            for (int i = 0; i < sfxPlayers.length; i++) {
+                if (sfxPlayers[i] != null) {
+                    sfxPlayers[i].deallocate();
+                    sfxPlayers[i].close();
+                    sfxPlayers[i] = null;
+                }
+            }
+            sfxPlayers = null;
             System.gc();
         }
     }
 
     public void playSFX(int sfxID) {
-        if(!profile.getSound()) return;
-        if (activeSFX == sfxID) {
-            //do nothing 
-        } else {
-            resetSFXResources();
-
-            try {
-                sfxPlayer = Manager.createPlayer(getClass().getResourceAsStream(SOUND_DATA[sfxID][0]), SOUND_DATA[sfxID][1]);
-                sfxPlayer.realize();
-                sfxPlayer.prefetch();
-                sfxPlayer.setLoopCount(1);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            } catch (MediaException ex) {
-                ex.printStackTrace();
-            }
+        if (!profile.getSound()) {
+            return;
         }
-
-
+        int index = getSFXIndex(sfxID);
+        System.out.println("Play sfx index:"+index);
         try {
-            sfxPlayer.start();
-            stateBM = PLAYING;
+            sfxPlayers[index].start();
         } catch (MediaException ex) {
             ex.printStackTrace();
         }
-        Debug.printFree("Freeeeee:");
     }
 
     public void stopSFX() {
@@ -176,5 +166,35 @@ public class SoundManager {
     public void reset() {
         resetBGResources();
         resetSFXResources();
+    }
+
+    public void initSFXs(int sfxIDs[]) {
+        resetSFXResources();
+        activeSFXs = sfxIDs;
+        sfxPlayers = new Player[activeSFXs.length];
+        try {
+            for(int i= 0; i < sfxPlayers.length; i++){
+                sfxPlayers[i] = Manager.createPlayer(getClass().getResourceAsStream(SOUND_DATA[sfxIDs[i]][0]), SOUND_DATA[sfxIDs[i]][1]);
+                sfxPlayers[i].realize();
+                sfxPlayers[i].prefetch();
+                sfxPlayers[i].setLoopCount(1);
+                //sfxPlayers[i].start();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (MediaException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private int getSFXIndex(int sfxID) {
+        int index = -1;
+        for (int i = 0; i < activeSFXs.length; i++) {
+            if (sfxID == activeSFXs[i]) {
+                index = i;
+                break;
+            }
+        }
+        return index;
     }
 }

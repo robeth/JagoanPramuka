@@ -15,7 +15,7 @@ import java.io.IOException;
  * @author Maviosso
  */
 public class AchievementData {
-
+    private static boolean[] NEW_ACHIEVEMENT = new boolean[10]; 
     public static MainProfile profile;
     private static final AchievementCondition DUKUN_CONDITION = new AchievementCondition() {
 
@@ -134,7 +134,12 @@ public class AchievementData {
                 if(BADGES[i].checkUnlockCondition()){
                     BADGES[i].setUnlocked(true);
                     newAchievements = true;
-                };
+                    NEW_ACHIEVEMENT[i] = true;
+                } else {
+                    NEW_ACHIEVEMENT[i] = false;
+                }
+            } else {
+                NEW_ACHIEVEMENT[i] = false;
             }
         }
         return newAchievements;
@@ -143,6 +148,7 @@ public class AchievementData {
     public static void writeData(DataOutputStream stream) throws IOException {
         for (int i = 0; i < BADGES.length; i++) {
             stream.writeBoolean(BADGES[i].isUnlocked());
+            stream.writeBoolean(NEW_ACHIEVEMENT[i]);
         }
     }
 
@@ -150,6 +156,7 @@ public class AchievementData {
         for (int i = 0; i < BADGES.length; i++) {
             try {
                 BADGES[i].setUnlocked(stream.readBoolean());
+                NEW_ACHIEVEMENT[i] = stream.readBoolean();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -160,5 +167,24 @@ public class AchievementData {
         for(int i = 0; i < BADGES.length; i++){
             BADGES[i].setUnlocked(false);
         }
+    }
+    
+    public static int[] getNewUnlockedIndex(){
+        int newCounter=0;
+        for(int i = 0; i < NEW_ACHIEVEMENT.length; i++){
+            if(NEW_ACHIEVEMENT[i]) newCounter++;
+        }
+        int[] newIndexes = new int[newCounter];
+        int j = 0;
+        for(int  i = 0; j < newCounter; i++){
+            if(NEW_ACHIEVEMENT[i]){
+                newIndexes[j++] = i;
+            }
+        }
+        return newIndexes;
+    }
+    
+    public static void resetNewUnlockedIndex(){
+        NEW_ACHIEVEMENT = new boolean[10];
     }
 }

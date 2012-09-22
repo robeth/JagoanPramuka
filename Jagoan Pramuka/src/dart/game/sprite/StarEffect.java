@@ -32,6 +32,9 @@ public class StarEffect {
     public void update(long currentTime){
         if(active){
             deltaTime = Math.min(fadeTime, currentTime-activationTime);
+            if(deltaTime == fadeTime) {
+                reset();
+            }
         }
     }
     
@@ -41,9 +44,12 @@ public class StarEffect {
     }
     public void paint(Graphics g){
         //bintang ke kanan
-        g.drawImage(getStarImage(), startX+(int)(deltaTime/fadeTime*fadeDistance), startY, Graphics.LEFT | Graphics.TOP);
-        g.drawImage(getStarImage(), startX+(int)(deltaTime/fadeTime*fadeDistance*0.8), startY+((int)(deltaTime/fadeTime*fadeDistance*0.25)), Graphics.LEFT | Graphics.TOP);
-        g.drawImage(getStarImage(), startX+(int)(deltaTime/fadeTime*fadeDistance*0.8), startY-((int)(deltaTime/fadeTime*fadeDistance*0.25)), Graphics.LEFT | Graphics.TOP);
+        if(active){
+            float progress = (float) deltaTime / (float)fadeTime* (float)fadeDistance ;
+            g.drawImage(getStarImage(), startX+(int)progress, startY, Graphics.LEFT | Graphics.TOP);
+            g.drawImage(getStarImage(), startX+(int)(progress * 0.8), startY+((int)(progress*0.25)), Graphics.LEFT | Graphics.TOP);
+            g.drawImage(getStarImage(), startX+(int)(progress*0.8), startY-((int)(progress*0.25)), Graphics.LEFT | Graphics.TOP);
+        }
     }
     
     public void reset(){
@@ -53,7 +59,7 @@ public class StarEffect {
     private static Image getStarImage(){
         if(starImage == null){
             try {
-                starImage = Image.createImage("a/png");
+                starImage = Image.createImage("/bintang.png");
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

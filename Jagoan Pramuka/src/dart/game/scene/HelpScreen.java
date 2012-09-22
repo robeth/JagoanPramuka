@@ -8,6 +8,7 @@ import com.chocoarts.Engine;
 import com.chocoarts.debug.Debug;
 import com.chocoarts.scene.Scene;
 import com.chocoarts.text.CustomFont;
+import dart.game.sound.SoundManager;
 import dart.game.sprite.DummyButton;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
@@ -28,6 +29,7 @@ public class HelpScreen extends Scene{
     private DummyButton TITLE = new DummyButton(110,0 ,100,40),
             INFO = new DummyButton(60, 200, 200,40),
             FRAME = new DummyButton(35,45,250,150);
+    private SoundManager sm;
     
     public HelpScreen(Engine engine) {
         super(engine);
@@ -36,10 +38,16 @@ public class HelpScreen extends Scene{
    public void init() throws Exception {
         berlin = new CustomFont("/font/berlinSansFB12White");
         page = 0;
+        int[] sfxIDs = new int[1];
+        sfxIDs[0] = SoundManager.SFX_BUTTON;
+        sm = SoundManager.getInstance();
+        sm.playBG(SoundManager.BM_ALAM_LUAS);
+        sm.initSFXs(sfxIDs);
     }
 
     public void pause() {
-        
+        sm.stopBG();
+        sm.stopSFX();
     }
 
     public void start() {
@@ -47,7 +55,7 @@ public class HelpScreen extends Scene{
     }
 
     public void resume() {
-        
+        sm.playBG(SoundManager.BM_ALAM_LUAS);
     }
 
     public void reset() {
@@ -87,6 +95,7 @@ public class HelpScreen extends Scene{
     }
 
     public void sleep() {
-        
+        sm.stopBG();
+        sm.stopSFX();
     }
 }
