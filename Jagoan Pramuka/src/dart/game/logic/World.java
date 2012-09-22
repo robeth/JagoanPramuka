@@ -24,7 +24,7 @@ import javax.microedition.lcdui.Image;
 public class World {
 
     private static final int LANE_NUMBER = 3;
-    private static final int CHARGED_DELAY = 200;
+    private static final int CHARGED_DELAY = 150;
     private Hero[] heroes;
     private Vector[] enemiesLanes;
     private Vector coins;
@@ -175,6 +175,9 @@ public class World {
             // disini lakukan 
             if (commenceCA) {
                 if (firstCharge){
+                        if (!applyAttack(heroes[CAheroes].getAttack(), CAheroes, 0, false)){
+                            chargeMiss = false;
+                        }
                         if (!applyAttack(heroes[CAheroes].getAttack(), CAheroes, 1, false)){
                             chargeMiss = false; 
                         }

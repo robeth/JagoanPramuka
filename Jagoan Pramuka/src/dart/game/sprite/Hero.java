@@ -36,7 +36,7 @@ public class Hero extends AnimatedSprite {
     public Hero(Image image, int frameWidth, int frameHeight, int frameDuration, int type) throws IOException {
         super(image, frameWidth, frameHeight, frameDuration);
 
-        attackArea = new AttackArea(image, frameWidth, frameHeight, 50, 50);
+        attackArea = new AttackArea(50, frameHeight, 50, 50);
         attackArea.setAttackDamage(ItemDatabase.equippedWeapon().getAttack());
         attackArea.setIncrementDuration(500);
         attackArea.setIncrementLength(50);

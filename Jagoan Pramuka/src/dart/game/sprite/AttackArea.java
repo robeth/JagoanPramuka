@@ -15,7 +15,7 @@ import javax.microedition.lcdui.Image;
  *
  * @author Maviosso
  */
-public class AttackArea extends ChocoSprite {
+public class AttackArea {
 
     public static final int CHARGING_STATE = 101;
     public static final int DAMAGE_STATE = 102;
@@ -37,11 +37,11 @@ public class AttackArea extends ChocoSprite {
     private int tileState;
     private static final int ONE = 1, TWO = 2;
     private boolean charging;
+    private int x,y;
 
     
 
-    public AttackArea(Image image, int width, int height, int initWidth, int initHeight) {
-        super(image, width, height);
+    public AttackArea(int width, int height, int initWidth, int initHeight) {
         this.initWidth = initWidth;
         this.initHeight = initHeight;
         currentWidth = initWidth;
@@ -172,4 +172,18 @@ public class AttackArea extends ChocoSprite {
     public void setIsChargingAttack(boolean startCharge) {
         this.charging = startCharge;
     }
+    
+    public int getX(){
+        return x;
+    }
+    
+    public int getY(){
+        return y;
+    }
+    
+    public void setPosition(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+    
 }
