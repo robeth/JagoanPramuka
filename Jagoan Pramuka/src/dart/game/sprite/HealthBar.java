@@ -37,6 +37,10 @@ public class HealthBar extends ChocoSprite {
     }
     
     public void calculateWidth(){
+        if (lifePoint == 0){
+            currentLPWidth = 0;
+            return;
+        }
         currentLPWidth = (currentLP * BAR_WIDTH) / lifePoint;
     }
     

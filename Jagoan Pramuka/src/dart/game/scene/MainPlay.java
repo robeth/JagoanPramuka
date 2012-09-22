@@ -274,7 +274,6 @@ public class MainPlay extends Scene {
             if (isTutorial) {
                 g.drawImage(currentTutorialImage, 0, 0, Graphics.LEFT | Graphics.TOP);
             } else {
-                System.out.println("cek background" + (background == null) + "cek world" + (world == null));
                 background.setPosition(world.getDeltaX(), world.getDeltaY());
                 background.paint(g);
                 world.paint(g);

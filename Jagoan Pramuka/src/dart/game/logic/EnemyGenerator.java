@@ -29,7 +29,7 @@ public class EnemyGenerator {
     int indexEnemyArray;
     private Vector[] enemyLanes;
     
-    private static final String[] enemyArrayLv1 = {"1","","","","","","1","","1","","",""
+    private static final String[] enemyArrayLv1 = {"4","4","4","","","","1","","1","","",""
             ,"1","","","","1","1","","1","","","","","1","1","","","1"
             ,"1","1","","","","1","","1","","1","","","1","1","","1","1"
             ,"1","","1","","11","1","","","","","","1","1","11","","","11"
@@ -121,6 +121,7 @@ public class EnemyGenerator {
         } else if (enemyCode == '5'){
             return getEnemy(4);
         }else {
+            System.out.println("asu lo masuk sini");
             return getEnemy(0);
         }
     }

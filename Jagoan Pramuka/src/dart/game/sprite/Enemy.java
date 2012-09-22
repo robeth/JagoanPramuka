@@ -105,7 +105,7 @@ public class Enemy extends AnimatedSprite {
             silverChance = 20;
             bronzeChance = 40;
             type = Enemy.CREEP;
-        } else if (enemyType == EnemyGenerator.BOS_CICAK) {
+        } else if (enemyType == EnemyGenerator.ALIEN) {
             Debug.println("enemy LP=150");
             LP = 150;
             score = 25;
