@@ -35,33 +35,33 @@ public class MainPlay extends Scene {
     public static final String AYAM = "/1_ayam.png",
             KAMBING = "/2_kambing.png",
             SAPI = "/3_sapi.png",
-            ANOA = "4_anoa.png",
-            BABIRUSA = "5_babirusa.png",
-            BEKANTAN = "6_bekantan.png",
-            BERUANG_MADU = "7_beruangmadu.png",
-            ENGGANG = "8_enggang.png",
-            BINTURUNG = "9_binturung.png",
-            BADAK = "10_badak.png",
-            MALEO = "11_maleo.png",
-            HARIMAU = "12_harimau.png",
-            CENDRAWASIH = "13_cendrawasih.png",
-            KOMODO = "14_komodo.png",
-            GAJAH = "15_gajah.png",
+            ANOA = "/4_anoa.png",
+            BABIRUSA = "/5_babirusa.png",
+            BEKANTAN = "/6_bekantan.png",
+            BERUANG_MADU = "/7_beruangmadu.png",
+            ENGGANG = "/8_enggang.png",
+            BINTURUNG = "/9_binturung.png",
+            BADAK = "/10_badak.png",
+            MALEO = "/11_maleo.png",
+            HARIMAU = "/12_harimau.png",
+            CENDRAWASIH = "/13_cendrawasih.png",
+            KOMODO = "/14_komodo.png",
+            GAJAH = "/15_gajah.png",
             AYAM_NO = "/1_ayam_no.png",
             KAMBING_NO = "/2_kambing_no.png",
             SAPI_NO = "/3_sapi_no.png",
-            ANOA_NO = "4_anoa_no.png",
-            BABIRUSA_NO = "5_babirusa_no.png",
-            BEKANTAN_NO = "6_bekantan_no.png",
-            BERUANG_MADU_NO = "7_beruangmadu_no.png",
-            ENGGANG_NO = "8_enggang_no.png",
-            BINTURUNG_NO = "9_binturung_no.png",
-            BADAK_NO = "10_badak_no.png",
-            MALEO_NO = "11_maleo_no.png",
-            HARIMAU_NO = "12_harimau_no.png",
-            CENDRAWASIH_NO = "13_cendrawasih_no.png",
-            KOMODO_NO = "14_komodo_no.png",
-            GAJAH_NO = "15_gajah_no.png";
+            ANOA_NO = "/4_anoa_no.png",
+            BABIRUSA_NO = "/5_babirusa_no.png",
+            BEKANTAN_NO = "/6_bekantan_no.png",
+            BERUANG_MADU_NO = "/7_beruangmadu_no.png",
+            ENGGANG_NO = "/8_enggang_no.png",
+            BINTURUNG_NO = "/9_binturung_no.png",
+            BADAK_NO = "/10_badak_no.png",
+            MALEO_NO = "/11_maleo_no.png",
+            HARIMAU_NO = "/12_harimau_no.png",
+            CENDRAWASIH_NO = "/13_cendrawasih_no.png",
+            KOMODO_NO = "/14_komodo_no.png",
+            GAJAH_NO = "/15_gajah_no.png";
     private Image aryaImage,
             bimaImage,
             cintaImage,
@@ -124,8 +124,7 @@ public class MainPlay extends Scene {
                 cintaImage = Image.createImage("/cintas.png");
                 heroes[0] = new Hero(aryaImage, 50, 43, 200, Hero.ARYA);
                 heroes[1] = new Hero(bimaImage, 42, 44, 200, Hero.BIMA);
-                heroes[2] = new Hero(cintaImage, 47, 45, 100, Hero.CINTA);
-                System.out.println("lala");
+                heroes[2] = new Hero(cintaImage, 47, 45, 200, Hero.CINTA);
             } else if (ItemDatabase.equippedWeapon() == ItemDatabase.TONGKAT){
                 aryaImage = Image.createImage("/arya_tongkat.png");
                 bimaImage = Image.createImage("/bima_tongkat.png");
@@ -168,19 +167,19 @@ public class MainPlay extends Scene {
 
             if (level == 1){
                 hud = new HUD(berlin, gothic, profile.getMoney(),AYAM,KAMBING,SAPI,AYAM_NO,KAMBING_NO,SAPI_NO);
-                backgroundImage = Image.createImage("/map1.jpg");
+                backgroundImage = Image.createImage("/Map1.jpg");
             } else if (level == 2){
                 hud = new HUD(berlin, gothic, profile.getMoney(),ANOA,BABIRUSA,BEKANTAN,ANOA_NO,BABIRUSA_NO,BEKANTAN_NO);
-                backgroundImage = Image.createImage("/map2.jpg");
+                backgroundImage = Image.createImage("/Map2.jpg");
             } else if (level == 3){
                 hud = new HUD(berlin, gothic, profile.getMoney(),BERUANG_MADU,ENGGANG,BINTURUNG,BERUANG_MADU_NO,ENGGANG_NO,BINTURUNG_NO);
-                backgroundImage = Image.createImage("/map3.jpg");
+                backgroundImage = Image.createImage("/Map3.jpg");
             } else if (level == 4){
                 hud = new HUD(berlin, gothic, profile.getMoney(),BADAK,MALEO,HARIMAU,BADAK_NO,MALEO_NO,HARIMAU_NO);
-                backgroundImage = Image.createImage("/map4.jpg");
+                backgroundImage = Image.createImage("/Map4.jpg");
             } else if (level == 5){
                 hud = new HUD(berlin, gothic, profile.getMoney(),CENDRAWASIH,KOMODO,GAJAH,CENDRAWASIH_NO,KOMODO_NO,GAJAH_NO);
-                backgroundImage = Image.createImage("/map5.jpg");
+                backgroundImage = Image.createImage("/Map5.jpg");
             }
             
             background = new ChocoSprite(backgroundImage);
@@ -275,6 +274,7 @@ public class MainPlay extends Scene {
             if (isTutorial) {
                 g.drawImage(currentTutorialImage, 0, 0, Graphics.LEFT | Graphics.TOP);
             } else {
+                System.out.println("cek background" + (background == null) + "cek world" + (world == null));
                 background.setPosition(world.getDeltaX(), world.getDeltaY());
                 background.paint(g);
                 world.paint(g);
