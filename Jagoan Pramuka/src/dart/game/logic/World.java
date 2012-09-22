@@ -123,8 +123,17 @@ public class World {
         finalAttackCount = 0;
         kuntilanakCount = profile.getKuntilanakKill();
         
+        int[] sfxIDs = new int[4];
+        sfxIDs[0] = SoundManager.SFX_THUNDER;
+        sfxIDs[1] = SoundManager.SFX_ULTI_EARTHQUAKE;
+        sfxIDs[2] = SoundManager.SFX_PUNCH;
+        sfxIDs[3] = SoundManager.SFX_HURT_MAN2;
+        
+        
         sm = SoundManager.getInstance();
         sm.playBG(SoundManager.BM_HIMNE);
+        sm.initSFXs(sfxIDs);
+        
         
         try {
             arya = Image.createImage("/aryabox.png");

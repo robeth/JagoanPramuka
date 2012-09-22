@@ -14,6 +14,7 @@ import dart.game.data.AchievementData;
 import dart.game.data.ItemDatabase;
 import dart.game.logic.World;
 import dart.game.main.MainProfile;
+import dart.game.sprite.Arrow;
 import dart.game.sprite.HUD;
 import dart.game.sprite.Hero;
 import java.io.IOException;
@@ -111,6 +112,7 @@ public class MainPlay extends Scene {
     private boolean isTutorial;
     private int pauseCursor;
     private boolean newAchievement;
+    private Arrow achievementEffect;
 
     MainPlay(Engine engine, int level) {
         super(engine);
@@ -152,6 +154,8 @@ public class MainPlay extends Scene {
             pauseImage = Image.createImage("/pause.png");
             cursorImage = Image.createImage("/Cursor.png");
             newAchievementImage = Image.createImage("/NotifikasiPenghargaan.png");
+            
+            achievementEffect = new Arrow (newAchievementImage, (320/2) - (170/2), 155, 1000, 0, 10, false);
 
             keyDownStates = new boolean[4];
 
@@ -228,6 +232,10 @@ public class MainPlay extends Scene {
     }
 
     public void update(long currentTime) {
+        if (postState == POPUP){
+            achievementEffect.update(currentTime);
+        }
+        
         if (isTutorial) {
         } else {
             if (gameState == PLAY_STATE) {
@@ -321,8 +329,9 @@ public class MainPlay extends Scene {
                 if (isGameEnd()) {
                     Image notificationImage = (gameState == WIN_STATE) ? winImage : loseImage;
                     g.drawImage(notificationImage, g.getClipWidth() / 2, g.getClipHeight() / 2, Graphics.HCENTER | Graphics.VCENTER);
-                    if (newAchievement){
-                        g.drawImage(newAchievementImage, 0, 0, 0);
+                    if (postState == POPUP){
+                        //g.drawImage(newAchievementImage, 0, 0, 0);
+                        achievementEffect.paint(g);
                     }
 
                     berlin.paintString(g, Integer.toString(curScore), 130, 88, Graphics.LEFT | Graphics.TOP);

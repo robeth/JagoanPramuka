@@ -29,7 +29,7 @@ public class EnemyGenerator {
     int indexEnemyArray;
     private Vector[] enemyLanes;
     
-    private static final String[] enemyArrayLv1 = {"4","4","4","","","","1","","1","","",""
+    private static final String[] enemyArrayLv1 = {"1","","","","","","1","","1","","",""
             ,"1","","","","1","1","","1","","","","","1","1","","","1"
             ,"1","1","","","","1","","1","","1","","","1","1","","1","1"
             ,"1","","1","","11","1","","","","","","1","1","11","","","11"

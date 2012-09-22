@@ -123,10 +123,6 @@ public class AchievementData {
             DUKUN = 8,
             CICAK = 9;
 
-    public static int[] getNewUnlockedAchievement() {
-        return null;
-    }
-    
     public static boolean updateAchievementsState(){
         boolean newAchievements = false;
         for(int i=0; i < BADGES.length; i++){

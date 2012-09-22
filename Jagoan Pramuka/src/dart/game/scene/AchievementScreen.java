@@ -58,7 +58,7 @@ public class AchievementScreen extends Scene{
         exit =false;
         
         
-        newAchievements = AchievementData.getNewUnlockedAchievement();
+        newAchievements = AchievementData.getNewUnlockedIndex();
         AchievementData.resetNewUnlockedIndex();
         stars = new StarEffect[newAchievements.length];
         timer = new Timer(500);
