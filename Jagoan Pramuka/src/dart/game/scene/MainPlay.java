@@ -102,6 +102,7 @@ public class MainPlay extends Scene {
             COMBO = 2,
             ANIMAL = 3,
             CONFIRM = 4,
+            POPUP = 5,
             ANIM1 = 0,
             ANIM2 = 1,
             ANIM3 = 2;
@@ -109,6 +110,7 @@ public class MainPlay extends Scene {
     private int currentTutorialIndex;
     private boolean isTutorial;
     private int pauseCursor;
+    private boolean newAchievement;
 
     MainPlay(Engine engine, int level) {
         super(engine);
@@ -193,6 +195,7 @@ public class MainPlay extends Scene {
             }
             
             pauseCursor = 0;
+            newAchievement = false;
             
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -318,7 +321,7 @@ public class MainPlay extends Scene {
                 if (isGameEnd()) {
                     Image notificationImage = (gameState == WIN_STATE) ? winImage : loseImage;
                     g.drawImage(notificationImage, g.getClipWidth() / 2, g.getClipHeight() / 2, Graphics.HCENTER | Graphics.VCENTER);
-                    if (AchievementData.updateAchievementsState()){
+                    if (newAchievement){
                         g.drawImage(newAchievementImage, 0, 0, 0);
                     }
 
@@ -435,13 +438,22 @@ public class MainPlay extends Scene {
                             if (gameState == WIN_STATE) {
                                 profile.setLastLevel(Math.max(profile.getLastLevel(), level));
                             }
-
+                            
+                            newAchievement = AchievementData.updateAchievementsState();
                             //MainMenu mainMenu = new MainMenu(engine);
-                            StageSelection stageSelection = new StageSelection(engine);
-                            changeScene(stageSelection);
+                            if (!newAchievement){
+                                StageSelection stageSelection = new StageSelection(engine);
+                                changeScene(stageSelection);
+                            } else {
+                                postState = POPUP;
+                            }
                         } else {
                             curScore = hud.getScore();
                         }
+                        break;
+                    case POPUP :
+                        StageSelection stageSelection = new StageSelection(engine);
+                        changeScene(stageSelection);
                         break;
                 }
             } else {
